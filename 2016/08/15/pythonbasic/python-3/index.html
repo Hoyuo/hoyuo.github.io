@@ -279,29 +279,29 @@
 <td align="center"></td>
 </tr>
 </tbody></table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">naver_end_price = [<span class="hljs-number">474500</span>, <span class="hljs-number">461500</span>, <span class="hljs-number">501000</span>, <span class="hljs-number">500500</span>, <span class="hljs-number">488500</span>]<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">naver_end_price = [<span class="number">474500</span>, <span class="number">461500</span>, <span class="number">501000</span>, <span class="number">500500</span>, <span class="number">488500</span>]</span><br></pre></td></tr></table></figure>
 
 <h2 id="문제-3-2"><a href="#문제-3-2" class="headerlink" title="문제 3-2"></a>문제 3-2</h2><p>문제 3-1에서 만든 ‘naver_end_price’를 이용하여 해당 주에 종가를 기준으로 가장 높았던 가격을 화면에 출력하세요. (힌트: 리스트에서 최댓값을 찾는 함수는 max( )이고, 화면 출력은 print( ) 입니다.)</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(<span class="hljs-built_in">max</span>(naver_end_price))<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="built_in">max</span>(naver_end_price))</span><br></pre></td></tr></table></figure>
 
 <pre><code>501000</code></pre>
 <h2 id="문제-3-3"><a href="#문제-3-3" class="headerlink" title="문제 3-3"></a>문제 3-3</h2><p>문제 3-1에서 만든 ‘naver_end_price’를 이용하여 해당 주에 종가를 기준으로 가장 낮았던 가격을 화면에 출력하세요. (힌트: 리스트에서 최솟값을 찾는 함수는 min( )이고, 화면 출력은 print( ) 입니다.)</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(<span class="hljs-built_in">min</span>(naver_end_price))<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="built_in">min</span>(naver_end_price))</span><br></pre></td></tr></table></figure>
 
 <pre><code>461500</code></pre>
 <h2 id="문제-3-4"><a href="#문제-3-4" class="headerlink" title="문제 3-4"></a>문제 3-4</h2><p>문제 3-1에서 만든 ‘naver_end_price’를 이용하여 해당 주에서 가장 종가가 높았던 요일과 가장 종가가 낮았던 요일의 가격 차를 화면에 출력하세요.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(<span class="hljs-built_in">max</span>(naver_end_price) - <span class="hljs-built_in">min</span>(naver_end_price))<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="built_in">max</span>(naver_end_price) - <span class="built_in">min</span>(naver_end_price))</span><br></pre></td></tr></table></figure>
 
 <pre><code>39500</code></pre>
 <h2 id="문제-3-5"><a href="#문제-3-5" class="headerlink" title="문제 3-5"></a>문제 3-5</h2><p>문제 3-1에서 만든 ‘naver_end_price’를 이용하여 수요일의 종가를 화면에 출력하세요.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(naver_end_price[<span class="hljs-number">2</span>])<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(naver_end_price[<span class="number">2</span>])</span><br></pre></td></tr></table></figure>
 
 <pre><code>501000</code></pre>
 <h2 id="문제-3-6"><a href="#문제-3-6" class="headerlink" title="문제 3-6"></a>문제 3-6</h2><p>문제 3-1의 표 3.2를 이용하여 날짜를 딕셔너리의 key 값으로, 종가를 딕셔너리의 value 값으로 하여 ‘naver_end_price2’ 라는 딕셔너리를 생성하세요.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">naver_end_price2 = &#123;<span class="hljs-string">&#x27;09/07&#x27;</span>:<span class="hljs-number">474500</span>, <span class="hljs-string">&#x27;09/08&#x27;</span>:<span class="hljs-number">461500</span>, <span class="hljs-string">&#x27;09/09&#x27;</span>:<span class="hljs-number">501000</span>, <span class="hljs-string">&#x27;09/10&#x27;</span>:<span class="hljs-number">500500</span>, <span class="hljs-string">&#x27;09/11&#x27;</span>:<span class="hljs-number">488500</span> &#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">naver_end_price2 = &#123;<span class="string">&#x27;09/07&#x27;</span>:<span class="number">474500</span>, <span class="string">&#x27;09/08&#x27;</span>:<span class="number">461500</span>, <span class="string">&#x27;09/09&#x27;</span>:<span class="number">501000</span>, <span class="string">&#x27;09/10&#x27;</span>:<span class="number">500500</span>, <span class="string">&#x27;09/11&#x27;</span>:<span class="number">488500</span> &#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="문제-3-7"><a href="#문제-3-7" class="headerlink" title="문제 3-7"></a>문제 3-7</h2><p>문제 3-7에서 생성한 ‘naver_end_price2’ 딕셔너리를 이용하여 ‘09/09’일 종가를 출력하세요.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(naver_end_price2[<span class="hljs-string">&#x27;09/09&#x27;</span>])<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(naver_end_price2[<span class="string">&#x27;09/09&#x27;</span>])</span><br></pre></td></tr></table></figure>
 
 <pre><code>501000</code></pre>
 

@@ -246,13 +246,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt-get install vsftpd<br>sudo nano /etc/vsftpd.conf<br></code></pre></td></tr></table></figure>
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install vsftpd</span><br><span class="line">sudo nano /etc/vsftpd.conf</span><br></pre></td></tr></table></figure>
 
 <p>anonymous_enable=NO<br>local_enable=YES<br>write_enable=YES</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/ftpusers<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ftpusers</span><br></pre></td></tr></table></figure>
 
 <p>root를 삭제한다</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo service vsftpd restart<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service vsftpd restart</span><br></pre></td></tr></table></figure>
 
     </div>
 

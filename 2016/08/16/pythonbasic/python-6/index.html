@@ -257,81 +257,81 @@
 <li>  move(dx, dy) 메소드는 현재 좌표를 dx, dy 만큼 이동시킨다.</li>
 <li>  모든 메소드는 인스턴스 메소드이다.</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span>:</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span>(<span class="hljs-params">self, x, y</span>):</span><br>        self.x = x<br>        self.y = y<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">setx</span>(<span class="hljs-params">self, x</span>):</span><br>        self.x = x<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">sety</span>(<span class="hljs-params">self, y</span>):</span><br>        self.y = y<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">return</span> (self.x, self.y)<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">move</span>(<span class="hljs-params">self, dx, dy</span>):</span><br>        self.x = self.x + dx<br>        self.y = self.y + dy<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, x, y</span>):</span></span><br><span class="line">        self.x = x</span><br><span class="line">        self.y = y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setx</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        self.x = x</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sety</span>(<span class="params">self, y</span>):</span></span><br><span class="line">        self.y = y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> (self.x, self.y)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">move</span>(<span class="params">self, dx, dy</span>):</span></span><br><span class="line">        self.x = self.x + dx</span><br><span class="line">        self.y = self.y + dy</span><br></pre></td></tr></table></figure>
 
 <h2 id="문제-6-2"><a href="#문제-6-2" class="headerlink" title="문제 6-2"></a>문제 6-2</h2><p>문제 6-1에서 생성한 Point 클래스에 대한 인스턴스를 생성한 후 네 개의 메소드를 사용하는 코드를 작성하세요.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">p = Point(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p = Point(<span class="number">1</span>,<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">p.get()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p.get()</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>(1, 2)</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">p.move(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)<br>p.get()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p.move(<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">p.get()</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>(3, 4)</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">p.setx(<span class="hljs-number">5</span>)<br>p.get()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p.setx(<span class="number">5</span>)</span><br><span class="line">p.get()</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>(5, 4)</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">p.sety(<span class="hljs-number">0</span>)<br>p.get()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p.sety(<span class="number">0</span>)</span><br><span class="line">p.get()</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>(5, 0)</code></pre>
 <h2 id="문제-6-3"><a href="#문제-6-3" class="headerlink" title="문제 6-3"></a>문제 6-3</h2><p>아래의 Stock 클래스에 대해 두 개의 인스턴스를 생성했을 때 클래스와 a와 b 인스턴스의 네임 스페이스를 그려보세요.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stock</span>:</span><br>        market = <span class="hljs-string">&quot;kospi&quot;</span><br><br><br><span class="hljs-meta">&gt;&gt;&gt; </span>a = Stock()<br><span class="hljs-meta">&gt;&gt;&gt; </span>b = Stock()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Stock</span>:</span></span><br><span class="line">        market = <span class="string">&quot;kospi&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = Stock()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = Stock()</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://wikidocs.net/images/page/3466/6.15.png"></p>
 <h2 id="문제-6-4"><a href="#문제-6-4" class="headerlink" title="문제 6-4"></a>문제 6-4</h2><p>문제 6-3의 코드에서 추가로 아래와 같은 코드를 수행했을 때 ‘???’로 표시된 부분의 결괏값을 적어보세요.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>a.market<br>???<br><span class="hljs-meta">&gt;&gt;&gt; </span>b.market<br>???<br><span class="hljs-meta">&gt;&gt;&gt; </span>Stock.market<br>???<br><span class="hljs-meta">&gt;&gt;&gt; </span>a.market = <span class="hljs-string">&quot;kosdak&quot;</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>b.market = <span class="hljs-string">&quot;nasdak&quot;</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>a.market<br>???<br><span class="hljs-meta">&gt;&gt;&gt; </span>b.market<br>???<br><span class="hljs-meta">&gt;&gt;&gt; </span>Stock.market<br>???<br>&gt;&gt;&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.market</span><br><span class="line">???</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.market</span><br><span class="line">???</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Stock.market</span><br><span class="line">???</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.market = <span class="string">&quot;kosdak&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.market = <span class="string">&quot;nasdak&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.market</span><br><span class="line">???</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.market</span><br><span class="line">???</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Stock.market</span><br><span class="line">???</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stock</span>:</span><br>        market = <span class="hljs-string">&quot;kospi&quot;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stock</span>:</span></span><br><span class="line">        market = <span class="string">&quot;kospi&quot;</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">a = Stock()<br>a.market<br></code></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>&#39;kospi&#39;</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">b = Stock()<br>b.market<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = Stock()</span><br><span class="line">a.market</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>&#39;kospi&#39;</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">Stock.market<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b = Stock()</span><br><span class="line">b.market</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>&#39;kospi&#39;</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">a.market = <span class="hljs-string">&quot;kosdak&quot;</span><br>b.market = <span class="hljs-string">&quot;nasdak&quot;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stock.market</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">a.market<br></code></pre></td></tr></table></figure>
+
+
+<pre><code>&#39;kospi&#39;</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.market = <span class="string">&quot;kosdak&quot;</span></span><br><span class="line">b.market = <span class="string">&quot;nasdak&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a.market</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>&#39;kosdak&#39;</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">b.market<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b.market</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>&#39;nasdak&#39;</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">Stock.market<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stock.market</span><br></pre></td></tr></table></figure>
 
 
 

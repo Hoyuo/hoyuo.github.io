@@ -246,38 +246,38 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="문제-2-1-다음-Daum-의-주가가-89-000원이고-네이버-Naver-의-주가가-751-000-이라고-가정하고-어떤-사람이-다음의-주식-100주와-네이버의-주식-20주를-가지고-있을-때-그-사람이-가지고-있는-주식의-총액을-계산하는-프로그램을-작성하세요"><a href="#문제-2-1-다음-Daum-의-주가가-89-000원이고-네이버-Naver-의-주가가-751-000-이라고-가정하고-어떤-사람이-다음의-주식-100주와-네이버의-주식-20주를-가지고-있을-때-그-사람이-가지고-있는-주식의-총액을-계산하는-프로그램을-작성하세요" class="headerlink" title="문제 2-1 다음 (Daum)의 주가가 89,000원이고 네이버 (Naver)의 주가가 751,000 이라고 가정하고, 어떤 사람이 다음의 주식 100주와 네이버의 주식 20주를 가지고 있을 때 그 사람이 가지고 있는 주식의 총액을 계산하는 프로그램을 작성하세요."></a>문제 2-1 다음 (Daum)의 주가가 89,000원이고 네이버 (Naver)의 주가가 751,000 이라고 가정하고, 어떤 사람이 다음의 주식 100주와 네이버의 주식 20주를 가지고 있을 때 그 사람이 가지고 있는 주식의 총액을 계산하는 프로그램을 작성하세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">daum = <span class="hljs-number">89000</span><br></code></pre></td></tr></table></figure>
+        <h2 id="문제-2-1-다음-Daum-의-주가가-89-000원이고-네이버-Naver-의-주가가-751-000-이라고-가정하고-어떤-사람이-다음의-주식-100주와-네이버의-주식-20주를-가지고-있을-때-그-사람이-가지고-있는-주식의-총액을-계산하는-프로그램을-작성하세요"><a href="#문제-2-1-다음-Daum-의-주가가-89-000원이고-네이버-Naver-의-주가가-751-000-이라고-가정하고-어떤-사람이-다음의-주식-100주와-네이버의-주식-20주를-가지고-있을-때-그-사람이-가지고-있는-주식의-총액을-계산하는-프로그램을-작성하세요" class="headerlink" title="문제 2-1 다음 (Daum)의 주가가 89,000원이고 네이버 (Naver)의 주가가 751,000 이라고 가정하고, 어떤 사람이 다음의 주식 100주와 네이버의 주식 20주를 가지고 있을 때 그 사람이 가지고 있는 주식의 총액을 계산하는 프로그램을 작성하세요."></a>문제 2-1 다음 (Daum)의 주가가 89,000원이고 네이버 (Naver)의 주가가 751,000 이라고 가정하고, 어떤 사람이 다음의 주식 100주와 네이버의 주식 20주를 가지고 있을 때 그 사람이 가지고 있는 주식의 총액을 계산하는 프로그램을 작성하세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">daum = <span class="number">89000</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">naver = <span class="hljs-number">751000</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">naver = <span class="number">751000</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(daum * <span class="hljs-number">100</span> + naver * <span class="hljs-number">20</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(daum * <span class="number">100</span> + naver * <span class="number">20</span>)</span><br></pre></td></tr></table></figure>
 
 <pre><code>23920000</code></pre>
-<h2 id="문제-2-2-위의-총액에서-다음과-네이버의-주가가-각각-5-10-하락한-경우에-손실액을-구하는-프로그램을-작성하시기-바랍니다"><a href="#문제-2-2-위의-총액에서-다음과-네이버의-주가가-각각-5-10-하락한-경우에-손실액을-구하는-프로그램을-작성하시기-바랍니다" class="headerlink" title="문제 2-2 위의 총액에서 다음과 네이버의 주가가 각각 5%, 10% 하락한 경우에 손실액을 구하는 프로그램을 작성하시기 바랍니다."></a>문제 2-2 위의 총액에서 다음과 네이버의 주가가 각각 5%, 10% 하락한 경우에 손실액을 구하는 프로그램을 작성하시기 바랍니다.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">daum = daum * <span class="hljs-number">0.05</span> * <span class="hljs-number">100</span><br></code></pre></td></tr></table></figure>
+<h2 id="문제-2-2-위의-총액에서-다음과-네이버의-주가가-각각-5-10-하락한-경우에-손실액을-구하는-프로그램을-작성하시기-바랍니다"><a href="#문제-2-2-위의-총액에서-다음과-네이버의-주가가-각각-5-10-하락한-경우에-손실액을-구하는-프로그램을-작성하시기-바랍니다" class="headerlink" title="문제 2-2 위의 총액에서 다음과 네이버의 주가가 각각 5%, 10% 하락한 경우에 손실액을 구하는 프로그램을 작성하시기 바랍니다."></a>문제 2-2 위의 총액에서 다음과 네이버의 주가가 각각 5%, 10% 하락한 경우에 손실액을 구하는 프로그램을 작성하시기 바랍니다.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">daum = daum * <span class="number">0.05</span> * <span class="number">100</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">naver = naver * <span class="hljs-number">0.1</span> * <span class="hljs-number">20</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">naver = naver * <span class="number">0.1</span> * <span class="number">20</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">naver + daum<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">naver + daum</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>1947000.0</code></pre>
 <h2 id="문제-2-3-오늘의-날씨를-보면-우리나라는-섭씨-온도를-사용하는-반면-미국와-유럽은-화씨-온도를-주로-사용합니다-화씨-온도-F-를-섭씨-온도-C-간에는-다음과-같은-공식이-있습니다-이-공식을-사용하여-화씨-온도가-50일-때-섭씨-온도를-계산해보시기-바랍니다"><a href="#문제-2-3-오늘의-날씨를-보면-우리나라는-섭씨-온도를-사용하는-반면-미국와-유럽은-화씨-온도를-주로-사용합니다-화씨-온도-F-를-섭씨-온도-C-간에는-다음과-같은-공식이-있습니다-이-공식을-사용하여-화씨-온도가-50일-때-섭씨-온도를-계산해보시기-바랍니다" class="headerlink" title="문제 2-3 오늘의 날씨를 보면 우리나라는 섭씨 온도를 사용하는 반면, 미국와 유럽은 화씨 온도를 주로 사용합니다. 화씨 온도 (F)를 섭씨 온도 (C) 간에는 다음과 같은 공식이 있습니다. 이 공식을 사용하여 화씨 온도가 50일 때 섭씨 온도를 계산해보시기 바랍니다."></a>문제 2-3 오늘의 날씨를 보면 우리나라는 섭씨 온도를 사용하는 반면, 미국와 유럽은 화씨 온도를 주로 사용합니다. 화씨 온도 (F)를 섭씨 온도 (C) 간에는 다음과 같은 공식이 있습니다. 이 공식을 사용하여 화씨 온도가 50일 때 섭씨 온도를 계산해보시기 바랍니다.</h2><p>$$ C = \frac{(F-32)}{1.8} $$</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">F = <span class="hljs-number">50</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F = <span class="number">50</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">(F-<span class="hljs-number">32</span>)/<span class="hljs-number">1.8</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(F-<span class="number">32</span>)/<span class="number">1.8</span></span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>10.0</code></pre>
-<h2 id="문제-2-4-화면에-“pizza-“를-10번-출력하는-프로그램을-작성하세요"><a href="#문제-2-4-화면에-“pizza-“를-10번-출력하는-프로그램을-작성하세요" class="headerlink" title="문제 2-4 화면에 “pizza “를 10번 출력하는 프로그램을 작성하세요."></a>문제 2-4 화면에 “pizza “를 10번 출력하는 프로그램을 작성하세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(<span class="hljs-string">&#x27;pizza\n&#x27;</span> * <span class="hljs-number">10</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="문제-2-4-화면에-“pizza-“를-10번-출력하는-프로그램을-작성하세요"><a href="#문제-2-4-화면에-“pizza-“를-10번-출력하는-프로그램을-작성하세요" class="headerlink" title="문제 2-4 화면에 “pizza “를 10번 출력하는 프로그램을 작성하세요."></a>문제 2-4 화면에 “pizza “를 10번 출력하는 프로그램을 작성하세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">&#x27;pizza\n&#x27;</span> * <span class="number">10</span>)</span><br></pre></td></tr></table></figure>
 
 <pre><code>pizza
 pizza
@@ -289,43 +289,43 @@ pizza
 pizza
 pizza
 pizza</code></pre>
-<h2 id="문제-2-5-월요일에-네이버의-주가가-100만원으로-시작하여-3일-연속으로-하한가-30-를-기록했을-때-수요일의-종가를-계산해보세요"><a href="#문제-2-5-월요일에-네이버의-주가가-100만원으로-시작하여-3일-연속으로-하한가-30-를-기록했을-때-수요일의-종가를-계산해보세요" class="headerlink" title="문제 2-5 월요일에 네이버의 주가가 100만원으로 시작하여, 3일 연속으로 하한가 (-30%)를 기록했을 때 수요일의 종가를 계산해보세요."></a>문제 2-5 월요일에 네이버의 주가가 100만원으로 시작하여, 3일 연속으로 하한가 (-30%)를 기록했을 때 수요일의 종가를 계산해보세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">naver = <span class="hljs-number">1000000</span><br></code></pre></td></tr></table></figure>
+<h2 id="문제-2-5-월요일에-네이버의-주가가-100만원으로-시작하여-3일-연속으로-하한가-30-를-기록했을-때-수요일의-종가를-계산해보세요"><a href="#문제-2-5-월요일에-네이버의-주가가-100만원으로-시작하여-3일-연속으로-하한가-30-를-기록했을-때-수요일의-종가를-계산해보세요" class="headerlink" title="문제 2-5 월요일에 네이버의 주가가 100만원으로 시작하여, 3일 연속으로 하한가 (-30%)를 기록했을 때 수요일의 종가를 계산해보세요."></a>문제 2-5 월요일에 네이버의 주가가 100만원으로 시작하여, 3일 연속으로 하한가 (-30%)를 기록했을 때 수요일의 종가를 계산해보세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">naver = <span class="number">1000000</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">naver = naver * <span class="hljs-number">0.7</span> * <span class="hljs-number">0.7</span> * <span class="hljs-number">0.7</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">naver = naver * <span class="number">0.7</span> * <span class="number">0.7</span> * <span class="number">0.7</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">naver<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">naver</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>342999.99999999994</code></pre>
-<h2 id="문제-2-6-아래의-포맷과-같이-이름-생년월일-주민등록번호를-출력하는-프로그램을-작성해보세요-이름-파이썬-생년월일-2014년-12월-12일-주민등록번호-20141212-1623210"><a href="#문제-2-6-아래의-포맷과-같이-이름-생년월일-주민등록번호를-출력하는-프로그램을-작성해보세요-이름-파이썬-생년월일-2014년-12월-12일-주민등록번호-20141212-1623210" class="headerlink" title="문제 2-6 아래의 포맷과 같이 이름, 생년월일, 주민등록번호를 출력하는 프로그램을 작성해보세요. 이름: 파이썬 생년월일: 2014년 12월 12일 주민등록번호: 20141212-1623210"></a>문제 2-6 아래의 포맷과 같이 이름, 생년월일, 주민등록번호를 출력하는 프로그램을 작성해보세요. 이름: 파이썬 생년월일: 2014년 12월 12일 주민등록번호: 20141212-1623210</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(<span class="hljs-string">&#x27;이름: 파이썬 생년월일: 2014년 12월 12일 주민등록번호: 20141212-1623210&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="문제-2-6-아래의-포맷과-같이-이름-생년월일-주민등록번호를-출력하는-프로그램을-작성해보세요-이름-파이썬-생년월일-2014년-12월-12일-주민등록번호-20141212-1623210"><a href="#문제-2-6-아래의-포맷과-같이-이름-생년월일-주민등록번호를-출력하는-프로그램을-작성해보세요-이름-파이썬-생년월일-2014년-12월-12일-주민등록번호-20141212-1623210" class="headerlink" title="문제 2-6 아래의 포맷과 같이 이름, 생년월일, 주민등록번호를 출력하는 프로그램을 작성해보세요. 이름: 파이썬 생년월일: 2014년 12월 12일 주민등록번호: 20141212-1623210"></a>문제 2-6 아래의 포맷과 같이 이름, 생년월일, 주민등록번호를 출력하는 프로그램을 작성해보세요. 이름: 파이썬 생년월일: 2014년 12월 12일 주민등록번호: 20141212-1623210</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">&#x27;이름: 파이썬 생년월일: 2014년 12월 12일 주민등록번호: 20141212-1623210&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
 <pre><code>이름: 파이썬 생년월일: 2014년 12월 12일 주민등록번호: 20141212-1623210</code></pre>
-<h2 id="문제-2-7-문자열의-슬라이싱-기능-그리고-연결하기를-이용하여-s-‘Daum-KaKao’를-‘KaKao-Daum’으로-변경해-보세요"><a href="#문제-2-7-문자열의-슬라이싱-기능-그리고-연결하기를-이용하여-s-‘Daum-KaKao’를-‘KaKao-Daum’으로-변경해-보세요" class="headerlink" title="문제 2-7 문자열의 슬라이싱 기능 그리고 연결하기를 이용하여 s = ‘Daum KaKao’를 ‘KaKao Daum’으로 변경해 보세요."></a>문제 2-7 문자열의 슬라이싱 기능 그리고 연결하기를 이용하여 s = ‘Daum KaKao’를 ‘KaKao Daum’으로 변경해 보세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">s = <span class="hljs-string">&#x27;Daum KaKao&#x27;</span><br></code></pre></td></tr></table></figure>
+<h2 id="문제-2-7-문자열의-슬라이싱-기능-그리고-연결하기를-이용하여-s-‘Daum-KaKao’를-‘KaKao-Daum’으로-변경해-보세요"><a href="#문제-2-7-문자열의-슬라이싱-기능-그리고-연결하기를-이용하여-s-‘Daum-KaKao’를-‘KaKao-Daum’으로-변경해-보세요" class="headerlink" title="문제 2-7 문자열의 슬라이싱 기능 그리고 연결하기를 이용하여 s = ‘Daum KaKao’를 ‘KaKao Daum’으로 변경해 보세요."></a>문제 2-7 문자열의 슬라이싱 기능 그리고 연결하기를 이용하여 s = ‘Daum KaKao’를 ‘KaKao Daum’으로 변경해 보세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&#x27;Daum KaKao&#x27;</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">print(s[<span class="hljs-number">5</span>:] + s[:<span class="hljs-number">5</span>])<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(s[<span class="number">5</span>:] + s[:<span class="number">5</span>])</span><br></pre></td></tr></table></figure>
 
 <pre><code>KaKaoDaum</code></pre>
-<h2 id="문제-2-8-a-‘hello-world’가-있을-때-이를-‘hi-world’로-변경해-보세요"><a href="#문제-2-8-a-‘hello-world’가-있을-때-이를-‘hi-world’로-변경해-보세요" class="headerlink" title="문제 2-8 a = ‘hello world’가 있을 때 이를 ‘hi world’로 변경해 보세요."></a>문제 2-8 a = ‘hello world’가 있을 때 이를 ‘hi world’로 변경해 보세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">s = <span class="hljs-string">&#x27;hello world&#x27;</span><br></code></pre></td></tr></table></figure>
+<h2 id="문제-2-8-a-‘hello-world’가-있을-때-이를-‘hi-world’로-변경해-보세요"><a href="#문제-2-8-a-‘hello-world’가-있을-때-이를-‘hi-world’로-변경해-보세요" class="headerlink" title="문제 2-8 a = ‘hello world’가 있을 때 이를 ‘hi world’로 변경해 보세요."></a>문제 2-8 a = ‘hello world’가 있을 때 이를 ‘hi world’로 변경해 보세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&#x27;hello world&#x27;</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">a = <span class="hljs-string">&#x27;hi &#x27;</span> + s[<span class="hljs-number">6</span>:]<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="string">&#x27;hi &#x27;</span> + s[<span class="number">6</span>:]</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">a<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a</span><br></pre></td></tr></table></figure>
 
 
 
 
 <pre><code>&#39;hi world&#39;</code></pre>
-<h2 id="문제-2-9-x-‘abcdef’를-‘bcdefa’로-변경해-보세요"><a href="#문제-2-9-x-‘abcdef’를-‘bcdefa’로-변경해-보세요" class="headerlink" title="문제 2-9 x = ‘abcdef’를 ‘bcdefa’로 변경해 보세요."></a>문제 2-9 x = ‘abcdef’를 ‘bcdefa’로 변경해 보세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">x = <span class="hljs-string">&#x27;abcdef&#x27;</span><br></code></pre></td></tr></table></figure>
+<h2 id="문제-2-9-x-‘abcdef’를-‘bcdefa’로-변경해-보세요"><a href="#문제-2-9-x-‘abcdef’를-‘bcdefa’로-변경해-보세요" class="headerlink" title="문제 2-9 x = ‘abcdef’를 ‘bcdefa’로 변경해 보세요."></a>문제 2-9 x = ‘abcdef’를 ‘bcdefa’로 변경해 보세요.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="string">&#x27;abcdef&#x27;</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">x[<span class="hljs-number">1</span>:] + x[<span class="hljs-number">0</span>]<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x[<span class="number">1</span>:] + x[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
 
 
 
