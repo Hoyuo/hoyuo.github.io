@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hoyuo.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android ?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. Create Project Sunshine">
+<meta property="og:url" content="https://hoyuo.github.io/2017/02/01/adnroid-developing/Developing-Android-Apps-01/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="Android ?">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://www.google.co.kr/intl/ko/mobile/android/images/android.jpg">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/app.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/androidstudio.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/newProject.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/android_version.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/android_version_2.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/version_select.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/page_select.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/page_name.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/folder.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/layout.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/1.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/2.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/layout.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/3.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/4.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/5.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/6.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/framelayout.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/LinearLayout.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/RelativeLayout.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/scroll.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/adapter_1.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/adapter_2.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/adapter_3.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/adapter_4.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/adapter_5.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/adapter_6.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/adapter_7.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/FindItem.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/1/7.png">
+<meta property="article:published_time" content="2017-02-01T06:00:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="udacity">
+<meta property="article:tag" content="android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.google.co.kr/intl/ko/mobile/android/images/android.jpg">
+
+<link rel="canonical" href="https://hoyuo.github.io/2017/02/01/adnroid-developing/Developing-Android-Apps-01/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'ko'
+  };
+</script>
+
+  <title>1. Create Project Sunshine | Hoyuo's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89785418-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-89785418-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hoyuo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Android Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">45</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Hoyuo" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2017/02/01/adnroid-developing/Developing-Android-Apps-01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+      <meta itemprop="description" content="Hoyuo's programming writting">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1. Create Project Sunshine
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">작성일</span>
+
+              <time title="Post created: 2017-02-01 15:00" itemprop="dateCreated datePublished" datetime="2017-02-01T15:00:00+09:00">2017-02-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/Developing-Android-Apps/" itemprop="url" rel="index"><span itemprop="name">Developing Android Apps</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Android"><a href="#Android" class="headerlink" title="Android ?"></a>Android ?</h1><p><img src="https://www.google.co.kr/intl/ko/mobile/android/images/android.jpg"></p>
+<hr>
+<a id="more"></a>
+
+<h2 id="Android-1"><a href="#Android-1" class="headerlink" title="Android"></a>Android</h2><blockquote>
+<p>안드로이드(영어: Android)는 휴대 전화를 비롯한 휴대용 장치를 위한 운영 체제와 미들웨어, 사용자 인터페이스 그리고 표준 응용 프로그램(웹 브라우저, 이메일 클라이언트, 단문 메시지 서비스(SMS), 멀티미디어 메시지 서비스(MMS)등)을 포함하고 있는 소프트웨어 스택이자 모바일 운영 체제이다. 안드로이드는 개발자들이 자바 언어로 응용 프로그램을 작성할 수 있게 하였으며, 컴파일된 바이트코드를 구동할 수 있는 런타임 라이브러리를 제공한다. 또한 안드로이드 소프트웨어 개발 키트(SDK)를 통해 응용 프로그램을 개발하기 위해 필요한 각종 도구들과 API를 제공한다.</p>
+</blockquote>
+<blockquote>
+<p>안드로이드는 리눅스 커널 위에서 동작하며, 다양한 안드로이드 시스템 구성 요소에서 사용되는 C/C++ 라이브러리들을 포함하고 있다. 안드로이드는 기존의 자바 가상 머신과는 다른 가상 머신인 달빅 가상 머신을 통해 자바로 작성된 응용 프로그램을 별도의 프로세스에서 실행하는 구조로 되어 있다.</p>
+</blockquote>
+<blockquote>
+<p>2005년에 안드로이드 사를 구글에서 인수한 후 2007년 11월에 안드로이드 플랫폼을 휴대용 장치 운영 체제로서 무료 공개한다고 발표한 후 48개의 하드웨어, 소프트웨어, 통신 회사가 모여 만든 오픈 핸드셋 얼라이언스(Open Handset Aliance, OHA)에서 공개 표준을 위해 개발하고 있다. 구글은 안드로이드의 모든 소스 코드를 오픈 소스 라이선스인 아파치 v2 라이선스로 배포하고 있어 기업이나 사용자는 각자 안드로이드 프로그램을 독자적으로 개발을 해서 탑재할 수 있다. 또한 응용 프로그램을 사고 팔 수 있는 구글 플레이를 제공하고 있으며, 이와 동시에 각 제조사 혹은 통신사별 응용 프로그램 마켓이 함께 운영되고 있다. 구글 플레이에서는 유료 및 무료 응용 프로그램이 제공되고 있다.<br>– Wikipedia</p>
+</blockquote>
+<hr>
+<p><img src="/img/adnroid-developing/1/app.png"></p>
+<h1 id="목표"><a href="#목표" class="headerlink" title="목표"></a>목표</h1><p>우리는 이런 앱을 만들어 보자!!<br>어렵지만 하나하나 시작해 봅시다</p>
+<hr>
+<h2 id="설치"><a href="#설치" class="headerlink" title="설치"></a>설치</h2><ol>
+<li>JAVA<br><a target="_blank" rel="noopener" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a><br>OS에 맞게 JAVA를 설치 하고 환경 변수를 세팅 한다<br></li>
+<li>Android Studio<br><a target="_blank" rel="noopener" href="https://developer.android.com/sdk/index.html">https://developer.android.com/sdk/index.html</a><br>다운로드 받고 설치를 하고 실행을 합니다</li>
+</ol>
+<hr>
+<p>설치가 완료 되었으면 이제 프로젝트를 만들고 본격적으로 Android App 만들기 시작합니다</p>
+<p><strong>Start a new Android Studio Project</strong> 버튼을 클릭합니다</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/androidstudio.png"></p>
+<hr>
+<p><img src="/img/adnroid-developing/1/newProject.png"></p>
+<hr>
+<h2 id="Android-Version"><a href="#Android-Version" class="headerlink" title="Android Version"></a>Android Version</h2><hr>
+<p><img src="/img/adnroid-developing/1/android_version.png"></p>
+<hr>
+<p><img src="/img/adnroid-developing/1/android_version_2.png"></p>
+<hr>
+<p>Android 전체 기기의 버전을 확인해 봅니다<br>아직 대다수의 기기에서는 Jelly Bean(API 16) 이상을 많이 사용하고 있습니다</p>
+<ul>
+<li>Min SDK Version : 우리가 지원할 최소 버전입니다. 최소 버전이 많이 내려가면 좋지만, 사용자에게 UI/UX 적으로 제공하기 힘듭니다. 개인적인 생각으로는 Min SDK Version은 API16을 추천해 드립니다</li>
+<li>Target SDK Version : 우리가 중점적으로 생각해야 할 버전입니다. Android Application 개발자라면 최신 버전을 이용해서 최대한 지원하는 걸 추천합니다. 항상 최신 버전에서 실행이 가능하도록 준비해 주세요</li>
+</ul>
+<hr>
+<p><img src="/img/adnroid-developing/1/version_select.png"></p>
+<hr>
+<h2 id="Android-Page"><a href="#Android-Page" class="headerlink" title="Android Page"></a>Android Page</h2><hr>
+<p><img src="/img/adnroid-developing/1/page_select.png"></p>
+<hr>
+<p>여러 가지 다양한 화면 선택이 존재합니다. 우리는 여기서 다양한 서비스 형태에 따라서 선택을 하고 진행을 하면 됩니다.</p>
+<p>우선 <strong>Basic Activity</strong>를 선택하고 진행합니다</p>
+<p>나중에 Android Page Layout에 관해서 이야기 하겠습니다</p>
+<hr>
+<h2 id="Android-Page-Name"><a href="#Android-Page-Name" class="headerlink" title="Android Page Name"></a>Android Page Name</h2><hr>
+<p><img src="/img/adnroid-developing/1/page_name.png"></p>
+<hr>
+<ul>
+<li>Activity Name : 기본적으로 앱을 키고 활동을 할 수 있는 페이지를 MainActivity라고 합니다. 처음 Android App을 만든다면 그냥 진행합니다</li>
+<li>Layout Name : Activity에서도 화면을 구성하지만 생각보다 어렵습니다. 그러므로 XML을 이용해서 쉽게 화면을 구성합니다. Activity 이름과 같이 진행합니다</li>
+<li>Title : 현재 Activity에서 표시할 이름을 정합니다</li>
+<li>Menu Resource Name : Activity마다 Menu를 추가할 수 있습니다. Menu마다 이름을 정하여서 구분하도록 합니다.</li>
+<li>Use a Fragment : Fragment를 사용하도록 합니다</li>
+</ul>
+<p>각 항목에 알맞은 내용을 넣고 Finish를 누르고 진행을 합니다.</p>
+<hr>
+<h3 id="Android-Studio"><a href="#Android-Studio" class="headerlink" title="Android Studio"></a>Android Studio</h3><p>기본적으로 다 처리하고 나면 안드로이드 스튜디오 상에서 Gradle를 이용해서 빌드 하기 때문에 대기를 해야 합니다</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/folder.png"></p>
+<h3 id="Android-Studio-1"><a href="#Android-Studio-1" class="headerlink" title="Android Studio"></a>Android Studio</h3><p>각 폴더에 관해서 설명하겠습니다</p>
+<ul>
+<li>App : 앱에 관련된 모든 것들이 있습니다<ul>
+<li>mainfests : Android 설정에 관한 파일인 manifest.xml 이 있습니다. 나올 때 마다 설명하겠습니다</li>
+<li>java : 각 Activity에 대한 소스 파일들이 있습니다. 그러므로 이름을 잘 정해야 합니다. 이상하게 정하면 힘들어요</li>
+<li>res : 각종 리소스 파일들이 있습니다. 리소스라고 하면 화면구성(layout), 이미지(drawable), 메뉴(menu), 특정값들(values), 정해진 이미지(mipmap)로 구성되어있습니다. 주의할 점은 모든 파일 이름은 소문자이고 공백이 없어야 합니다</li>
+</ul>
+</li>
+<li>Gradle Scripts : Gradle은 빌드 툴 입니다. 빌드 과정을 자동으로 처리 하기 위해서 해주는 거이기 때문에 건드리지 않도록 합니다. (필요한 상황이 생길 때는 지금 없어요…)<ul>
+<li>build.gradle(Project: ProjectName) : 라이브러리등을 추가 하기 위해서는 여기를 수정합니다</li>
+<li>build.gradle(Module: App) : Android Version등과 같이 안드로이드 App을 빌드하기 위해서 하는 설정값들</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>한번 빌드를 시킨 후 실행합니다</p>
+<p>Hello World가 보이면 성공입니다</p>
+<hr>
+<h2 id="Android-Layout"><a href="#Android-Layout" class="headerlink" title="Android Layout"></a>Android Layout</h2><hr>
+<p><img src="/img/adnroid-developing/1/layout.png"></p>
+<p>이번 강의에서 우리가 할 모습입니다</p>
+<hr>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs xml">&lt;application<br>    android:allowBackup=&quot;true&quot;<br>    android:icon=&quot;@mipmap/ic_launcher&quot;<br>    android:label=&quot;@string/app_name&quot;<br>    android:theme=&quot;@style/AppTheme&quot; &gt;<br>    &lt;activity<br>        android:name=&quot;.MainActivity&quot;<br>        android:label=&quot;@string/app_name&quot; &gt;<br>        <span class="hljs-tag">&lt;<span class="hljs-name">intent-filter</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">action</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">&quot;android.intent.action.MAIN&quot;</span> /&gt;</span><br><br>            <span class="hljs-tag">&lt;<span class="hljs-name">category</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">&quot;android.intent.category.LAUNCHER&quot;</span> /&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">intent-filter</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">activity</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">application</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> </span>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>App이 시작되면 제일 먼저 MainActivity를 찾게 됩니다</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivityFragment</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Fragment</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainActivityFragment</span><span class="hljs-params">()</span> </span>&#123;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> View <span class="hljs-title">onCreateView</span><span class="hljs-params">(LayoutInflater inflater, ViewGroup container,</span></span><br><span class="hljs-function"><span class="hljs-params">                             Bundle savedInstanceState)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> inflater.inflate(R.layout.fragment_main, container, <span class="hljs-keyword">false</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>MainActivityFragment는 프로젝트를 만들 때 사용하는 템플릿에 의해 생성됩니다</p>
+<p>Fragment라는 것은 Activity 안의 모듈형 컨테이너입니다</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">inflater.inflate(R.layout.fragment_main, container, <span class="hljs-keyword">false</span>);<br></code></pre></td></tr></table></figure>
+<p>fragment_main을 이용해서 Fragment의 Layout을 구성합니다</p>
+<hr>
+<p>이제부터 화면을 구성해 봅시다<br>UI를 수정하기 위해서는 fragment_main.xml을 수정해야 합니다<br>Ctrl 키를 누르고 R.layout.fragment_main에서 fragment_main을 클릭하여도 되고<br>아니면 app - res - layout - fragment_main.xml파일을 클릭하여서 열면 됩니다</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/1.png"></p>
+<hr>
+<p>기본적으로 파일을 열면 xml 형식으로 수정할 수 있습니다<br>xml이 익숙하지 않으신 분한테는 어렵습니다<br>밑에 잘 보면 Design 있습니다<br>우리한테는 <strong>마우스</strong>가 있습니다!!!<br>조금 더 쉽게 할 수 있습니다</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/2.png"></p>
+<hr>
+<p>쉽게 할 수 있도록 GUI 도구로 잘 되어있습니다</p>
+<p>한번 마우스 클릭을 이용해서 여러 가지를 해보세요</p>
+<p>도구에 익숙해져야지 우리가 하고 싶은 걸 할 수 있습니다!!</p>
+<hr>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">RelativeLayout</span> <span class="hljs-attr">xmlns:android</span>=<span class="hljs-string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">xmlns:tools</span>=<span class="hljs-string">&quot;http://schemas.android.com/tools&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:layout_width</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:layout_height</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingBottom</span>=<span class="hljs-string">&quot;@dimen/activity_vertical_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingLeft</span>=<span class="hljs-string">&quot;@dimen/activity_horizontal_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingRight</span>=<span class="hljs-string">&quot;@dimen/activity_horizontal_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingTop</span>=<span class="hljs-string">&quot;@dimen/activity_vertical_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">tools:context</span>=<span class="hljs-string">&quot;.MainActivityFragment&quot;</span>&gt;</span><br><br>    &lt;TextView<br>        android:layout_width=&quot;wrap_content&quot;<br>        android:layout_height=&quot;wrap_content&quot;<br>        android:text=&quot;@string/hello_world&quot; /&gt;<br><br><span class="hljs-tag">&lt;/<span class="hljs-name">RelativeLayout</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>fragment_main.xml의 소스입니다<br>RelativeLayout을 적용하고 padding을 적용했네요<br>뷰젯으로는 TextView를 이용하였네요</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/layout.png" alt="ListView"></p>
+<p>우리는 이런 모습을 만들어야 합니다<br>이런 뷰젯은 존재하지 않습니다<br>내가 만들어야 합니다</p>
+<p>그림처럼 하는 것을 ListView라고 합니다</p>
+<p>우리 천천히 해봅시다</p>
+<hr>
+<p>Design에서 <strong>비교적</strong> 정교한 레이아웃을 만들 수는 있습니다</p>
+<p><img src="/img/adnroid-developing/1/3.png"></p>
+<p>이 정도는 다들 만들 수 있잖아요??</p>
+<p>우리한테는 마우스가 있잖아요!!</p>
+<hr>
+<h2 id="우리는-이제-ListView에-대해서-작업을-할게요"><a href="#우리는-이제-ListView에-대해서-작업을-할게요" class="headerlink" title="우리는 이제 ListView에 대해서 작업을 할게요"></a>우리는 이제 ListView에 대해서 작업을 할게요</h2><h3 id="천천히-따라오세요"><a href="#천천히-따라오세요" class="headerlink" title="천천히 따라오세요"></a>천천히 따라오세요</h3><hr>
+<p><img src="/img/adnroid-developing/1/4.png"></p>
+<hr>
+<p><img src="/img/adnroid-developing/1/5.png"></p>
+<hr>
+<p>list_item_forecast.xml 파일을 만들었나요?</p>
+<p><img src="/img/adnroid-developing/1/6.png"></p>
+<p>list_item_forecast.xml 파일에 사진과 동일한 레이아웃을 만들어 봅시다</p>
+<p>손가락으로 터치했을 때 어느 정도 여유도 있어야 하고<br>글자도 이쁘게 가운데 정렬했으면 좋겠고<br>여기 보이는 TextView에 이름도 정했으면 좋겠고<br>하나하나씩 해봅시다</p>
+<hr>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml">android:id  		-&gt; 이름을 정합니다.<br>android:minHeight 	-&gt; 최소 높이를 정합니다.<br>android:gravity 	-&gt; 정렬을 합니다<br></code></pre></td></tr></table></figure>
+
+<p>이렇게 하면 각 항목에 대해서 만들수가 있습니다</p>
+<hr>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">TextView</span> <span class="hljs-attr">xmlns:android</span>=<span class="hljs-string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:id</span>=<span class="hljs-string">&quot;@+id/list_item_forecast_textview&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:layout_width</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:layout_height</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:gravity</span>=<span class="hljs-string">&quot;center_vertical&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:minHeight</span>=<span class="hljs-string">&quot;?android:attr/listPreferredItemHeight&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="Android-Layout-Design"><a href="#Android-Layout-Design" class="headerlink" title="Android Layout Design"></a>Android Layout Design</h2><hr>
+<p>안드로이드는 다양한 화면 다양한 기기에서 제공합니다<br>어떤 기기든 어떤 화면이든 같은 앱을 보여주는 것은 중요합니다<br>이것을 <strong>Responsive Design</strong>이라 합니다<br>한국어로 쉽게 설명하면 반응형 디자인으로 불립니다<br>우리 네이버를 컴퓨터에서 들어가나 핸드폰으로 들어가나 태블릿으로 들어가나 똑같은 네이버잖아요??<br>그걸 의미합니다!!</p>
+<hr>
+<p>안드로이드는 많은 Layout을 제공합니다</p>
+<ul>
+<li>FrameLayout</li>
+<li>LinearLayout</li>
+<li>TableLayout</li>
+<li>GridLayout</li>
+<li>RelativeLayout</li>
+</ul>
+<p>대표적으로 사용되는 것들입니다.<br>최근 버전에는 ConstraintLayout 도 있습니다.</p>
+<hr>
+<h1 id="FrameLayout"><a href="#FrameLayout" class="headerlink" title="FrameLayout"></a>FrameLayout</h1><p><img src="/img/adnroid-developing/1/framelayout.png" alt="FrameLayout"></p>
+<p>FrameLayout은 언제 사용할까요?</p>
+<blockquote>
+<p>우리가 보려는 항목이 하나만 있으면 사용하는 가장 단순한 레이아웃입니다<br>전체 영역을 채우는 ListView와 같은 경우 해당합니다</p>
+</blockquote>
+<hr>
+<h1 id="LinearLayout"><a href="#LinearLayout" class="headerlink" title="LinearLayout"></a>LinearLayout</h1><p><img src="/img/adnroid-developing/1/LinearLayout.png" alt="LinearLayout"></p>
+<p>LinearLayout은 언제 사용할까요?</p>
+<blockquote>
+<p>View들을 수평 또는 수직으로 차례로 쌓을 때 적합합니다<br>또한, 화면을 비율로 나누는 방법이다</p>
+</blockquote>
+<hr>
+<h1 id="RelativeLayout"><a href="#RelativeLayout" class="headerlink" title="RelativeLayout"></a>RelativeLayout</h1><p><img src="/img/adnroid-developing/1/RelativeLayout.png" alt="RelativeLayout"></p>
+<p>RelativeLayout은 언제 사용할까요?</p>
+<blockquote>
+<p>앞에 설명한 2개보다 복잡합니다. 하지만 효과적입니다<br>정말 많은 View를 각각의 상위 항목을 정하고 상대적 레이아웃 또는 수많은 형제의 View를 잡고 위치를 정할 수 있습니다<br>정말 복잡하고 어려운 Layout 구성을 할 때 유용합니다</p>
+</blockquote>
+<hr>
+<h1 id="해상도"><a href="#해상도" class="headerlink" title="해상도"></a>해상도</h1><ul>
+<li>dpi (Dot Per Inch)<ul>
+<li>1인치당 픽셀 수. 물리적 단위인 1 inch (=2.54cm)에 몇 픽셀이 들어가는가를 나타내는 단위다<ul>
+<li>Low density (120dpi) : ldpi</li>
+<li>Medium density (160dpi) : mdpi</li>
+<li>High density (240dpi) : hdpi</li>
+<li>Extra High density (320dpi) : xdpi</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>px<ul>
+<li>스크린의 실제 픽셀 단위를 사용하며, 실제 크기나 밀도와 상관이 없다. mdpi(160dip)에서 1dp = 1px 이다<ul>
+<li>ldpi : 1dp = 0.75px</li>
+<li>mdpi : 1dp = 1px</li>
+<li>hdpi : 1dp = 1.5px</li>
+<li>xdpi : 1dp = 2px;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>dp 와 dip (Density Independent Pixel)<ul>
+<li>말 그대로 실제 픽셀에 독립적인 단위로 안드로이드 폰의 다양한 해상도를 지원하기 위해 만든 단위이다. 큰 화면이든 작은 화면이든 같은 크기로 나타나게 되어있다</li>
+<li>즉, 화면이 작은 핸드폰에서 10원짜리만 하게 나타난다면 화면이 큰 핸드폰에서도 10원짜리 만하게 나타나게 되어있다. dp(dip)와 px간의 변환을 하는 방법은 아래와 같다 <a target="_blank" rel="noopener" href="https://pixplicity.com/dp-px-converter/">참고</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>dp(dip)와 px간의 변환<ul>
+<li>px = dp * (160 / dpi) = dp * density</li>
+<li>dp = px / (160 / dpi) = px / density</li>
+<li>여기서 density는 density = dpi / 160 계산 한다<ul>
+<li>ldpi : density = 0.75</li>
+<li>mdpi : density = 1</li>
+<li>hdpi : density = 1.5</li>
+<li>xdpi : density = 2</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>sp<ul>
+<li>dp와 비슷하지만, 사용자가 선택한 글꼴 크기에 의해 크기가 조절된다</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="/img/adnroid-developing/1/scroll.png"></p>
+<hr>
+<p>Q. 만약 우리한테 총 데이터가 50개가 있다고 가정했을 때<br>화면에 10개를 보여줄 수 있다고 하면<br>우리는 몇 개의 View를 만들어서 보여줘야 할까요?</p>
+<p>A. <strong>12</strong>개입니다. 10개를 보여줄 수 있다고 했을 때 앞뒤로 한 개씩 추가로 예비로 보여줄 준비를 하고 있어야 끊김이 없고 메모리 낭비도 없습니다</p>
+<hr>
+<p>![](/img/adnroid-developing/1/listview recycle.png)</p>
+<hr>
+<p>그림과 같이 우리는 View 를 재사용하면서 List 항목을 보여줘야 메모리 사용도 적고 부드럽게 동작할 수 있습니다.</p>
+<p>이런 재활용 작업은 AdapterView의 하위 클래스인 ListView, GridView에서도 같습니다.</p>
+<hr>
+<p>ListView를 적용해보도록 하겠습니다</p>
+<p>어떤 파일을 열어야 할까요?</p>
+<p><strong>fragment_main.xml</strong> 입니다</p>
+<hr>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">RelativeLayout</span> <span class="hljs-attr">xmlns:android</span>=<span class="hljs-string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">xmlns:tools</span>=<span class="hljs-string">&quot;http://schemas.android.com/tools&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:layout_width</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:layout_height</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingBottom</span>=<span class="hljs-string">&quot;@dimen/activity_vertical_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingLeft</span>=<span class="hljs-string">&quot;@dimen/activity_horizontal_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingRight</span>=<span class="hljs-string">&quot;@dimen/activity_horizontal_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingTop</span>=<span class="hljs-string">&quot;@dimen/activity_vertical_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">tools:context</span>=<span class="hljs-string">&quot;.MainActivityFragment&quot;</span>&gt;</span><br><br>    &lt;TextView<br>        android:layout_width=&quot;wrap_content&quot;<br>        android:layout_height=&quot;wrap_content&quot;<br>        android:text=&quot;@string/hello_world&quot; /&gt;<br><br><span class="hljs-tag">&lt;/<span class="hljs-name">RelativeLayout</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>기존의 소스입니다. 불필요한 내용이 너무 많아요<br>우리는 수정해서 우리가 원하는 형태로 바꾸겠습니다</p>
+<hr>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">FrameLayout</span> <span class="hljs-attr">xmlns:android</span>=<span class="hljs-string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">xmlns:tools</span>=<span class="hljs-string">&quot;http://schemas.android.com/tools&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:layout_width</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:layout_height</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingBottom</span>=<span class="hljs-string">&quot;@dimen/activity_vertical_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingLeft</span>=<span class="hljs-string">&quot;@dimen/activity_horizontal_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingRight</span>=<span class="hljs-string">&quot;@dimen/activity_horizontal_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">android:paddingTop</span>=<span class="hljs-string">&quot;@dimen/activity_vertical_margin&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">tools:context</span>=<span class="hljs-string">&quot;.MainActivityFragment&quot;</span>&gt;</span><br><br>    &lt;ListView<br>        android:id=&quot;@+id/listview_forecast&quot;<br>        android:layout_width=&quot;match_parent&quot;<br>        android:layout_height=&quot;match_parent&quot; /&gt;<br><br><span class="hljs-tag">&lt;/<span class="hljs-name">FrameLayout</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>이 정도면 우리가 이번 강의에서 하려는 UI는 어느 정도 완성되었습니다</p>
+<h2 id="그러나"><a href="#그러나" class="headerlink" title="그러나!!!!!"></a>그러나!!!!!</h2><h2 id="데이터는"><a href="#데이터는" class="headerlink" title="데이터는??"></a>데이터는??</h2><hr>
+<p>layout에서  ListView와 같은 AdapterView를 사용할 때 데이터가 없으면 아무것도 표시가 안됩니다<br>이제부터 보여주기 위한 데이터 Fake Data를 넣겠습니다<br>이거는 그냥 보여주기 위한 용입니다!!!! 실제 데이터 아닙니다</p>
+<p>MainActivityFragment.java 파일을 열어보세요</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivityFragment</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Fragment</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainActivityFragment</span><span class="hljs-params">()</span> </span>&#123;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> View <span class="hljs-title">onCreateView</span><span class="hljs-params">(LayoutInflater inflater, ViewGroup container,</span></span><br><span class="hljs-function"><span class="hljs-params">                             Bundle savedInstanceState)</span> </span>&#123;<br>        String[] data = &#123;<br>                <span class="hljs-string">&quot;Mon 6/23 - Sunny - 31/17&quot;</span>,<br>                <span class="hljs-string">&quot;Tue 6/24 - Foggy - 21/8&quot;</span>,<br>                <span class="hljs-string">&quot;Wed 6/25 - Cloudy - 22/17&quot;</span>,<br>                <span class="hljs-string">&quot;Thurs 6/26 - Rainy - 18/11&quot;</span>,<br>                <span class="hljs-string">&quot;Fri 6/27 - Foggy - 21/10&quot;</span>,<br>                <span class="hljs-string">&quot;Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18&quot;</span>,<br>                <span class="hljs-string">&quot;Sun 6/29 - Sunny - 20/7&quot;</span><br>        &#125;;<br>        List&lt;String&gt; weekForecast = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;(Arrays.asList(data));<br><br>        <span class="hljs-keyword">return</span> inflater.inflate(R.layout.fragment_main, container, <span class="hljs-keyword">false</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>다음과 같이 코드를 추가하였나요?<br>이제 실제로 돌아가기 위해서 코드를 추가하겠습니다</p>
+<hr>
+<h2 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h2><hr>
+<p> 우리가 앞으로 많이 접하게 되는 Adapters에 대해서 이야기해 봅시다</p>
+<p>우리한테 다음 그림과 같은 데이터가 있다고 해봅시다</p>
+<p><img src="/img/adnroid-developing/1/adapter_1.png"></p>
+<p>이 데이터를 Adapter로 만들어지는 과정을 볼게요</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/adapter_2.png"></p>
+<p>Raw Data는 우리가 실제로 표현할 데이터를 의미합니다<br>Raw Data를 실제 코드에서 저장을 해야 합니다<br>그리고 각각의 데이터를 표현해야 합니다<br>여러 개의 Layout 파일들이 필요하겠네요</p>
+<hr>
+<p>만약 데이터가 100000000개이면….?<br>이것들에 대해서 Layout파일들을 하나하나 다 만들면…….</p>
+<p>정말 힘든 일이 생깁니다.</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/adapter_3.png"></p>
+<hr>
+<p>그래서 우리는 Adapter를 이용해서 표현합니다<br>이것을 AdapterView라고 합니다</p>
+<p>AdapaterView는 실제 동작을 볼게요</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/adapter_4.png"></p>
+<p>처음에 개수를 물어봅니다.<br><strong>이건 총 몇 개의 데이터야?</strong><br>위에서는 3개의 데이터를 가지고만 합니다</p>
+<p>그러면 자동으로 다음을 진행합니다</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/adapter_5.png"><br><img src="/img/adnroid-developing/1/adapter_6.png"></p>
+<hr>
+<p>그러면 최종적으로</p>
+<p><img src="/img/adnroid-developing/1/adapter_7.png"></p>
+<hr>
+<p>우리는 이것을 실제 코드로 표현합니다<br>기본적으로 AdapterView에 표현하기 위해서 Adapter에 표현합니다</p>
+<p>우리는 ArrayAdapter로 표현하겠습니다</p>
+<p>4개의 매개변수를 갖고 시작을 합니다 (생성자)</p>
+<ul>
+<li>context : App 환경에 대한 총체적 정보를 포함합니다 -&gt; getActivity()</li>
+<li>ID of list item layout : 우리가 데이터를 표현할 Layout -&gt; R.layout.list_item_forecast</li>
+<li>ID of textView : 데이터를 표현할 곳의 이름 -&gt; R.id.list_item_forecast_textview</li>
+<li>list of data : 보여줄 데이터를 의미 -&gt; weekForecast</li>
+</ul>
+<hr>
+<p>다음 코드를 추가 합시다</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> View <span class="hljs-title">onCreateView</span><span class="hljs-params">(LayoutInflater inflater, ViewGroup container,</span></span><br><span class="hljs-function"><span class="hljs-params">                         Bundle savedInstanceState)</span> </span>&#123;<br><br><span class="hljs-comment">// 생략</span><br><br>    ArrayAdapter&lt;String&gt; mForecastAdapter = <span class="hljs-keyword">new</span> ArrayAdapter&lt;String&gt;(<br>                    getActivity(),<br>                    R.layout.list_item_forecast,<br>                    R.id.list_item_forecast_textview,<br>                    weekForecast<br>    );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>이렇게 하면 Adapter로 데이터를 표현할 준비를 한 것입니다</p>
+<p>Layout에 있는 ListView에 우리의 데이터를 보여 달라고 요청만 하면 됩니다</p>
+<p>ListView는 어떻게 찾을까요??</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/FindItem.png"></p>
+<p><a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/view/View.html#IDs">http://developer.android.com/reference/android/view/View.html#IDs</a></p>
+<p>여기에서 추가 적으로 공부해보세요</p>
+<p>이제 ListView를 찾고 ListView에 ArrayAdapter(mForecastAdapter)를 붙이세요</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> View <span class="hljs-title">onCreateView</span><span class="hljs-params">(LayoutInflater inflater, ViewGroup container,</span></span><br><span class="hljs-function"><span class="hljs-params">                         Bundle savedInstanceState)</span> </span>&#123;<br><span class="hljs-comment">// 생략</span><br>    View rootView = inflater.inflate(R.layout.fragment_main, container, <span class="hljs-keyword">false</span>);<br>    ListView listView = (ListView)rootView.findViewById(R.id.listview_forecast);<br>    listView.setAdapter(mForecastAdapter);<br><br>    <span class="hljs-keyword">return</span> rootView;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>rootView를 통해서 찾을 기점을 잡고<br>그 기점을 통해서 ListView를 찾고<br>찾은 ListView를 통해서 Adapter를 설정합니다</p>
+<p>이제 빌드를 하고 실행을 해보세요</p>
+<hr>
+<p><img src="/img/adnroid-developing/1/7.png"></p>
+<hr>
+<h1 id="복습은-필수"><a href="#복습은-필수" class="headerlink" title="복습은 필수"></a>복습은 필수</h1><ul>
+<li>Android Studio</li>
+<li>SDK - Target and Minimum</li>
+<li>Emulators vs. Real Devices</li>
+<li>Gradle</li>
+<li>Application</li>
+<li>Activity</li>
+<li>Fragment</li>
+<li>Views and ViewGroups</li>
+<li>Views and XML layouts</li>
+<li>ListView</li>
+<li>Adapter</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Hoyuo
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://hoyuo.github.io/2017/02/01/adnroid-developing/Developing-Android-Apps-01/" title="1. Create Project Sunshine">https://hoyuo.github.io/2017/02/01/adnroid-developing/Developing-Android-Apps-01/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/udacity/" rel="tag"><i class="fa fa-tag"></i> udacity</a>
+              <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/02/01/adnroid-developing/Developing-Android-Apps-00/" rel="prev" title="Developing Android Apps">
+      <i class="fa fa-chevron-left"></i> Developing Android Apps
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/02/04/adnroid-developing/Developing-Android-Apps-02/" rel="next" title="2. Connect Sunshine to the Cloud">
+      2. Connect Sunshine to the Cloud <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android"><span class="nav-number">1.</span> <span class="nav-text">Android ?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-1"><span class="nav-number">1.1.</span> <span class="nav-text">Android</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EB%AA%A9%ED%91%9C"><span class="nav-number">2.</span> <span class="nav-text">목표</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%84%A4%EC%B9%98"><span class="nav-number">2.1.</span> <span class="nav-text">설치</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-Version"><span class="nav-number">2.2.</span> <span class="nav-text">Android Version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-Page"><span class="nav-number">2.3.</span> <span class="nav-text">Android Page</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-Page-Name"><span class="nav-number">2.4.</span> <span class="nav-text">Android Page Name</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-Studio"><span class="nav-number">2.4.1.</span> <span class="nav-text">Android Studio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-Studio-1"><span class="nav-number">2.4.2.</span> <span class="nav-text">Android Studio</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-Layout"><span class="nav-number">2.5.</span> <span class="nav-text">Android Layout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%9A%B0%EB%A6%AC%EB%8A%94-%EC%9D%B4%EC%A0%9C-ListView%EC%97%90-%EB%8C%80%ED%95%B4%EC%84%9C-%EC%9E%91%EC%97%85%EC%9D%84-%ED%95%A0%EA%B2%8C%EC%9A%94"><span class="nav-number">2.6.</span> <span class="nav-text">우리는 이제 ListView에 대해서 작업을 할게요</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%B2%9C%EC%B2%9C%ED%9E%88-%EB%94%B0%EB%9D%BC%EC%98%A4%EC%84%B8%EC%9A%94"><span class="nav-number">2.6.1.</span> <span class="nav-text">천천히 따라오세요</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-Layout-Design"><span class="nav-number">2.7.</span> <span class="nav-text">Android Layout Design</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FrameLayout"><span class="nav-number">3.</span> <span class="nav-text">FrameLayout</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LinearLayout"><span class="nav-number">4.</span> <span class="nav-text">LinearLayout</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RelativeLayout"><span class="nav-number">5.</span> <span class="nav-text">RelativeLayout</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%ED%95%B4%EC%83%81%EB%8F%84"><span class="nav-number">6.</span> <span class="nav-text">해상도</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%EA%B7%B8%EB%9F%AC%EB%82%98"><span class="nav-number">6.1.</span> <span class="nav-text">그러나!!!!!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8A%94"><span class="nav-number">6.2.</span> <span class="nav-text">데이터는??</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adapter"><span class="nav-number">6.3.</span> <span class="nav-text">Adapter</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EB%B3%B5%EC%8A%B5%EC%9D%80-%ED%95%84%EC%88%98"><span class="nav-number">7.</span> <span class="nav-text">복습은 필수</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description">Hoyuo's programming writting</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">카테고리</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 30567,
+      el    : 'wpac-rating',
+      color : '#fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '79c048e4f0067cf8561e',
+      clientSecret: '2143a9396e1b205817582122455e850a93254adf',
+      repo        : 'gtalk',
+      owner       : 'hoyuo',
+      admin       : ['hoyuo'],
+      id          : '2904dadb7e4940bc3af2c3ede2dc3dd8',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

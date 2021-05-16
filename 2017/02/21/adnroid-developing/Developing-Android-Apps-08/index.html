@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hoyuo.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Application in the Background우리는 2강에서 배웠던 내용을 생각해 봅시다Refresh 버튼을 메뉴를 선택하면 AsyncTask를 사용하여 데이터를 업데이트 하였습니다 이것은 좋지 않고 나중에 수정할 것이라고 말한적이 있습니다 AsyncTask는 Activity의 Lifecycle과 무관하기 때문입니다Loader를 배울때의 문제점이 계">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8. Services and Notifications">
+<meta property="og:url" content="https://hoyuo.github.io/2017/02/21/adnroid-developing/Developing-Android-Apps-08/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="Application in the Background우리는 2강에서 배웠던 내용을 생각해 봅시다Refresh 버튼을 메뉴를 선택하면 AsyncTask를 사용하여 데이터를 업데이트 하였습니다 이것은 좋지 않고 나중에 수정할 것이라고 말한적이 있습니다 AsyncTask는 Activity의 Lifecycle과 무관하기 때문입니다Loader를 배울때의 문제점이 계">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/8/1.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/8/2.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/8/3.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/8/4.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/8/5.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/8/6.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/8/7.png">
+<meta property="og:image" content="https://hoyuo.github.io/img/adnroid-developing/8/8.png">
+<meta property="article:published_time" content="2017-02-21T06:00:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="udacity">
+<meta property="article:tag" content="android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hoyuo.github.io/img/adnroid-developing/8/1.png">
+
+<link rel="canonical" href="https://hoyuo.github.io/2017/02/21/adnroid-developing/Developing-Android-Apps-08/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'ko'
+  };
+</script>
+
+  <title>8. Services and Notifications | Hoyuo's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89785418-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-89785418-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hoyuo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Android Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">45</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Hoyuo" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2017/02/21/adnroid-developing/Developing-Android-Apps-08/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+      <meta itemprop="description" content="Hoyuo's programming writting">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          8. Services and Notifications
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">작성일</span>
+
+              <time title="Post created: 2017-02-21 15:00" itemprop="dateCreated datePublished" datetime="2017-02-21T15:00:00+09:00">2017-02-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/Developing-Android-Apps/" itemprop="url" rel="index"><span itemprop="name">Developing Android Apps</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Application-in-the-Background"><a href="#Application-in-the-Background" class="headerlink" title="Application in the Background"></a>Application in the Background</h2><p>우리는 2강에서 배웠던 내용을 생각해 봅시다<br>Refresh 버튼을 메뉴를 선택하면 AsyncTask를 사용하여 데이터를 업데이트 하였습니다</p>
+<p>이것은 좋지 않고 나중에 수정할 것이라고 말한적이 있습니다</p>
+<p>AsyncTask는 Activity의 Lifecycle과 무관하기 때문입니다<br>Loader를 배울때의 문제점이 계속 반복되는 구조가 됩니다</p>
+<p>Web 서비스에서 Data를 받을 때와 같은 장시간 Background 작업은 좋은 방법이 아닙니다</p>
+<p>AsyncTask는 Application 프로세스가 살아 있는 동안 계속 실행 됩니다<br>단 우선순위가 낮기 때문에 Background로 이동을 하는 상황이나 리소스가 부족한 상황에서는 죽게 됩니다<br>이것은 큰 문제입니다!!</p>
+<p>Application을 시작할때 날씨를 업데이트 하지만 날씨가 빠르게 변화하면 바람직하지 않은 움직임을 할 수도 있습니다</p>
+<p>날씨를 업데이트 하는 올바른 방법을 배웁시다<br>배터리 소모를 최소화하고 Background에서 정기적으로 Data를 업데이트 합시다</p>
+<p>4강에서 활동양이 미비한 Application은 종료시킨다는 사실을 배웠습니다</p>
+<p>Foreground Application을 위한 활동이라는 사실도 배웠습니다<br>Application이 보이지 않는 곳에서도 해야할 활동이 있다면?</p>
+<p>예를 들어서 사진 업로드 / 다운로드, 음악 재생 같은 것이 있다면 어떨까요?</p>
+<p>이런동작을 하기 위해서 Application의 Component가 있습니다</p>
+<p><strong>Activity, Content Provider, Broadcast Receiver, intent</strong> 같은 것들을 이미 다 배웠습니다</p>
+<p>마지막 단계인 Services만 배우면 됩니다!</p>
+<p><img src="/img/adnroid-developing/8/1.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">startService(myService);<br>stopService(myService);<br></code></pre></td></tr></table></figure>
+
+<p>이런식으로 서비스를 시작 / 정지 할 수 있습니다</p>
+<p>Activity와 Services의 다른 점은 UI가 없고 Background Activity보다 우선순위도 높지 않습니다<br>실행중인 서비스를 가지고 있는 앱은 Foreground 활동을 위한 리소스 확보 때문에 종료될 가능성이 있습니다<br>하지만 기본 설정으로 시스템은 앱 내에서 중지된 서비스를 재시작 하려고 시도합니다</p>
+<p><img src="/img/adnroid-developing/8/2.png"></p>
+<p>Activity와는 다르게 서비스는 방해 없이 작업을 수행하도록 설계되어 있습니다</p>
+<p>보통 실행하고 싶은 백그라운드 작업을 시작하려고 할 때만 <strong>onStartCommand</strong> handler를 override 합니다<br>그런데 이 경우에는 앱 상태 변화를 모니터링하고 백그라운드 앱에 전달할 handler가 없다는 것을 알아야 합니다</p>
+<p>실행중인 Service가 프레임워크에 다음과 같이 통지하기 때문입니다</p>
+<blockquote>
+<p>“이 Application은 Background에 실행중인 Service를 가지지 않는 다른 Application보다 우선 순위가 높다”</p>
+</blockquote>
+<p>Services는 작업 수행도 가능합니다<br>음악을 재생하거나 네비게이션 길안내를 수행하는 작업들이 가능합니다<br>이 작업은 UI를 가지지 않기 때문에 중단시 사용자 경험을 방해하게 됩니다</p>
+<p>이러한 경우 startForeground() 호출에 의해 “Service가 Foreground에서 실행되고 있다”고 통지할수 잇습니다</p>
+<p><img src="/img/adnroid-developing/8/3.png"></p>
+<p><img src="/img/adnroid-developing/8/4.png"></p>
+<p>Activity와 Receiver와 같이 Service도 Main-Thread 입니다</p>
+<p>그래서 Service내에서 시간이 오래 걸리는 작업을 실행시키는 경우에는 Background Thread로 처리 할 수 있습니다</p>
+<p>IntentService Class를 이용 할 수 있습니다 Practice Patterns을 이용해서 사용됩니다</p>
+<p>intent를 이용해서 들어오는 intent의 목록을 만들고 startService()가 호출될 때 넘어 들어옵니다<br>큐 형식으로 되어있습니다</p>
+<p>Services는 강력한 툴 입니다<br>배우는 것도 중요하지만 현실적으로 프레임워크를 통해 자기만의 Services implementation을 실행하는 방법도 종종 있습니다<br>백그라운드 작업을 실행할 IntentService이든 SyncAdapter든 간에 계속 배워 나가봅시다</p>
+<hr>
+<p><strong>Android에서는 App Priority를 3단계로 구분합니다</strong></p>
+<p>Low, High, Critical</p>
+<ul>
+<li>Critical : Active Activities Foreground Services</li>
+<li>High : Visible Activities, Running Services</li>
+<li>Low : Background Applications</li>
+</ul>
+<p><strong>Android 자원 관리의 3가지 법칙!!</strong></p>
+<ol>
+<li>Android는 유저가 사용하고 있는 중인 앱들을 부드럽게 사용가능하도록 유지시킵니다</li>
+<li>1번을 어기지 않는 이상 Android는 보이거나 실행중인 앱들은 그대로 내비둡니다</li>
+<li>1번 2번을 어기지 않는 이상 Android는 Background에 있는 모든 앱들을 유지시킵니다</li>
+</ol>
+<hr>
+<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><p><a target="_blank" rel="noopener" href="https://developer.android.com/guide/components/services.html?hl=ko">Services</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/IntentService.html">IntentService</a></p>
+<p>Service를 이용해서 Applications을 어떻게 적용할까요?</p>
+<p>WeatherProvider 내에 Content Notifier가 Content Observer에게 통보해 줍니다<br>FetchWeatherTask는 이미 UI와 독립적으로 실행되고 있습니다</p>
+<p>이제 IntentService를 활용할 수 있습니다!</p>
+<p>service 패키지를 만들어 봅시다<br><strong>SunshineService</strong> class를 만들 때 <strong>IntentService</strong>를 상속받아서 해봅시다</p>
+<p>기본적인 생성자와 handler를 override 합시다</p>
+<p><strong>AndroidManifest.xml</strong> 에 Service를 추가합니다</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">service</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">&quot;.service.SunshineService&quot;</span>/&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>FetchWeatherTask.doInBackground() 내용을 SunshineService.onHandleIntent()로 이동합니다<br>나머지 부속 함수들도 이동합니다</p>
+<p>마무리로 FetchWeatherTask class를 삭제합니다</p>
+<p><a href="/downloads/code/8/SunshineService.java">SunshineService.java</a></p>
+<p><strong>ForecastFragment.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">updateWeather</span><span class="hljs-params">()</span> </span>&#123;<br>    Intent intent = <span class="hljs-keyword">new</span> Intent(getActivity(), SunshineService.class);<br>    intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,<br>                Utility.getPreferredLocation(getActivity()));<br>    getActivity().startService(intent);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>이제 우리 Application에는 간단한 Service가 포함되어있습니다<br>하지만 이것은 스스로 작동하지는 않습니다</p>
+<p>Alarm Manager를 통해서 작업을 진행해 봅시다<br>Alarm Manager는 일정 시간이 지난뒤 시작하려는 Application 구성 요소 시스템에 말하고 Background에서 몇가지 작업을 처리 할 수 있습니다</p>
+<p>우리는 Background에서 어떤 작업을 시키면 될까요? 이것을 하기위해서 어떤것이 필요할까요?</p>
+<hr>
+<h2 id="Broadcast-Receiver"><a href="#Broadcast-Receiver" class="headerlink" title="Broadcast Receiver"></a>Broadcast Receiver</h2><p>Broadcast Receiver는 아주 특별한 역할을 합니다</p>
+<p>다른 Applications에서 Intent Broadcast를 수신하는데 사용합니다<br>일반적으로 Broadcast Receiver는 Intent Filter에 등록합니다<br>또한 Application에서 알람을 listen것도 하나의 방법입니다</p>
+<p>우리는 <a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/PendingIntent.html">PendingIntent</a>를 사용합니다</p>
+<p>PendingIntent는 하나의 Application에서 또 다른 Application으로 전달하는 역할을 수행합니다<br>기존의 Intent와 다르게 permission, ID를 보내서 지정한 작업을 수행 할 권한을 부여받는 역할을 합니다</p>
+<p>Android 내부에 보안 모델에 무단 액세스하지 않고 특정 비동기 방법으로 Application의 CallBack 프로세스에 허용합니다</p>
+<p><strong>SunshineService</strong> Class 안에 추가 합니다</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AlarmReceiver</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">BroadcastReceiver</span> </span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onReceive</span><span class="hljs-params">(Context context, Intent intent)</span> </span>&#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>AndroidManifest</strong> 에도 Receiver를 등록합니다</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml">&lt;receiver<br>    android:name=&quot;.service.SunshineService$AlarmReceiver&quot;<br>    android:enabled=&quot;true&quot;/&gt;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="연습"><a href="#연습" class="headerlink" title="연습"></a>연습</h2><ul>
+<li>AlarmReceiver.onReceive()를 완성하세요</li>
+<li>updateWeather()를 수정하세요</li>
+</ul>
+<h3 id="정답"><a href="#정답" class="headerlink" title="정답"></a>정답</h3><p><strong>SunshineService.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AlarmReceiver</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">BroadcastReceiver</span> </span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onReceive</span><span class="hljs-params">(Context context, Intent intent)</span> </span>&#123;<br>        Intent sendIntent = <span class="hljs-keyword">new</span> Intent(context, SunshineService.class);<br>        sendIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,<br>                            intent.getStringExtra(SunshineService.LOCATION_QUERY_EXTRA));<br>        context.startService(sendIntent);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>ForecastFragment.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">updateWeather</span><span class="hljs-params">()</span> </span>&#123;<br>    Intent alarmIntent = <span class="hljs-keyword">new</span> Intent(getActivity(), SunshineService.AlarmReceiver.class);<br>    alarmIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,<br>            Utility.getPreferredLocation(getActivity()));<br><br>    PendingIntent pendingIntent = PendingIntent.getBroadcast(<br>            getActivity(),<br>            <span class="hljs-number">0</span>,<br>            alarmIntent,<br>            PendingIntent.FLAG_ONE_SHOT<br>    );<br><br>    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);<br><br>    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + <span class="hljs-number">3000</span>, pendingIntent);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>이제 앱을 실행하면 5초후에 화면이 업데이트 되는걸 볼 수 있습니다<br>우리는 이것을 이용해서 Background에서 Update와 Service를 이용해서 폰의 기능을 더 유용하게 사용할 수 있습니다</p>
+<p>우리 Android 휴대폰 내부에는 Cell Radio가 있습니다</p>
+<p><img src="/img/adnroid-developing/8/5.png"></p>
+<p><img src="/img/adnroid-developing/8/6.png"></p>
+<p><img src="/img/adnroid-developing/8/7.png"></p>
+<p><img src="/img/adnroid-developing/8/8.png"></p>
+<hr>
+<p>고객이나 서비스 사이트의 변화를 무시할 수 없습니다</p>
+<ul>
+<li>최소량의 상태 전송만 한다</li>
+<li>Prefetch, Batch를 이용한다</li>
+<li>긴급하지 않은 전송은 대기</li>
+<li>사용자나 서버가 시작한 긴급전송과 묶어서 전송</li>
+</ul>
+<p>이것을 통해서 Cell Radio 변화의 빈도를 낮출 수 있습니다</p>
+<p>크기에 상관 없이 데이터를 옮길 때마다 Radio는 30초까지 켜져 있을 수 있다는 사실을 알아야 합니다<br>어느정도 균형을 맞춰서 작업이 되어야합니다</p>
+<p>현재 섹션에서 사용자가 필요료 할만한 모든 데이터를 한 번 연결된 상태에서 한꺼번에 최대한 다운 받아야 합니다</p>
+<p>하지만, 사용하지 않을 데이터를 다운 받느라 배터리와 주파수를 낭비하면 안됩니다</p>
+<p><a target="_blank" rel="noopener" href="https://developer.android.com/training/efficient-downloads/index.html">Transferring Data Without Draining the Battery</a><br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=cSIB2pDvH3E&list=PLWz5rJ2EKKc-VJS9WQlj9xM_ygPopZ-Qd">Efficient Data Transfers</a></p>
+<hr>
+<h2 id="SyncAdapter"><a href="#SyncAdapter" class="headerlink" title="SyncAdapter"></a>SyncAdapter</h2><p>Background에서 Transaction을 쉽게 만드는 방법은 여러가지가 있습니다<br>Android는 여러가지 Practice들을 제공하는 SyncManager 프레임워크를 가지고 있습니다</p>
+<p>SyncAdapter를 이용해서 그 프레임워크를 사용할 수 있습니다!!!</p>
+<p>Application이 구글 Application이 이용하는 효과적은 싱크 기능을 이용할 수 있도록 만들어줍니다</p>
+<p>Data Transfer을 한자리에 보관할 수 있는 중심적인 장소입니다<br>Android에 의해 효율적으로 관리 됩니다</p>
+<p>Android SyncManager는 SyncAdapter를 이용해서 Sync 요청을 처리합니다<br>SyncManager는 이러한 요청을 배열하고 시간을 조정함으로서 Application에서 다른 Application으로 Data가 이동하게 하거나 System이 Radio를 switch 하는 빈도를 줄여 줍니다</p>
+<p>메모리가 부족하다면 동시에 Sync 하는 수를 적게 합니다<br>SyncManager는 Network가 불안정할 때 Data Transfer나 Download 재시작 전에 Network 연결 상태를 점검합니다</p>
+<p>Synchronization 프레임워크는 Content Provider와 Two-way Synchronization을 해주고 Android 계정 관리자가 그 계정에 알맞는 Synchronization 서비스를 제공하도록 합니다</p>
+<p>우리 앱은 그런 것들을 하는건 아닙니다<br>이러 기능들의 복잡함을 다루기는 할 것입니다</p>
+<p>SyncAdapter를 만드는것은 처음에는 어려울 수도 있습니다</p>
+<hr>
+<p>한번 SyncAdapter를 구현해 봅시다</p>
+<script src="//gist.github.com/6fc5b24e3296fbcb1da4e7b4cd6baa90.js"></script>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs xml">&lt;service<br>    android:name=&quot;.sync.SunshineAuthenticatorService&quot;&gt;<br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">intent-filter</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">action</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">&quot;android.accounts.AccountAuthenticator&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">intent-filter</span>&gt;</span><br><br>    &lt;meta-data<br>        android:name=&quot;android.accounts.AccountAuthenticator&quot;<br>        android:resource=&quot;@xml/authenticator&quot;/&gt;<br><span class="hljs-tag">&lt;/<span class="hljs-name">service</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml">&lt;provider<br>    android:name=&quot;.data.WeatherProvider&quot;<br>    android:authorities=&quot;@string/content_authority&quot;<br>    android:exported=&quot;false&quot;<br>    android:syncable=&quot;true&quot;/&gt;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml">&lt;uses-permission<br>    android:name=&quot;android.permission.READ_SYNC_SETTINGS&quot;/&gt;<br>&lt;uses-permission<br>    android:name=&quot;android.permission.WRITE_SYNC_SETTINGS&quot;/&gt;<br>&lt;uses-permission<br>    android:name=&quot;android.permission.AUTHENTICATE_ACCOUNTS&quot;/&gt;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs xml">&lt;service<br>    android:name=&quot;.sync.SunshineSyncService&quot;<br>    android:exported=&quot;true&quot;&gt;<br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">intent-filter</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">action</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">&quot;android.content.SyncAdapter&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">intent-filter</span>&gt;</span><br><br>    &lt;meta-data<br>        android:name=&quot;android.content.SyncAdapter&quot;<br>        android:resource=&quot;@xml/syncadapter&quot;/&gt;<br><span class="hljs-tag">&lt;/<span class="hljs-name">service</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>ForecastFragment.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">updateWeather</span><span class="hljs-params">()</span> </span>&#123;<br>    SunshineSyncAdapter.syncImmediately(getActivity());<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="한번-해보기"><a href="#한번-해보기" class="headerlink" title="한번 해보기"></a>한번 해보기</h2><p>SyncAdapter를 이용해서 날씨 데이터를 가져오고 DB안에 저장하도록 하세요<br>ForecastFragment.updateWeather()를 수정해서 SyncAdapter와 동기화를 시작하도록 하세요<br><strong>SunshineService.onHandleIntent()에 있는 코드를 SyncAdapter로 이동하면 됩니다</strong></p>
+<p><a target="_blank" rel="noopener" href="https://developer.android.com/training/sync-adapters/running-sync-adapter.html">Running a Sync Adapter</a></p>
+<h3 id="정답-1"><a href="#정답-1" class="headerlink" title="정답"></a>정답</h3><p><a href="/downloads/code/8/SunshineSyncAdapter.java">SunshineSyncAdapter.java</a></p>
+<hr>
+<p>스케쥴을 동기화 합시다</p>
+<ol>
+<li><p><strong>FetchWeatherTask</strong>, <strong>SunshineService</strong> class를 삭제하고 <strong>AndroidManifest</strong>에 등록한 service와 receiver도 삭제합니다</p>
+</li>
+<li><p>SunshineSyncAdapter에 method를 추가 합니다</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment">    * Helper method to schedule the sync adapter periodic execution</span><br><span class="hljs-comment">    */</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">configurePeriodicSync</span><span class="hljs-params">(Context context, <span class="hljs-keyword">int</span> syncInterval, <span class="hljs-keyword">int</span> flexTime)</span> </span>&#123;<br>       Account account = getSyncAccount(context);<br>       String authority = context.getString(R.string.content_authority);<br>       <span class="hljs-keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT) &#123;<br>           <span class="hljs-comment">// we can enable inexact timers in our periodic sync</span><br>           SyncRequest request = <span class="hljs-keyword">new</span> SyncRequest.Builder().<br>                   syncPeriodic(syncInterval, flexTime).<br>                   setSyncAdapter(account, authority).<br>                   setExtras(<span class="hljs-keyword">new</span> Bundle()).build();<br>           ContentResolver.requestSync(request);<br>       &#125; <span class="hljs-keyword">else</span> &#123;<br>           ContentResolver.addPeriodicSync(account,<br>                   authority, <span class="hljs-keyword">new</span> Bundle(), syncInterval);<br>       &#125;<br>   &#125;<br><br>   <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAccountCreated</span><span class="hljs-params">(Account newAccount, Context context)</span> </span>&#123;<br>       <span class="hljs-comment">/*</span><br><span class="hljs-comment">        * Since we&#x27;ve created an account</span><br><span class="hljs-comment">        */</span><br>       SunshineSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);<br><br>       <span class="hljs-comment">/*</span><br><span class="hljs-comment">        * Without calling setSyncAutomatically, our periodic sync will not be enabled.</span><br><span class="hljs-comment">        */</span><br>       ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), <span class="hljs-keyword">true</span>);<br><br>       <span class="hljs-comment">/*</span><br><span class="hljs-comment">        * Finally, let&#x27;s do a sync to get things started</span><br><span class="hljs-comment">        */</span><br>       syncImmediately(context);<br>   &#125;<br><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initializeSyncAdapter</span><span class="hljs-params">(Context context)</span> </span>&#123;<br>       getSyncAccount(context);<br>   &#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>getSyncAccount()에 코드를 추가합니다</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (<span class="hljs-keyword">null</span> == accountManager.getPassword(newAccount)) &#123;<br><br>    <span class="hljs-keyword">if</span> (!accountManager.addAccountExplicitly(newAccount, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-keyword">null</span>)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>    &#125;<br>    onAccountCreated(newAccount, context); <span class="hljs-comment">// 이게 추가된 사항</span><br>&#125;<br><span class="hljs-keyword">return</span> newAccount;<br></code></pre></td></tr></table></figure></li>
+<li><p>시간에 대한 설정을 추가 합니다</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Interval at which to sync with the weather, in seconds.</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> SYNC_INTERVAL = <span class="hljs-number">60</span> * <span class="hljs-number">180</span>;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> SYNC_FLEXTIME = SYNC_INTERVAL / <span class="hljs-number">3</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>MainActivity</strong> 마지막에 코드를 추가합니다</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">SunshineSyncAdapter.initializeSyncAdapter(<span class="hljs-keyword">this</span>);<br></code></pre></td></tr></table></figure>
+
+<h3 id="Control-Flow"><a href="#Control-Flow" class="headerlink" title="Control Flow"></a>Control Flow</h3><ol>
+<li>MainActivity가 생성될때 SyncAdapter를 초기화합니다</li>
+<li>초기화 중에, getSyncAccount() 가 호출됩니다</li>
+<li>getSyncAccount()는 계정이 없으면 onAccountCreated()를 이용해서 만든다</li>
+<li>onAccountCreated()는 동기화 스케쥴링을 구성하고, 즉시 동기화를 한다</li>
+</ol>
+<hr>
+<h2 id="FCM-Firebase-Cloud-Messaging"><a href="#FCM-Firebase-Cloud-Messaging" class="headerlink" title="FCM (Firebase Cloud Messaging)"></a>FCM (Firebase Cloud Messaging)</h2><p>SyncAdapter를 이용해서는 우리는 반복적인 작업에 대해서 구현했습니다</p>
+<p>부정확한 반복 알람은 정확한 반복 알람보다는 훨씬 낫겠지만 여전히 완벽과는 거리가 멉니다<br>반복 알람들의 공통적인 문제는 여전히 업데이트를 확인하기 위해 서버를 폴링한다는 것입니다</p>
+<p>자주 폴링하면 할수록 더 최신 데이터를 출력할 수 있지만 배터리 소모량이 많아집니다<br>배터리를 오래 쓰기 위해서 폴링 주기를 길게 늘리면 갱신되지 않은 데이터가 오랫동안 남아 있습니다<br>사용자로 하여금 스스로 업데이트 빈도를 결정하게 할 수도 있지만 앱이 다 알아서 해 준다는 느낌이 덜합니다</p>
+<p>더 좋은 방법이 없을까요? 그런것이 가능은 할까요?</p>
+<p>FCM은 다운로드될 준비가 된 데이터가 생기면 서버에서 앱에 알리도록 합니다<br>혹은 메세지 playload 안에 데이터를 포함시켜서 보내는 방법도 있습니다</p>
+<p>FCM은 Firebase를 통해 서버에서 앱의 어느 인스턴스에라도 메세지를 보낼 수 있습니다</p>
+<p>이런구조를 사용하면 폴링을 사용 안해도 됩니다</p>
+<p>배터리 생명도 개선이 되고 앱의 최신성도 향상시켜 줍니다</p>
+<p>그리고 동기화할 데이터가 있을 때 클라이언트에 알리는 일을 서버에게 맡길 수 있습니다</p>
+<p>이러한 알림은 새로운 데이터가 있거나 다운로드가 필요하다고 앱에 알려주고 SyncAdapter를 발동시키는 단순한 메세지일 수도 있고 메세지 안에 새로운 데이터를 포함시켜 보내는 방법도 있습니다</p>
+<p>우리 Application에서는 외부 서버를 이용하게 됩니다<br>그렇다고 해도 변경점을 발견하게 되면 소스를 끌어오고 설치된 앱 인스턴스에 알리는 중간 단계를 만드는 것이 좋습니다</p>
+<p><a target="_blank" rel="noopener" href="https://firebase.google.com/docs/cloud-messaging/">FCM</a></p>
+<hr>
+<h2 id="Notification"><a href="#Notification" class="headerlink" title="Notification"></a>Notification</h2><p>Notification을 만들어 봅시다</p>
+<p><strong>string.xml</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- Notification Format --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">string</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;format_notification&quot;</span>&gt;</span><br>Forecast: <span class="hljs-tag">&lt;<span class="hljs-name">xliff:g</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;condition&quot;</span>&gt;</span>%1$s<span class="hljs-tag">&lt;/<span class="hljs-name">xliff:g</span>&gt;</span> High: <span class="hljs-tag">&lt;<span class="hljs-name">xliff:g</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;high&quot;</span>&gt;</span>%2$s<span class="hljs-tag">&lt;/<span class="hljs-name">xliff:g</span>&gt;</span> Low: <span class="hljs-tag">&lt;<span class="hljs-name">xliff:g</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;low&quot;</span>&gt;</span>%3$s<span class="hljs-tag">&lt;/<span class="hljs-name">xliff:g</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span><br><span class="hljs-comment">&lt;!-- Strings related to Notification preference --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">string</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;pref_last_notification&quot;</span>&gt;</span>last_notification<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>SunshineSyncAdapter에 Projection을 추가합니다</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] NOTIFY_WEATHER_PROJECTION = <span class="hljs-keyword">new</span> String[] &#123;<br>        WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,<br>        WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,<br>        WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,<br>        WeatherContract.WeatherEntry.COLUMN_SHORT_DESC<br>&#125;;<br><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> INDEX_WEATHER_ID = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> INDEX_MAX_TEMP = <span class="hljs-number">1</span>;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> INDEX_MIN_TEMP = <span class="hljs-number">2</span>;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> INDEX_SHORT_DESC = <span class="hljs-number">3</span>;<br></code></pre></td></tr></table></figure>
+
+<p>Constants 추가</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">long</span> DAY_IN_MILLIS = <span class="hljs-number">1000</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">24</span>;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> WEATHER_NOTIFICATION_ID = <span class="hljs-number">3004</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Utility.formatTemperature()</strong> 수정</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">formatTemperature</span><span class="hljs-params">(Context context, <span class="hljs-keyword">double</span> temperature)</span> </span>&#123;<br>    String suffix = <span class="hljs-string">&quot;\u00B0&quot;</span>;<br>    <span class="hljs-keyword">if</span> (!isMetric(context)) &#123;<br>        temperature = (temperature * <span class="hljs-number">1.8</span>) + <span class="hljs-number">32</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> String.format(context.getString(R.string.format_temperature), temperature);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>**SunshineSyncAdapter.getWeatherDataFromJson()**에서 bulkInsert 진행 후에</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">notifyWeather();<br></code></pre></td></tr></table></figure>
+
+<p><strong>SunshineSyncAdapter</strong>에 메서드 추가</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">notifyWeather</span><span class="hljs-params">()</span> </span>&#123;<br>    Context context = getContext();<br>    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);<br>    String lastNotificationKey = context.getString(R.string.pref_last_notification);<br>    <span class="hljs-keyword">long</span> lastSync = prefs.getLong(lastNotificationKey, <span class="hljs-number">0</span>);<br><br>    <span class="hljs-keyword">if</span> (System.currentTimeMillis() - lastSync &gt;= DAY_IN_MILLIS) &#123;<br>        String locationQuery = Utility.getPreferredLocation(context);<br><br>        Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());<br><br>        Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>);<br><br>        <span class="hljs-keyword">if</span> (cursor.moveToFirst()) &#123;<br>            <span class="hljs-keyword">int</span> weatherId = cursor.getInt(INDEX_WEATHER_ID);<br>            <span class="hljs-keyword">double</span> high = cursor.getDouble(INDEX_MAX_TEMP);<br>            <span class="hljs-keyword">double</span> low = cursor.getDouble(INDEX_MIN_TEMP);<br>            String desc = cursor.getString(INDEX_SHORT_DESC);<br><br>            <span class="hljs-keyword">int</span> iconId = Utility.getIconResourceForWeatherCondition(weatherId);<br>            String title = context.getString(R.string.app_name);<br><br>            String contentText = String.format(context.getString(R.string.format_notification),<br>                    desc,<br>                    Utility.formatTemperature(context, high),<br>                    Utility.formatTemperature(context, low));<br><br>            <span class="hljs-comment">// TODO : Work</span><br>            SharedPreferences.Editor editor = prefs.edit();<br>            editor.putLong(lastNotificationKey, System.currentTimeMillis());<br>            editor.commit();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/ui/notifiers/notifications.html">알림</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html">NotificationCompat.Builder</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/NotificationManager.html">NotificationManager</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/PendingIntent.html">PendingIntent</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/support/v4/app/TaskStackBuilder.html">TaskStackBuilder</a></p>
+<hr>
+<h2 id="연습-1"><a href="#연습-1" class="headerlink" title="연습"></a>연습</h2><ol>
+<li>NotificationCompat.Builder를 이용해서 Notification을 만듭니다</li>
+<li>Notification이 선택되면 화면이 열리도록 explicit intent를 만들어 봅시다</li>
+<li>TaskStackBuilder를 이용해서 backstack을 만듭시다</li>
+<li>NotificationManager를 이용해서 Notification을 보여줍니다</li>
+</ol>
+<h3 id="정답-2"><a href="#정답-2" class="headerlink" title="정답"></a>정답</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java">NotificationCompat.Builder mBuilder =<br>        <span class="hljs-keyword">new</span> NotificationCompat.Builder(getContext())<br>                .setSmallIcon(iconId)<br>                .setContentTitle(title)<br>                .setContentText(contentText);<br><br>Intent resultIntent = <span class="hljs-keyword">new</span> Intent(context, MainActivity.class);<br>TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);<br>stackBuilder.addNextIntent(resultIntent);<br>PendingIntent resultPendingIntent =<br>        stackBuilder.getPendingIntent(<br>                <span class="hljs-number">0</span>,<br>                PendingIntent.FLAG_UPDATE_CURRENT<br>        );<br>mBuilder.setContentIntent(resultPendingIntent);<br><br>NotificationManager mNotificationManager =<br>        (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);<br><br>mNotificationManager.notify(WEATHER_NOTIFICATION_ID, mBuilder.build());<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>Background에서 App을 업데이트 했지만 Application 실행시키지 않으면 변화된 내용을 알 수 있는가?</p>
+<p>알림은 Background 업데이트를 사용자에게 알려 주는 편리한 방식으로 시작했지만 가벼운 정도의 방식으로 App과 직접 상호작용하는 강력한 표준 지름길이 되었습니다</p>
+<p>단순 한줄 알림에서 많은 정보를 포함할수 있도록 바뀌었고, 알림 내에 잇는 데이터에서 수행되는 작동을 포함 가능하게 합니다</p>
+<p>잘 이용한다면 Android Wear에서 쉽게 Notification을 구성 할 수 있습니다</p>
+<p>그러나 알림의 유용성과 스팸은 한끗 차이라는것을 명심하세요</p>
+<hr>
+<h2 id="연습-2"><a href="#연습-2" class="headerlink" title="연습"></a>연습</h2><p>Application을 좀 더 좋게 만들기 위한 작업입니다</p>
+<p>preference를 이용해서 Notification을 On / Off 하도록 만들어 보세요!</p>
+<h3 id="정답-3"><a href="#정답-3" class="headerlink" title="정답"></a>정답</h3><script src="//gist.github.com/5c52b2defb2d40b594aaa3a637140da1.js"></script>
+
+<hr>
+<p>사실 알고계신분도 있을 수 있지만 우리 Application의 Database가 무한정 증가 하고 있습니다</p>
+<p>이것은 언젠가 용량부족을 겪게 됩니다<br>그러면 사용자들은 우리 Application을 당연히 삭제합니다… 이렇게 하면 안됩니다</p>
+<p>이 문제를 해결해 봅시다<br>단순하게 생각하면 오늘 날짜 이전 데이터는 삭제를 하면 됩니다</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">getContext().getContentResolver().delete(WeatherEntry.CONTENT_URI,<br>        WeatherEntry.COLUMN_DATE + <span class="hljs-string">&quot; &lt;= ?&quot;</span>,<br>        <span class="hljs-keyword">new</span> String[]&#123;Long.toString(dayTime.setJulianDay(julianStartDay - <span class="hljs-number">1</span>))&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>이런식으로 코드를 추가하면 불필요 데이터는 삭제가 되기 때문에 문제가 해결이 됩니다</p>
+<p>우리 Application에 아직도 불편한 부분이 있습니다<br>지도를 보여줄때 GPS좌표값이 아니라 단순 위치 쿼리를 이용한다는 점입니다</p>
+<p>이것을 수정하여서 GPS 좌표값으로 넘겨주도록 합시다<br>또한, 더이상 필요없는 Refresh 버튼도 제거합시다!</p>
+<p>일단 MainActivity에 있는 <strong>openPreferredLocationInMap()**을 **ForecastFragment</strong>로 이동합니다</p>
+<p><strong>onOptionsItemSelected()**에서 action_map을 삭제합니다<br>**menu_main.xml</strong>에서 action_map 부분을 삭제합니다</p>
+<p><strong>forecast_fragment_menu.xml</strong> 을 수정합니다</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">menu</span> <span class="hljs-attr">xmlns:android</span>=<span class="hljs-string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span><br><span class="hljs-tag">      <span class="hljs-attr">xmlns:app</span>=<span class="hljs-string">&quot;http://schemas.android.com/apk/res-auto&quot;</span>&gt;</span><br>    &lt;item<br>        android:id=&quot;@+id/action_map&quot;<br>        android:title=&quot;@string/action_map&quot;<br>        app:showAsAction=&quot;never&quot;/&gt;<br><span class="hljs-tag">&lt;/<span class="hljs-name">menu</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>ForecastFragment.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">onOptionsItemSelected</span><span class="hljs-params">(MenuItem item)</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> id = item.getItemId();<br>    <span class="hljs-keyword">if</span>(id == R.id.action_map) &#123;<br>        openPreferredLocationInMap();<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.onOptionsItemSelected(item);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">openPreferredLocationInMap</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">null</span> != mForecastAdapter ) &#123;<br>        Cursor c = mForecastAdapter.getCursor();<br><br>        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">null</span> != c ) &#123;<br>            c.moveToPosition(<span class="hljs-number">0</span>);<br><br>            String posLat = c.getString(COL_COORD_LAT);<br>            String posLong = c.getString(COL_COORD_LONG);<br>            Uri geoLocation = Uri.parse(<span class="hljs-string">&quot;geo:&quot;</span> + posLat + <span class="hljs-string">&quot;,&quot;</span> + posLong);<br><br>            Intent intent = <span class="hljs-keyword">new</span> Intent(Intent.ACTION_VIEW);<br>            intent.setData(geoLocation);<br><br>            <span class="hljs-keyword">if</span> (intent.resolveActivity(getActivity().getPackageManager()) != <span class="hljs-keyword">null</span>) &#123;<br>                startActivity(intent);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                Log.d(LOG_TAG, <span class="hljs-string">&quot;Couldn&#x27;t call&quot;</span> + geoLocation.toString() + <span class="hljs-string">&quot;, no receiving apps installed!&quot;</span>);<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="복습은-필수"><a href="#복습은-필수" class="headerlink" title="복습은 필수"></a>복습은 필수</h2><ul>
+<li>Service</li>
+<li>BroadcastReceiver</li>
+<li>SyncAdapter</li>
+<li>Notification</li>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/studio/intro/index.html">AndroidStudio</a></li>
+</ul>
+<hr>
+<h1 id="끝"><a href="#끝" class="headerlink" title="끝"></a>끝</h1>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Hoyuo
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://hoyuo.github.io/2017/02/21/adnroid-developing/Developing-Android-Apps-08/" title="8. Services and Notifications">https://hoyuo.github.io/2017/02/21/adnroid-developing/Developing-Android-Apps-08/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/udacity/" rel="tag"><i class="fa fa-tag"></i> udacity</a>
+              <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/02/18/adnroid-developing/Developing-Android-Apps-07-03/" rel="prev" title="7. Rich and Responsive Layouts (3)">
+      <i class="fa fa-chevron-left"></i> 7. Rich and Responsive Layouts (3)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/03/20/zen_of_python/" rel="next" title="The Zen of Python">
+      The Zen of Python <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Application-in-the-Background"><span class="nav-number">1.</span> <span class="nav-text">Application in the Background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service"><span class="nav-number">2.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Broadcast-Receiver"><span class="nav-number">3.</span> <span class="nav-text">Broadcast Receiver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%97%B0%EC%8A%B5"><span class="nav-number">4.</span> <span class="nav-text">연습</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%A0%95%EB%8B%B5"><span class="nav-number">4.1.</span> <span class="nav-text">정답</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SyncAdapter"><span class="nav-number">5.</span> <span class="nav-text">SyncAdapter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%ED%95%9C%EB%B2%88-%ED%95%B4%EB%B3%B4%EA%B8%B0"><span class="nav-number">6.</span> <span class="nav-text">한번 해보기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%A0%95%EB%8B%B5-1"><span class="nav-number">6.1.</span> <span class="nav-text">정답</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Control-Flow"><span class="nav-number">6.2.</span> <span class="nav-text">Control Flow</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FCM-Firebase-Cloud-Messaging"><span class="nav-number">7.</span> <span class="nav-text">FCM (Firebase Cloud Messaging)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Notification"><span class="nav-number">8.</span> <span class="nav-text">Notification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%97%B0%EC%8A%B5-1"><span class="nav-number">9.</span> <span class="nav-text">연습</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%A0%95%EB%8B%B5-2"><span class="nav-number">9.1.</span> <span class="nav-text">정답</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%97%B0%EC%8A%B5-2"><span class="nav-number">10.</span> <span class="nav-text">연습</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%A0%95%EB%8B%B5-3"><span class="nav-number">10.1.</span> <span class="nav-text">정답</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EB%B3%B5%EC%8A%B5%EC%9D%80-%ED%95%84%EC%88%98"><span class="nav-number">11.</span> <span class="nav-text">복습은 필수</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EB%81%9D"><span class="nav-number"></span> <span class="nav-text">끝</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description">Hoyuo's programming writting</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">카테고리</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 30567,
+      el    : 'wpac-rating',
+      color : '#fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '79c048e4f0067cf8561e',
+      clientSecret: '2143a9396e1b205817582122455e850a93254adf',
+      repo        : 'gtalk',
+      owner       : 'hoyuo',
+      admin       : ['hoyuo'],
+      id          : 'fd0f7d73b05567c2b14eda4388eef075',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
