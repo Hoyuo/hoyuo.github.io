@@ -4,24 +4,11 @@
   
     
     <entry>
-      <title>Hello World</title>
-      <link href="/2022/01/10/hello-world/"/>
-      <url>/2022/01/10/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>RxJava</title>
       <link href="/2018/05/01/rxJava/rxjava-1/"/>
       <url>/2018/05/01/rxJava/rxjava-1/</url>
       
-        <content type="html"><![CDATA[<h1 id="RxJava-데이터-형태와-가공자"><a href="#RxJava-데이터-형태와-가공자" class="headerlink" title="RxJava 데이터 형태와 가공자"></a>RxJava 데이터 형태와 가공자</h1><hr><table><thead><tr><th align="center"></th><th align="center">Completable</th><th align="center">Single</th><th align="center">Maybe</th><th align="center">Observable</th><th align="center">Subject</th></tr></thead><tbody><tr><td align="center">Nothing</td><td align="center">O</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center"></td></tr><tr><td align="center">One</td><td align="center"></td><td align="center">O</td><td align="center">O</td><td align="center">O</td><td align="center">O</td></tr><tr><td align="center">More</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">O</td><td align="center">O</td></tr><tr><td align="center">Unlimited</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">O</td><td align="center">O</td></tr></tbody></table><ul><li>RxJava에서 데이터 형태는 4가지 형태로 Nothing, One, More, Unlimted가 있습니다.</li><li>데이터 형태에 따라서 4가지로 처리 할 수 있습니다.(RxJava1 기준, RxJava2 Maybe 추가)<ul><li>Maybe는 Optional Type을 깔끔하게 처리 할 수가 있습니다.</li></ul></li></ul><hr><ul><li>작업이 종료됨과 동시에 1개의 Item 만을 전파하는 Single.</li><li>발행하는 Item은 없이 작업의 종료만을 전파하는 Completable</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Single.fromCallable(dao::findAll)</span><br><span class="line">  .subscribeOn(Schedulers.io())</span><br><span class="line">  .subscribe(</span><br><span class="line">    books -&gt; &#123;</span><br><span class="line">    <span class="comment">// Next Step</span></span><br><span class="line">    &#125;,</span><br><span class="line">    throwable -&gt; &#123;</span><br><span class="line">    <span class="comment">// Error handling</span></span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure><hr><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Completable.fromAction(heavyJob::run)</span><br><span class="line">  .subscribeOn(Schedulers.io())</span><br><span class="line">  .subscribe(</span><br><span class="line">    () -&gt; &#123;</span><br><span class="line">    <span class="comment">// Next Step</span></span><br><span class="line">    &#125;, </span><br><span class="line">    throwable -&gt; &#123;</span><br><span class="line">    <span class="comment">// Error handling</span></span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure><hr><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Maybe.just(<span class="string">&quot;Maybe&quot;</span>)</span><br><span class="line">    .subscribe(</span><br><span class="line">        ::println, <span class="comment">// onSuccess</span></span><br><span class="line">        &#123; it.printStackTrace() &#125;, <span class="comment">// onError</span></span><br><span class="line">        &#123; println(<span class="string">&quot;onComplete&quot;</span>) &#125; <span class="comment">// onComplete</span></span><br><span class="line">    )</span><br><span class="line"><span class="comment">// Output &gt; Maybe</span></span><br><span class="line"></span><br><span class="line">Maybe.fromCallable &#123;</span><br><span class="line">    <span class="keyword">val</span> nullableStr: String? = <span class="literal">null</span> <span class="comment">// nullableStr</span></span><br><span class="line">&#125;.subscribe(</span><br><span class="line">    ::println, <span class="comment">// onSuccess</span></span><br><span class="line">    &#123; it.printStackTrace() &#125;, <span class="comment">// onError</span></span><br><span class="line">    &#123; println(<span class="string">&quot;onComplete&quot;</span>) &#125; <span class="comment">// onComplete</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">// Output &gt; onComplete</span></span><br></pre></td></tr></table></figure><hr><h1 id="마블-다이어그램"><a href="#마블-다이어그램" class="headerlink" title="마블 다이어그램"></a>마블 다이어그램</h1><p><img src="http://reactivex.io/assets/operators/legend.png"></p><hr><p><img src="http://reactivex.io/documentation/operators/images/S.AsyncSubject.png"></p><hr><p><img src="http://reactivex.io/documentation/operators/images/S.AsyncSubject.e.png"></p><hr><ul><li><p>순차적이고 반복적으로 각각의 element에 접근이 가능한 형태 Observable</p></li><li><p>Observable 처럼 행동하는 형태와 Observer 둘 다 될수 있는 형태의 Subject</p><ul><li>Observable : 데이터의 스트림</li><li>Observer : Observable이 보낸 데이터의 스트림을 받음</li></ul></li><li><p>Cold Observable, Hot Observable</p></li></ul><hr><h1 id="일반적인-RxJava-구조"><a href="#일반적인-RxJava-구조" class="headerlink" title="일반적인 RxJava 구조"></a>일반적인 RxJava 구조</h1><hr><p><img src="https://camo.githubusercontent.com/a7350fe2e9a50ec381f63a63bd475d818a940fea/687474703a2f2f7265616374697665782e696f2f646f63756d656e746174696f6e2f6f70657261746f72732f696d616765732f6d61702e706e67"></p><hr><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">Observable.just(filename)</span><br><span class="line">    .map(<span class="keyword">new</span> Func&lt;String, String&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            File file;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                file = File.createTempFile(filename, <span class="keyword">null</span>, getCacheDir());</span><br><span class="line">                storedCacheName = file.getName();</span><br><span class="line">            &#125; <span class="keyword">catch</span>(IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> storedCacheName;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .subscribeOn(Schedulers.io()) <span class="comment">// 워커 쓰레드 지정</span></span><br><span class="line">    .observeOn(AndroidSchedulers.mainThread()) <span class="comment">// Observable가 보내준 데이터 결과를 어디서 사용 하는가?</span></span><br><span class="line">    .subscrbe(<span class="keyword">new</span> Observer&lt;String&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            mResulteText.setText(s);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">            Lod.e(TAG, e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompleted</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure><hr>]]></content>
+        <content type="html"><![CDATA[<h1 id="RxJava-데이터-형태와-가공자"><a href="#RxJava-데이터-형태와-가공자" class="headerlink" title="RxJava 데이터 형태와 가공자"></a>RxJava 데이터 형태와 가공자</h1><hr><table><thead><tr><th align="center"></th><th align="center">Completable</th><th align="center">Single</th><th align="center">Maybe</th><th align="center">Observable</th><th align="center">Subject</th></tr></thead><tbody><tr><td align="center">Nothing</td><td align="center">O</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center"></td></tr><tr><td align="center">One</td><td align="center"></td><td align="center">O</td><td align="center">O</td><td align="center">O</td><td align="center">O</td></tr><tr><td align="center">More</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">O</td><td align="center">O</td></tr><tr><td align="center">Unlimited</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">O</td><td align="center">O</td></tr></tbody></table><ul><li>RxJava에서 데이터 형태는 4가지 형태로 Nothing, One, More, Unlimted가 있습니다.</li><li>데이터 형태에 따라서 4가지로 처리 할 수 있습니다.(RxJava1 기준, RxJava2 Maybe 추가)<ul><li>Maybe는 Optional Type을 깔끔하게 처리 할 수가 있습니다.</li></ul></li></ul><hr><ul><li>작업이 종료됨과 동시에 1개의 Item 만을 전파하는 Single.</li><li>발행하는 Item은 없이 작업의 종료만을 전파하는 Completable</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Single.fromCallable(dao::findAll)</span><br><span class="line">  .subscribeOn(Schedulers.io())</span><br><span class="line">  .subscribe(</span><br><span class="line">    books -&gt; &#123;</span><br><span class="line">    <span class="comment">// Next Step</span></span><br><span class="line">    &#125;,</span><br><span class="line">    throwable -&gt; &#123;</span><br><span class="line">    <span class="comment">// Error handling</span></span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure><hr><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Completable.fromAction(heavyJob::run)</span><br><span class="line">  .subscribeOn(Schedulers.io())</span><br><span class="line">  .subscribe(</span><br><span class="line">    () -&gt; &#123;</span><br><span class="line">    <span class="comment">// Next Step</span></span><br><span class="line">    &#125;, </span><br><span class="line">    throwable -&gt; &#123;</span><br><span class="line">    <span class="comment">// Error handling</span></span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure><hr><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Maybe.just(<span class="string">&quot;Maybe&quot;</span>)</span><br><span class="line">    .subscribe(</span><br><span class="line">        ::println, <span class="comment">// onSuccess</span></span><br><span class="line">        &#123; it.printStackTrace() &#125;, <span class="comment">// onError</span></span><br><span class="line">        &#123; println(<span class="string">&quot;onComplete&quot;</span>) &#125; <span class="comment">// onComplete</span></span><br><span class="line">    )</span><br><span class="line"><span class="comment">// Output &gt; Maybe</span></span><br><span class="line"></span><br><span class="line">Maybe.fromCallable &#123;</span><br><span class="line">    <span class="keyword">val</span> nullableStr: String? = <span class="literal">null</span> <span class="comment">// nullableStr</span></span><br><span class="line">&#125;.subscribe(</span><br><span class="line">    ::println, <span class="comment">// onSuccess</span></span><br><span class="line">    &#123; it.printStackTrace() &#125;, <span class="comment">// onError</span></span><br><span class="line">    &#123; println(<span class="string">&quot;onComplete&quot;</span>) &#125; <span class="comment">// onComplete</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">// Output &gt; onComplete</span></span><br></pre></td></tr></table></figure><hr><h1 id="마블-다이어그램"><a href="#마블-다이어그램" class="headerlink" title="마블 다이어그램"></a>마블 다이어그램</h1><p><img src="https://reactivex.io/assets/operators/legend.png"></p><hr><p><img src="https://reactivex.io/documentation/operators/images/S.AsyncSubject.png"></p><hr><p><img src="https://reactivex.io/documentation/operators/images/S.AsyncSubject.e.png"></p><hr><ul><li><p>순차적이고 반복적으로 각각의 element에 접근이 가능한 형태 Observable</p></li><li><p>Observable 처럼 행동하는 형태와 Observer 둘 다 될수 있는 형태의 Subject</p><ul><li>Observable : 데이터의 스트림</li><li>Observer : Observable이 보낸 데이터의 스트림을 받음</li></ul></li><li><p>Cold Observable, Hot Observable</p></li></ul><hr><h1 id="일반적인-RxJava-구조"><a href="#일반적인-RxJava-구조" class="headerlink" title="일반적인 RxJava 구조"></a>일반적인 RxJava 구조</h1><hr><p><img src="https://camo.githubusercontent.com/a7350fe2e9a50ec381f63a63bd475d818a940fea/687474703a2f2f7265616374697665782e696f2f646f63756d656e746174696f6e2f6f70657261746f72732f696d616765732f6d61702e706e67"></p><hr><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">Observable.just(filename)</span><br><span class="line">    .map(<span class="keyword">new</span> Func&lt;String, String&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            File file;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                file = File.createTempFile(filename, <span class="keyword">null</span>, getCacheDir());</span><br><span class="line">                storedCacheName = file.getName();</span><br><span class="line">            &#125; <span class="keyword">catch</span>(IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> storedCacheName;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .subscribeOn(Schedulers.io()) <span class="comment">// 워커 쓰레드 지정</span></span><br><span class="line">    .observeOn(AndroidSchedulers.mainThread()) <span class="comment">// Observable가 보내준 데이터 결과를 어디서 사용 하는가?</span></span><br><span class="line">    .subscrbe(<span class="keyword">new</span> Observer&lt;String&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            mResulteText.setText(s);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">            Lod.e(TAG, e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompleted</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure><hr>]]></content>
       
       
       <categories>
@@ -270,9 +257,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -299,9 +286,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -328,9 +315,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -357,9 +344,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -386,9 +373,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -415,9 +402,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -444,9 +431,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -473,9 +460,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -502,9 +489,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -531,9 +518,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
@@ -560,9 +547,9 @@
       
         <tags>
             
-            <tag> android </tag>
-            
             <tag> udacity </tag>
+            
+            <tag> android </tag>
             
         </tags>
       
