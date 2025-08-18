@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -126,6 +126,11 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a>
 
   </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">45</span></a>
+
+  </li>
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">11</span></a>
@@ -134,11 +139,6 @@
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">8</span></a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">45</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -182,8 +182,6 @@
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
-
-  <a href="https://github.com/Hoyuo" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 
     <main class="main">
@@ -248,17 +246,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Guideline-RedLine"><a href="#Guideline-RedLine" class="headerlink" title="Guideline (RedLine)"></a>Guideline (RedLine)</h2><p><a href="/downloads/code/7/Sunshine_Visual_Mocks_ALL.pdf">PDF 파일</a>을 참조하여서 RedLine에 맞게 화면을 설정해 봅시다</p>
-<p>일단 디자인에서 글씨 폰트를 변경하라고 되어있습니다</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:fontFamily=&quot;sans-serif-condensed&quot;</span><br></pre></td></tr></table></figure>
+          Guideline (RedLine)
+PDF 파일을 참조하여서 RedLine에 맞게 화면을 설정해 봅시다
 
-<p>TextView에 다음과 같이 적어주면 폰트를 변경할 수 있습니다</p>
-<p>폰트 크기도 22sp, 14sp라고 적혀있습니다</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">android:textAppearance=&quot;?android:textAppearanceLarge&quot;</span><br><span class="line">android:textAppearance=&quot;?android:textAppearanceSmall&quot;</span><br></pre></td></tr></table></figure>
+일단 디자인에서 글씨 폰트를 변경하라고 되어있습니다
 
-<p>다음과 같이 적으면 대략 22sp, 14sp와 비슷한 크기가 됩니다</p>
-<p>현재 아이템에서 이미지 쪽을 보면 60dp 사이즈에 가운데 이미지가 표시 되어있습니다<br>FrameLayout을 이용해서 60dp사이즈를 사용해서 크기를 설정해주고 이미지 배치합시다</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;FrameLayout</span><br><span class="line">	android:layout_width=&quot;60dp&quot;</span><br><span class="line">	android:layout_height=&quot;wrap_content&quot;&gt;</span><br></pre></td></tr></table></figure>
+1
+
+
+android:fontFamily="sans-serif-condensed"
+
+
+TextView에 다음과 같이 적어주면 폰트를 변경할 수 있습니다
+
+폰트 크기도 22sp, 14sp라고 적혀있습니다
+
+1
+2
+
+
+android:textAppearance="?android:textAppearanceLarge"
+android:textAppearance="?android:text
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/18/adnroid-developing/Developing-Android-Apps-07-03/#more" rel="contents">
@@ -336,21 +344,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h2><p><strong>왜?</strong> Fragment를 사용하는지 자체에 대한 의문이 생길것입니다</p>
-<p>단지 UI 구성 요소를 묶으려면 그냥 ViewGroup이나 재사용 가능한 XML Layout정의를 만들면 되지않을까요?<br>물론 이것도 가능합니다</p>
-<p>하지만 Fragment는 단순히 UI구성요소를 묶는 정도에 그치지 않습니다<br>Fragment는 유지 중인 앱 상태에서 수신하는 Lifecycle Event를 포함한 Activity을 완전히 모듈화 하도록 해 줍니다</p>
-<p>Fragments는 허니콤(Android 3.0)에서 특정 문제를 해결하기 위해서 처음 도입되었습니다<br>최초로 Tablets을 지원했기때문에 좋은 UI를 만들기 위해서는 2개 이상의 Activity를 나란히 보여주는 것 입니다</p>
-<p>Fragments를 사용하면 FragmentManager를 통해서 편하게 처리 할 수있습니다<br>Activity Lifecycle Event 처리, UI 개별 요소의 상태 관리, 앱 상태를 유지하기 위해서 언제 어느 스크린 요소가 출력되어있는지에 대한 정보 등등을 처리해 줍니다</p>
-<p>단일 Activity에서 Fragment를 바꿔줌으로써 여러 화면을 표시하는것과 같은 효과를 줄 수도 있습니다</p>
-<p>하지만 이런 구조는 비추천합니다</p>
-<ul>
-<li>단일 Activity로 구성할 경우 코드가 복잡합니다</li>
-<li>Intent Filter 생성 및 관리가 훨씬 어렵습니다</li>
-<li>Activity 코드를 읽고 테스트하고 관리하는데도 어렵습니다</li>
-<li>독립적인 구성요소들 함께 묶게 되는 문제가 있습니다 (coupling)</li>
-<li>단일 Activity에 민감한 정보와 공유 가능한 일반 정보가 같이 있는 경우 보안의 위험성도 커집니다</li>
-</ul>
-<p>Context가 변경될 때 마다 Activity를 만드는 방법을 추천합니다<br>View에서 Input으로 전환하는등 출력 데이터의 종류가 바뀔 때 하는 것이 좋습니다</p>
+          Fragment
+왜? Fragment를 사용하는지 자체에 대한 의문이 생길것입니다
+
+단지 UI 구성 요소를 묶으려면 그냥 ViewGroup이나 재사용 가능한 XML Layout정의를 만들면 되지않을까요?
+물론 이것도 가능합니다
+
+하지만 Fragment는 단순히 UI구성요소를 묶는 정도에 그치지 않습니다
+Fragment는 유지 중인 앱 상태에서 수신하는 Lifecycle Event를 포함한 Activity을 완전히 모듈화 하도록 해 줍니다
+
+Fragments는 허니콤(Android 3.0)에서 특정 문제를 해결하기 위해서 처음 도입되
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/18/adnroid-developing/Developing-Android-Apps-07-02/#more" rel="contents">
@@ -428,23 +431,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Android-Design-Principles"><a href="#Android-Design-Principles" class="headerlink" title="Android Design Principles"></a>Android Design Principles</h2><ul>
-<li>새로운 테마</li>
-<li>복잡한 뷰를 위한 새로운 위젯</li>
-<li>사용자 지정 그림자 및 애니메이션을 위한 새로운 API</li>
-</ul>
-<p><strong>보기에도 좋고 그만큼 기능적인 면에서도 우수하며 사용하기 쉬운 앱을 만드는것이다!</strong></p>
-<p>사용자는 우리 앱을 30초면 평가를 한다 / 이것은 대부분 시각적인 요소(UI)에 편중되어 있다</p>
-<ul>
-<li>세련되고 깔끔한가?</li>
-<li>전문적으로 보이는가?</li>
-<li>사용하기는 얼마나 쉬운가?</li>
-</ul>
-<p>디자인이라는건 개발자가 설명하기 어려운 사항이기도 합니다<br>하지만 우리는 기본적으로 많이 사용되는 어플리케이션, 내가 자주 사용하는 어플리케이션을 생각해 봅시다</p>
-<p>자세한 것은 Google 에서 제시하는 디자인 가이드 라인을 참고해 봅시다</p>
-<p><a target="_blank" rel="noopener" href="https://design.google.com/">Google Design</a><br><a target="_blank" rel="noopener" href="https://material.io/guidelines/material-design/introduction.html?hl=ko">Material design</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/training/material/index.html">개발자를 위한 머티리얼 디자인</a></p>
-<hr>
-<h2 id="View-amp-ViewGroup"><a href="#View-amp-ViewGroup" class="headerlink" title="View &amp; ViewGroup"></a>View &amp; ViewGroup</h2>
+          Android Design Principles
+ * 새로운 테마
+ * 복잡한 뷰를 위한 새로운 위젯
+ * 사용자 지정 그림자 및 애니메이션을 위한 새로운 API
+
+보기에도 좋고 그만큼 기능적인 면에서도 우수하며 사용하기 쉬운 앱을 만드는것이다!
+
+사용자는 우리 앱을 30초면 평가를 한다 / 이것은 대부분 시각적인 요소(UI)에 편중되어 있다
+
+ * 세련되고 깔끔한가?
+ * 전문적으로 보이는가?
+ * 사용하기는 얼마나 쉬운가?
+
+디자인이라는건 개발자가 설명하기 어려운 사항이기도 합니다
+하지만 우리는 기본적으로 많이 사용되는 어플리케이
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/18/adnroid-developing/Developing-Android-Apps-07-01/#more" rel="contents">
@@ -522,15 +523,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Loaders"><a href="#Loaders" class="headerlink" title="Loaders"></a>Loaders</h2><p><strong>로더는 정말 대단하다!</strong><br>로더는 Activity나 Fragment 내에서 비동기 데이터를 로딩할 때 최선의 작업방식이다<br>만들어진 로더는 Background Thread에 Data를 로딩할 AsyncTask를 만듭니다</p>
-<p>첫 로딩이 완료되면 UI 스레드와 동기화합니다<br>이제 데이터를 모니터링하고 갱신되는 사항은 모두 UI 스레드로 보내도록 설정할 수 있습니다<br>더 좋은 점은 힘들게 DB에 ContentProvider를 추가한 혜택을 느낄 수 있습니다!</p>
-<p><img src="/img/adnroid-developing/6/1.png"></p>
-<p><strong>Cursorloader</strong>는 AsyncTask Loader의 하위 구현으로서 ContentProvider에 질의를 수행하고 커서를 반환합니다<br>이 Cursor는 직접 UI에 바인딩 할 수 있습니다</p>
-<p>Cursorloader는 데이터베이스에 따라 ContentProvider가 변경되는 경우 Cursor를 자동으로 업데이트합니다<br>설정이 바뀌어서 Host Activity가 함께 다시 만들어지면 직전의 커서에 다시 연결하기 때문에 장치가 회전해도 데이터를 다시 쿼리 할 필요는 없습니다</p>
-<p>Cursorloader는 Cursor의 관리, Background Thread의 생성, UI와 동기화, 데이터 소스의 모니터링을 처리합니다<br>ContentProvider를 이용하지 않는 것은 현명하지 않지만 그 경우에도 로더를 사용할 수 있습니다<br>AsyncTaskLoader를 상속받아서 사용자의 Loader를 만들 수 있습니다</p>
-<p><a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/content/AsyncTaskLoader.html">AsyncTask Loader API</a></p>
-<p><img src="/img/adnroid-developing/6/2.png"></p>
-<p><img src="/img/adnroid-developing/6/3.png"></p>
+          Loaders
+로더는 정말 대단하다!
+로더는 Activity나 Fragment 내에서 비동기 데이터를 로딩할 때 최선의 작업방식이다
+만들어진 로더는 Background Thread에 Data를 로딩할 AsyncTask를 만듭니다
+
+첫 로딩이 완료되면 UI 스레드와 동기화합니다
+이제 데이터를 모니터링하고 갱신되는 사항은 모두 UI 스레드로 보내도록 설정할 수 있습니다
+더 좋은 점은 힘들게 DB에 ContentProvider를 추가한 혜택을 느낄 수 있습니다!
+
+
+
+Cursorloader는 AsyncTask Loader의 하위 구현으로
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/15/adnroid-developing/Developing-Android-Apps-06/#more" rel="contents">
@@ -608,15 +612,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Content-Providers"><a href="#Content-Providers" class="headerlink" title="Content Providers"></a>Content Providers</h2><p><strong>Why?</strong></p>
-<p>왜 Content Providers를 사용하는가? 묻는 것은 이상한것이 아닙니다<br>데이터를 안전하게 공유하고 효율적으로 app의 경계선을 넘어서 파일들이나 또는 정말 어떤 다른 것과 같이 넘으려고 하는 것을 허용하기 때문이다<br>캘린더, SMS와 같은 것은 Shared content providers를 이용하여 작동된다<br>Content Providers를 설계하는것은 나중에 다른 App에 날씨 데이터를 공유 하기 위해서 입니다</p>
-<p>만약 공유할 필요가 없으면 넘어 가면 됩니다!<br>하지만, 우리는 공부가 목적이닌깐 만듭시다!!</p>
-<p><a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/providers/content-providers.html">content providers</a></p>
-<p><img src="/img/adnroid-developing/5/1.png"></p>
-<p><img src="/img/adnroid-developing/5/2.png"></p>
-<p>ContentProvider를 이용해서 widgets, Search가 작동하는 방법입니다<br>APIs의 상당량은 syncing, querying data, UI의 updating을 적절히 하는 과정의 최적화 설계가 되어있습니다<br>Syncadapter, Cursorloader를 나중에 이용하게 됩니다<br>Content Observer를 이용해서 UI를 자동적으로 업데이트 하게 만들 수 있습니다</p>
-<hr>
-<h2 id="Content-Uri"><a href="#Content-Uri" class="headerlink" title="Content Uri"></a>Content Uri</h2>
+          Content Providers
+Why?
+
+왜 Content Providers를 사용하는가? 묻는 것은 이상한것이 아닙니다
+데이터를 안전하게 공유하고 효율적으로 app의 경계선을 넘어서 파일들이나 또는 정말 어떤 다른 것과 같이 넘으려고 하는 것을 허용하기 때문이다
+캘린더, SMS와 같은 것은 Shared content providers를 이용하여 작동된다
+Content Providers를 설계하는것은 나중에 다른 App에 날씨 데이터를 공유 하기 위해서 입니다
+
+만약 공유할 필요가 없으면 넘어 가면 됩니다!
+하지만, 우리는 공부가
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/12/adnroid-developing/Developing-Android-Apps-05/#more" rel="contents">
@@ -694,15 +699,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Activity-Lifecycle"><a href="#Activity-Lifecycle" class="headerlink" title="Activity Lifecycle"></a>Activity Lifecycle</h1><p>우리는 기본적으로 Intent를 더 살펴 봅시다<br>MainActivity에서 항목을 클릭하면 DetailActivity가 나옵니다<br>back button을 클릭하면 다시 MainActivity로 돌아갑니다<br>계속 같은 앱에서 동작을 하는 것 입니다</p>
-<p>또, 지도를 보거나 메세지를 전송하는 창에서도 동일하게 작동합니다<br>홈 버튼을 눌러서 홈 화면으로 갈 수도 있습니다</p>
-<p>이런식으로 Android에서는 여러개의 작업들이 뒤에서 돌아가고 있습니다<br>그러나 리소스는 제한적이기 때문에 백그라운드에 깔아놓으면 안됩니다</p>
-<p>이것을 TaskKiller Application을 사용하면 안됩니다 자동으로 해줍니다</p>
-<p>우리는 이것을 방지하기 위해서 Application에서 Lifetime에서 어디쯤 위치하는지 알려주는 <strong>Framework 신호들</strong>과 <strong>Activity의 Lifecycle</strong>을 이해해야 합니다</p>
-<p><img src="/img/adnroid-developing/4/0.png"></p>
-<p>active life cycle은 activity가 foreground에 있고 focus가 잡혀 있을 때를 뜻합니다</p>
-<p><img src="/img/adnroid-developing/4/1.png"></p>
-<hr>
+          Activity Lifecycle
+우리는 기본적으로 Intent를 더 살펴 봅시다
+MainActivity에서 항목을 클릭하면 DetailActivity가 나옵니다
+back button을 클릭하면 다시 MainActivity로 돌아갑니다
+계속 같은 앱에서 동작을 하는 것 입니다
+
+또, 지도를 보거나 메세지를 전송하는 창에서도 동일하게 작동합니다
+홈 버튼을 눌러서 홈 화면으로 갈 수도 있습니다
+
+이런식으로 Android에서는 여러개의 작업들이 뒤에서 돌아가고 있습니다
+그러나 리소스는 제한적이기 때문에 백그라운드에 깔아놓으면 안됩니다
+
+
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/09/adnroid-developing/Developing-Android-Apps-04/#more" rel="contents">
@@ -780,15 +789,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="ListView-Item-Select"><a href="#ListView-Item-Select" class="headerlink" title="ListView Item Select"></a>ListView Item Select</h1><hr>
-<p><img src="/img/adnroid-developing/3/1.png"></p>
-<p>우리는 목록 중에 하나를 선택해서 자세하게 보고 싶습니다</p>
-<p>어떤 method를 이용해야 할까요?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> setOnTouchListener(View.OnTouchListener l)</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> setOnClickListener</span><br><span class="line">	(AdapterView.OnClickListener l)</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> setOnItemSelectedListener</span><br><span class="line">	(AdapterView.OnItemSelectedListener l)</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> setOnItemClickListener</span><br><span class="line">	(AdapterView.OnItemClickListener l)</span><br></pre></td></tr></table></figure>
+          ListView Item Select
 
-<p><a target="_blank" rel="noopener" href="http://developer.android.com/intl/ko/reference/android/widget/ListView.html">ListView</a></p>
-<h2 id="정답-setOnItemClickListener"><a href="#정답-setOnItemClickListener" class="headerlink" title="정답 : setOnItemClickListener"></a>정답 : setOnItemClickListener</h2><hr>
-<h1 id="Toast"><a href="#Toast" class="headerlink" title="Toast"></a>Toast</h1>
+
+
+
+
+우리는 목록 중에 하나를 선택해서 자세하게 보고 싶습니다
+
+어떤 method를 이용해야 할까요?
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+1. setOnTouchListener(View.OnTouchListener l)
+
+2. setOnClickListener
+	(AdapterView.OnClickListener l)
+
+3. setOnItemSelectedListener
+	(AdapterView.OnItemSelectedListener l)
+
+4. setOnItemClickListen
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/06/adnroid-developing/Developing-Android-Apps-03/#more" rel="contents">
@@ -866,15 +897,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="날씨-얻어-오기"><a href="#날씨-얻어-오기" class="headerlink" title="날씨 얻어 오기"></a>날씨 얻어 오기</h2><hr>
-<p>우리는 실제 데이터를 얻어 올 것입니다<br>openweathermap 싸이트에 API를 이용합니다</p>
-<p><a target="_blank" rel="noopener" href="http://openweathermap.org/">http://openweathermap.org/</a></p>
-<p>전세계 날씨 정보를 얻어 올 수 있는 곳입니다<br>싸이트에 접속해서 회원가입 후 API키를 받습니다</p>
-<p><a target="_blank" rel="noopener" href="http://openweathermap.org/api">http://openweathermap.org/api</a><br>많은 데이터를 얻을 수 있습니다<br>현재 날씨 / 앞으로 5일간 3시간 간격 / 16일 동안 매일매일 등등<br>정말 많은 데이터를 얻어 올 수 있습니다</p>
-<p><a target="_blank" rel="noopener" href="http://openweathermap.org/weather-conditions">http://openweathermap.org/weather-conditions</a> 에 접속하면 날씨 정보에 대한 아이콘을 볼 수 있습니다</p>
-<p>차후에 이 아이콘을 사용할 예정 입니다</p>
-<hr>
-<p><a target="_blank" rel="noopener" href="http://openweathermap.org/city/1835848">http://openweathermap.org/city/1835848</a><br>서울에 대한 날씨에 대한 페이지입니다</p>
+          날씨 얻어 오기
+
+
+
+우리는 실제 데이터를 얻어 올 것입니다
+openweathermap 싸이트에 API를 이용합니다
+
+http://openweathermap.org/
+
+전세계 날씨 정보를 얻어 올 수 있는 곳입니다
+싸이트에 접속해서 회원가입 후 API키를 받습니다
+
+http://openweathermap.org/api
+많은 데이터를 얻을 수 있습니다
+현재 날씨 / 앞으로 5일간 3시간 간격 / 16일 동안 매일매일 등등
+정말 많은 데이터를 얻어 올 수 있습니다
+
+http://openweathermap.org/weather-condi
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/04/adnroid-developing/Developing-Android-Apps-02/#more" rel="contents">
@@ -952,21 +992,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Android"><a href="#Android" class="headerlink" title="Android ?"></a>Android ?</h1><p><img src="https://www.google.co.kr/intl/ko/mobile/android/images/android.jpg"></p>
-<hr>
-<span id="more"></span>
+          Android ?
 
-<h2 id="Android-1"><a href="#Android-1" class="headerlink" title="Android"></a>Android</h2><blockquote>
-<p>안드로이드(영어: Android)는 휴대 전화를 비롯한 휴대용 장치를 위한 운영 체제와 미들웨어, 사용자 인터페이스 그리고 표준 응용 프로그램(웹 브라우저, 이메일 클라이언트, 단문 메시지 서비스(SMS), 멀티미디어 메시지 서비스(MMS)등)을 포함하고 있는 소프트웨어 스택이자 모바일 운영 체제이다. 안드로이드는 개발자들이 자바 언어로 응용 프로그램을 작성할 수 있게 하였으며, 컴파일된 바이트코드를 구동할 수 있는 런타임 라이브러리를 제공한다. 또한 안드로이드 소프트웨어 개발 키트(SDK)를 통해 응용 프로그램을 개발하기 위해 필요한 각종 도구들과 API를 제공한다.</p>
-</blockquote>
-<blockquote>
-<p>안드로이드는 리눅스 커널 위에서 동작하며, 다양한 안드로이드 시스템 구성 요소에서 사용되는 C/C++ 라이브러리들을 포함하고 있다. 안드로이드는 기존의 자바 가상 머신과는 다른 가상 머신인 달빅 가상 머신을 통해 자바로 작성된 응용 프로그램을 별도의 프로세스에서 실행하는 구조로 되어 있다.</p>
-</blockquote>
-<blockquote>
-<p>2005년에 안드로이드 사를 구글에서 인수한 후 2007년 11월에 안드로이드 플랫폼을 휴대용 장치 운영 체제로서 무료 공개한다고 발표한 후 48개의 하드웨어, 소프트웨어, 통신 회사가 모여 만든 오픈 핸드셋 얼라이언스(Open Handset Aliance, OHA)에서 공개 표준을 위해 개발하고 있다. 구글은 안드로이드의 모든 소스 코드를 오픈 소스 라이선스인 아파치 v2 라이선스로 배포하고 있어 기업이나 사용자는 각자 안드로이드 프로그램을 독자적으로 개발을 해서 탑재할 수 있다. 또한 응용 프로그램을 사고 팔 수 있는 구글 플레이를 제공하고 있으며, 이와 동시에 각 제조사 혹은 통신사별 응용 프로그램 마켓이 함께 운영되고 있다. 구글 플레이에서는 유료 및 무료 응용 프로그램이 제공되고 있다.<br>– Wikipedia</p>
-</blockquote>
-<hr>
-<p><img src="/img/adnroid-developing/1/app.png"></p>
+
+
+
+
+Android
+안드로이드(영어: Android)는 휴대 전화를 비롯한 휴대용 장치를 위한 운영 체제와 미들웨어, 사용자 인터페이스 그리고 표준 응용 프로그램(웹 브라우저, 이메일 클라이언트, 단문 메시지 서비스(SMS), 멀티미디어 메시지 서비스(MMS)등)을 포함하고 있는 소프트웨어 스택이자 모바일 운영 체제이다. 안드로이드는 개발자들이 자바 언어로 응용 프로그램을 작성할 수 있게 하였으며, 컴파일된 바이트코드를 구동할 수 있는 런타임 라이브러리를 제공한다. 또한 안드로이드 소프트웨어 개발 키트(SDK)
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/01/adnroid-developing/Developing-Android-Apps-01/#more" rel="contents">
@@ -1044,18 +1077,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a target="_blank" rel="noopener" href="https://classroom.udacity.com/courses/ud853">https://classroom.udacity.com/courses/ud853</a> 강의를 정리하면서 포스팅한 자료입니다<br>예전 강의였기때문에 최신 내용과 많이 다를수가 있습니다</p>
-<h2 id="다음과-같은-챕터로-구성되어있습니다"><a href="#다음과-같은-챕터로-구성되어있습니다" class="headerlink" title="다음과 같은 챕터로 구성되어있습니다"></a>다음과 같은 챕터로 구성되어있습니다</h2><ol>
-<li>Create Project Sunshine</li>
-<li>Connect Sunshine to the Cloud</li>
-<li>Create New Activities and Navigate Apps with Intents</li>
-<li>Activity Lifecycle and Data</li>
-<li>Content Providers</li>
-<li>Hooking it up with Loaders</li>
-<li>Rich and Responsive Layouts</li>
-<li>Services and Notifications</li>
-</ol>
+          https://classroom.udacity.com/courses/ud853 강의를 정리하면서 포스팅한 자료입니다
+예전 강의였기때문에 최신 내용과 많이 다를수가 있습니다
 
+다음과 같은 챕터로 구성되어있습니다
+ 1. Create Project Sunshine
+ 2. Connect Sunshine to the Cloud
+ 3. Create New Activities and Navigate Apps with Intents
+ 4. Activity Lifecycle and Data
+ 5. Content Providers
+ 6. Hookin
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/02/01/adnroid-developing/Developing-Android-Apps-00/#more" rel="contents">
@@ -1166,7 +1197,7 @@
   </nav>
 </div>
   <div class="cc-license motion-element" itemprop="license">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/ko" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
   </div>
 
 
@@ -1190,7 +1221,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1307,6 +1338,7 @@ if (document.querySelectorAll('pre.mermaid').length) {
 
   
 
+  
 
 </body>
 </html>
