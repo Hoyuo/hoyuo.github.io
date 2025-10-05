@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="📚 Flutter TikTok Clone - 초기 프로젝트 세팅📑 목차 Flutter 프로젝트 생성 (Tiktok clone project init) Sizes 상수 시스템 구축 Gaps 위젯 시스템 구축 FVM 버전 관리 설정">
+<meta property="og:type" content="article">
+<meta property="og:title" content="0. Flutter TikTok Clone - 초기 프로젝트 세팅">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/04/flutter/flutter-0/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="📚 Flutter TikTok Clone - 초기 프로젝트 세팅📑 목차 Flutter 프로젝트 생성 (Tiktok clone project init) Sizes 상수 시스템 구축 Gaps 위젯 시스템 구축 FVM 버전 관리 설정">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-04T03:00:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="flutter">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/04/flutter/flutter-0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/04/flutter/flutter-0/","path":"2025/10/04/flutter/flutter-0/","title":"0. Flutter TikTok Clone - 초기 프로젝트 세팅"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>0. Flutter TikTok Clone - 초기 프로젝트 세팅 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">10</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-Flutter-TikTok-Clone-%EC%B4%88%EA%B8%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%84%B8%ED%8C%85"><span class="nav-number">1.</span> <span class="nav-text">📚 Flutter TikTok Clone - 초기 프로젝트 세팅</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%91-%EB%AA%A9%EC%B0%A8"><span class="nav-number">1.1.</span> <span class="nav-text">📑 목차</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Flutter-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%83%9D%EC%84%B1"><span class="nav-number">1.2.</span> <span class="nav-text">1. Flutter 프로젝트 생성</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8C-%ED%95%99%EC%8A%B5-%EB%AA%A9%ED%91%9C"><span class="nav-number">1.2.1.</span> <span class="nav-text">📌 학습 목표</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%BB-%EC%B4%88%EA%B8%B0-main-dart-%EC%BD%94%EB%93%9C"><span class="nav-number">1.2.3.</span> <span class="nav-text">💻 초기 main.dart 코드</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%96-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.2.4.</span> <span class="nav-text">📖 코드 상세 설명</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-main-%ED%95%A8%EC%88%98"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">1. main() 함수</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-TikTokApp-%ED%81%B4%EB%9E%98%EC%8A%A4"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">2. TikTokApp 클래스</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-MaterialApp-%EC%84%A4%EC%A0%95"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">3. MaterialApp 설정</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%A6-pubspec-yaml-%EC%84%A4%EC%A0%95"><span class="nav-number">1.2.5.</span> <span class="nav-text">📦 pubspec.yaml 설정</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%EC%8B%9C%EA%B0%81%EC%A0%81-%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8"><span class="nav-number">1.2.6.</span> <span class="nav-text">🎨 시각적 다이어그램</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B5%AC%EC%A1%B0"><span class="nav-number">1.2.6.1.</span> <span class="nav-text">프로젝트 구조</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%EC%95%B1-%EC%8B%A4%ED%96%89-%ED%9D%90%EB%A6%84"><span class="nav-number">1.2.6.2.</span> <span class="nav-text">앱 실행 흐름</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.2.7.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%91-%ED%95%B5%EC%8B%AC-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC"><span class="nav-number">1.2.8.</span> <span class="nav-text">🔑 핵심 개념 정리</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%8B%A4%EC%8A%B5-%EA%B3%BC%EC%A0%9C"><span class="nav-number">1.2.9.</span> <span class="nav-text">💡 실습 과제</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9D%93-%EC%9E%90%EC%A3%BC-%EB%AC%BB%EB%8A%94-%EC%A7%88%EB%AC%B8"><span class="nav-number">1.2.10.</span> <span class="nav-text">❓ 자주 묻는 질문</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Sizes-%EC%83%81%EC%88%98-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B5%AC%EC%B6%95"><span class="nav-number">1.3.</span> <span class="nav-text">2. Sizes 상수 시스템 구축</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8C-%ED%95%99%EC%8A%B5-%EB%AA%A9%ED%91%9C-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">📌 학습 목표</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EC%9C%84%EC%B9%98"><span class="nav-number">1.3.2.</span> <span class="nav-text">📂 파일 위치</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%BB-sizes-dart-%EC%A0%84%EC%B2%B4-%EC%BD%94%EB%93%9C"><span class="nav-number">1.3.3.</span> <span class="nav-text">💻 sizes.dart 전체 코드</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%96-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">1.3.4.</span> <span class="nav-text">📖 코드 상세 설명</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%ED%81%B4%EB%9E%98%EC%8A%A4-%EA%B5%AC%EC%A1%B0"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">1. 클래스 구조</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-static-const-%ED%82%A4%EC%9B%8C%EB%93%9C"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">2. static const 키워드</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%ED%81%AC%EA%B8%B0-%EA%B0%92-%EC%B2%B4%EA%B3%84"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">3. 크기 값 체계</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%82%AC%EC%9A%A9-%EC%98%88%EC%8B%9C"><span class="nav-number">1.3.5.</span> <span class="nav-text">🎯 사용 예시</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Before-%ED%95%98%EB%93%9C%EC%BD%94%EB%94%A9-%E2%9D%8C"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">Before (하드코딩 ❌)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#After-%EC%83%81%EC%88%98-%EC%82%AC%EC%9A%A9-%E2%9C%85"><span class="nav-number">1.3.5.2.</span> <span class="nav-text">After (상수 사용 ✅)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%EC%8B%9C%EA%B0%81%EC%A0%81-%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8-1"><span class="nav-number">1.3.6.</span> <span class="nav-text">🎨 시각적 다이어그램</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%ED%81%AC%EA%B8%B0-%EC%B2%B4%EA%B3%84-%EC%8B%9C%EA%B0%81%ED%99%94"><span class="nav-number">1.3.6.1.</span> <span class="nav-text">크기 체계 시각화</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sizes-%ED%81%B4%EB%9E%98%EC%8A%A4-%EC%82%AC%EC%9A%A9-%ED%9D%90%EB%A6%84"><span class="nav-number">1.3.6.2.</span> <span class="nav-text">Sizes 클래스 사용 흐름</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%99%9C-%EC%9D%B4%EB%9F%B0-%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%B4-%ED%95%84%EC%9A%94%ED%95%9C%EA%B0%80"><span class="nav-number">1.3.7.</span> <span class="nav-text">💡 왜 이런 시스템이 필요한가?</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%EC%9D%BC%EA%B4%80%EC%84%B1-Consistency"><span class="nav-number">1.3.7.1.</span> <span class="nav-text">1. 일관성 (Consistency)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%98-Maintainability"><span class="nav-number">1.3.7.2.</span> <span class="nav-text">2. 유지보수 (Maintainability)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%EA%B0%80%EB%8F%85%EC%84%B1-Readability"><span class="nav-number">1.3.7.3.</span> <span class="nav-text">3. 가독성 (Readability)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%EB%94%94%EC%9E%90%EC%9D%B8-%EC%8B%9C%EC%8A%A4%ED%85%9C-Design-System"><span class="nav-number">1.3.7.4.</span> <span class="nav-text">4. 디자인 시스템 (Design System)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">1.3.8.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%91-%ED%95%B5%EC%8B%AC-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC-1"><span class="nav-number">1.3.9.</span> <span class="nav-text">🔑 핵심 개념 정리</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%8B%A4%EC%8A%B5-%EA%B3%BC%EC%A0%9C-1"><span class="nav-number">1.3.10.</span> <span class="nav-text">💡 실습 과제</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9D%93-%EC%9E%90%EC%A3%BC-%EB%AC%BB%EB%8A%94-%EC%A7%88%EB%AC%B8-1"><span class="nav-number">1.3.11.</span> <span class="nav-text">❓ 자주 묻는 질문</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Gaps-%EC%9C%84%EC%A0%AF-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B5%AC%EC%B6%95"><span class="nav-number">1.4.</span> <span class="nav-text">3. Gaps 위젯 시스템 구축</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8C-%ED%95%99%EC%8A%B5-%EB%AA%A9%ED%91%9C-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">📌 학습 목표</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EC%9C%84%EC%B9%98-1"><span class="nav-number">1.4.2.</span> <span class="nav-text">📂 파일 위치</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%BB-gaps-dart-%EC%A0%84%EC%B2%B4-%EC%BD%94%EB%93%9C"><span class="nav-number">1.4.3.</span> <span class="nav-text">💻 gaps.dart 전체 코드</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%96-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">1.4.4.</span> <span class="nav-text">📖 코드 상세 설명</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-import-%EB%AC%B8"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">1. import 문</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Vertical-Gaps-%EC%88%98%EC%A7%81-%EA%B0%84%EA%B2%A9"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">2. Vertical Gaps (수직 간격)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Horizontal-Gaps-%EC%88%98%ED%8F%89-%EA%B0%84%EA%B2%A9"><span class="nav-number">1.4.4.3.</span> <span class="nav-text">3. Horizontal Gaps (수평 간격)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Sizes-%ED%81%B4%EB%9E%98%EC%8A%A4-%EC%9E%AC%EC%82%AC%EC%9A%A9"><span class="nav-number">1.4.4.4.</span> <span class="nav-text">4. Sizes 클래스 재사용</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%82%AC%EC%9A%A9-%EC%98%88%EC%8B%9C-1"><span class="nav-number">1.4.5.</span> <span class="nav-text">🎯 사용 예시</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Before-%EB%A7%A4%EB%B2%88-SizedBox-%EC%9E%91%EC%84%B1-%E2%9D%8C"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">Before (매번 SizedBox 작성 ❌)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#After-Gaps-%EC%82%AC%EC%9A%A9-%E2%9C%85"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">After (Gaps 사용 ✅)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%EC%8B%9C%EA%B0%81%EC%A0%81-%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8-2"><span class="nav-number">1.4.6.</span> <span class="nav-text">🎨 시각적 다이어그램</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Vertical-Gaps-%EC%88%98%EC%A7%81-%EA%B0%84%EA%B2%A9"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">Vertical Gaps (수직 간격)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Horizontal-Gaps-%EC%88%98%ED%8F%89-%EA%B0%84%EA%B2%A9"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">Horizontal Gaps (수평 간격)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gaps-%ED%81%B4%EB%9E%98%EC%8A%A4-%EA%B5%AC%EC%A1%B0"><span class="nav-number">1.4.6.3.</span> <span class="nav-text">Gaps 클래스 구조</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%99%9C-Gaps-%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%B4-%ED%95%84%EC%9A%94%ED%95%9C%EA%B0%80"><span class="nav-number">1.4.7.</span> <span class="nav-text">💡 왜 Gaps 시스템이 필요한가?</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%EC%BD%94%EB%93%9C-%EA%B0%84%EA%B2%B0%EC%84%B1-Simplicity"><span class="nav-number">1.4.7.1.</span> <span class="nav-text">1. 코드 간결성 (Simplicity)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%ED%83%80%EC%9E%85-%EC%95%88%EC%A0%95%EC%84%B1-Type-Safety"><span class="nav-number">1.4.7.2.</span> <span class="nav-text">2. 타입 안정성 (Type Safety)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%EC%84%B1%EB%8A%A5-%EC%B5%9C%EC%A0%81%ED%99%94-Performance"><span class="nav-number">1.4.7.3.</span> <span class="nav-text">3. 성능 최적화 (Performance)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%EA%B0%80%EB%8F%85%EC%84%B1-%ED%96%A5%EC%83%81-Readability"><span class="nav-number">1.4.7.4.</span> <span class="nav-text">4. 가독성 향상 (Readability)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%84-main-dart%EC%97%90%EC%84%9C-Gaps-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0"><span class="nav-number">1.4.8.</span> <span class="nav-text">🔄 main.dart에서 Gaps 사용하기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">1.4.9.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%91-%ED%95%B5%EC%8B%AC-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC-2"><span class="nav-number">1.4.10.</span> <span class="nav-text">🔑 핵심 개념 정리</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%8B%A4%EC%8A%B5-%EA%B3%BC%EC%A0%9C-2"><span class="nav-number">1.4.11.</span> <span class="nav-text">💡 실습 과제</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9D%93-%EC%9E%90%EC%A3%BC-%EB%AC%BB%EB%8A%94-%EC%A7%88%EB%AC%B8-2"><span class="nav-number">1.4.12.</span> <span class="nav-text">❓ 자주 묻는 질문</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-FVM-%EB%B2%84%EC%A0%84-%EA%B4%80%EB%A6%AC-%EC%84%A4%EC%A0%95"><span class="nav-number">1.5.</span> <span class="nav-text">4. FVM 버전 관리 설정</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8C-%ED%95%99%EC%8A%B5-%EB%AA%A9%ED%91%9C-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">📌 학습 목표</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%EA%B4%80%EB%A0%A8-%ED%8C%8C%EC%9D%BC"><span class="nav-number">1.5.2.</span> <span class="nav-text">📂 관련 파일</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%BB-%EC%84%A4%EC%A0%95-%ED%8C%8C%EC%9D%BC-%EB%82%B4%EC%9A%A9"><span class="nav-number">1.5.3.</span> <span class="nav-text">💻 설정 파일 내용</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-fvmrc"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">1. .fvmrc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-fvm-fvm-config-json"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">2. .fvm&#x2F;fvm_config.json</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-gitignore-%EC%B6%94%EA%B0%80"><span class="nav-number">1.5.3.3.</span> <span class="nav-text">3. .gitignore 추가</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-vscode-settings-json-%EC%B6%94%EA%B0%80"><span class="nav-number">1.5.3.4.</span> <span class="nav-text">4. .vscode&#x2F;settings.json 추가</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%96-FVM-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.5.4.</span> <span class="nav-text">📖 FVM 상세 설명</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-FVM%EC%9D%B4%EB%9E%80"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">1. FVM이란?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-FVM-%EC%9E%91%EB%8F%99-%EC%9B%90%EB%A6%AC"><span class="nav-number">1.5.4.2.</span> <span class="nav-text">2. FVM 작동 원리</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%EC%BB%A4%EB%B0%8B-%EB%B3%80%EA%B2%BD-%EC%82%AC%ED%95%AD-%EB%B6%84%EC%84%9D"><span class="nav-number">1.5.4.3.</span> <span class="nav-text">3. 커밋 변경 사항 분석</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%EC%8B%9C%EA%B0%81%EC%A0%81-%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8-3"><span class="nav-number">1.5.5.</span> <span class="nav-text">🎨 시각적 다이어그램</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FVM-%EB%B2%84%EC%A0%84-%EA%B4%80%EB%A6%AC-%ED%9D%90%EB%A6%84"><span class="nav-number">1.5.5.1.</span> <span class="nav-text">FVM 버전 관리 흐름</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%EB%B2%84%EC%A0%84-%EC%A0%84%ED%99%98-%EA%B3%BC%EC%A0%95"><span class="nav-number">1.5.5.2.</span> <span class="nav-text">버전 전환 과정</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-FVM-%EC%82%AC%EC%9A%A9%EB%B2%95"><span class="nav-number">1.5.6.</span> <span class="nav-text">💡 FVM 사용법</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-FVM-%EC%84%A4%EC%B9%98-%EC%B5%9C%EC%B4%88-1%ED%9A%8C"><span class="nav-number">1.5.6.1.</span> <span class="nav-text">1. FVM 설치 (최초 1회)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Flutter-%EB%B2%84%EC%A0%84-%EC%84%A4%EC%B9%98"><span class="nav-number">1.5.6.2.</span> <span class="nav-text">2. Flutter 버전 설치</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90-%EB%B2%84%EC%A0%84-%EC%84%A4%EC%A0%95"><span class="nav-number">1.5.6.3.</span> <span class="nav-text">3. 프로젝트에 버전 설정</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-FVM-Flutter-%EB%AA%85%EB%A0%B9%EC%96%B4-%EC%8B%A4%ED%96%89"><span class="nav-number">1.5.6.4.</span> <span class="nav-text">4. FVM Flutter 명령어 실행</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%A7-%ED%8C%80-%ED%98%91%EC%97%85-%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4"><span class="nav-number">1.5.7.</span> <span class="nav-text">🔧 팀 협업 시나리오</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%EC%83%81%ED%99%A9-%EC%83%88-%ED%8C%80%EC%9B%90%EC%9D%B4-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-clone"><span class="nav-number">1.5.7.1.</span> <span class="nav-text">상황: 새 팀원이 프로젝트 clone</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">1.5.8.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%91-%ED%95%B5%EC%8B%AC-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC-3"><span class="nav-number">1.5.9.</span> <span class="nav-text">🔑 핵심 개념 정리</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%8B%A4%EC%8A%B5-%EA%B3%BC%EC%A0%9C-3"><span class="nav-number">1.5.10.</span> <span class="nav-text">💡 실습 과제</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9D%93-%EC%9E%90%EC%A3%BC-%EB%AC%BB%EB%8A%94-%EC%A7%88%EB%AC%B8-3"><span class="nav-number">1.5.11.</span> <span class="nav-text">❓ 자주 묻는 질문</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%93-%EC%A0%84%EC%B2%B4-%EB%B3%B5%EC%8A%B5-%EB%B0%8F-%EC%9A%94%EC%95%BD"><span class="nav-number">1.6.</span> <span class="nav-text">🎓 전체 복습 및 요약</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9A-%EB%B0%B0%EC%9A%B4-%EB%82%B4%EC%9A%A9-%EC%A0%95%EB%A6%AC"><span class="nav-number">1.6.1.</span> <span class="nav-text">📚 배운 내용 정리</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%97-%EA%B0%9C%EB%85%90-%EC%97%B0%EA%B2%B0-%EB%A7%B5"><span class="nav-number">1.6.2.</span> <span class="nav-text">🔗 개념 연결 맵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%AA-%EC%8B%A4%EC%A0%84-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0"><span class="nav-number">1.6.3.</span> <span class="nav-text">💪 실전 프로젝트 시작하기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%B5%9C%EC%A2%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.6.4.</span> <span class="nav-text">🎯 최종 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-%ED%8C%A8%ED%84%B4-%EC%A0%95%EB%A6%AC"><span class="nav-number">1.6.5.</span> <span class="nav-text">📝 핵심 코드 패턴 정리</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%EB%B6%80%EB%A1%9D"><span class="nav-number">1.7.</span> <span class="nav-text">📚 부록</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-%EB%AA%85%EB%A0%B9%EC%96%B4-%EC%A0%95%EB%A6%AC"><span class="nav-number">1.7.1.</span> <span class="nav-text">A. 명령어 정리</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85"><span class="nav-number">1.7.2.</span> <span class="nav-text">B. 트러블슈팅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-%EC%9C%A0%EC%9A%A9%ED%95%9C-VSCode-%ED%99%95%EC%9E%A5"><span class="nav-number">1.7.3.</span> <span class="nav-text">C. 유용한 VSCode 확장</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-%EC%B0%B8%EA%B3%A0-%EC%9E%90%EB%A3%8C"><span class="nav-number">1.7.4.</span> <span class="nav-text">D. 참고 자료</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/04/flutter/flutter-0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="0. Flutter TikTok Clone - 초기 프로젝트 세팅 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          0. Flutter TikTok Clone - 초기 프로젝트 세팅
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-04 12:00" itemprop="dateCreated datePublished" datetime="2025-10-04T12:00:00+09:00">2025-10-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="📚-Flutter-TikTok-Clone-초기-프로젝트-세팅"><a href="#📚-Flutter-TikTok-Clone-초기-프로젝트-세팅" class="headerlink" title="📚 Flutter TikTok Clone - 초기 프로젝트 세팅"></a>📚 Flutter TikTok Clone - 초기 프로젝트 세팅</h1><h2 id="📑-목차"><a href="#📑-목차" class="headerlink" title="📑 목차"></a>📑 목차</h2><ol>
+<li><a href="#1-flutter-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%83%9D%EC%84%B1">Flutter 프로젝트 생성 (Tiktok clone project init)</a></li>
+<li><a href="#2-sizes-%EC%83%81%EC%88%98-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B5%AC%EC%B6%95">Sizes 상수 시스템 구축</a></li>
+<li><a href="#3-gaps-%EC%9C%84%EC%A0%AF-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B5%AC%EC%B6%95">Gaps 위젯 시스템 구축</a></li>
+<li><a href="#4-fvm-%EB%B2%84%EC%A0%84-%EA%B4%80%EB%A6%AC-%EC%84%A4%EC%A0%95">FVM 버전 관리 설정</a></li>
+</ol>
+<hr>
+<h2 id="1-Flutter-프로젝트-생성"><a href="#1-Flutter-프로젝트-생성" class="headerlink" title="1. Flutter 프로젝트 생성"></a>1. Flutter 프로젝트 생성</h2><h3 id="📌-학습-목표"><a href="#📌-학습-목표" class="headerlink" title="📌 학습 목표"></a>📌 학습 목표</h3><ul>
+<li>Flutter 프로젝트의 기본 구조를 이해합니다</li>
+<li>MaterialApp의 기본 설정 방법을 배웁니다</li>
+<li>프로젝트 초기 파일 구조를 파악합니다</li>
+<li>테마 색상 설정 방법을 이해합니다</li>
+</ul>
+<h3 id="📂-파일-구조"><a href="#📂-파일-구조" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">tiktok/</span><br><span class="line">├── lib/</span><br><span class="line">│   ├── main.dart              # 앱 진입점</span><br><span class="line">│   └── constants/</span><br><span class="line">│       ├── sizes.dart         # 크기 상수 (빈 파일)</span><br><span class="line">│       └── gaps.dart          # 간격 위젯 (빈 파일)</span><br><span class="line">├── pubspec.yaml               # 프로젝트 설정 파일</span><br><span class="line">├── android/                   # Android 플랫폼 코드</span><br><span class="line">├── ios/                       # iOS 플랫폼 코드</span><br><span class="line">├── web/                       # Web 플랫폼 코드</span><br><span class="line">├── windows/                   # Windows 플랫폼 코드</span><br><span class="line">├── linux/                     # Linux 플랫폼 코드</span><br><span class="line">└── macos/                     # macOS 플랫폼 코드</span><br></pre></td></tr></table></figure>
+
+<h3 id="💻-초기-main-dart-코드"><a href="#💻-초기-main-dart-코드" class="headerlink" title="💻 초기 main.dart 코드"></a>💻 초기 main.dart 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  runApp(<span class="keyword">const</span> TikTokApp());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TikTokApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> TikTokApp(&#123;<span class="keyword">super</span>.key&#125;);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      title: <span class="string">&#x27;TikTok Clone&#x27;</span>,</span><br><span class="line">      theme: ThemeData(</span><br><span class="line">        colorScheme: ColorScheme.fromSeed(seedColor: <span class="keyword">const</span> Color(<span class="number">0xFFE9435A</span>)),</span><br><span class="line">        useMaterial3: <span class="keyword">false</span>,</span><br><span class="line">      ),</span><br><span class="line">      home: Container(),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="📖-코드-상세-설명"><a href="#📖-코드-상세-설명" class="headerlink" title="📖 코드 상세 설명"></a>📖 코드 상세 설명</h3><h4 id="1-main-함수"><a href="#1-main-함수" class="headerlink" title="1. main() 함수"></a>1. <strong>main() 함수</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  runApp(<span class="keyword">const</span> TikTokApp());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>void main()</strong>: Dart 프로그램의 진입점(Entry Point)입니다</li>
+<li><strong>runApp()</strong>: Flutter 앱을 시작하는 함수입니다</li>
+<li><strong>const TikTokApp()</strong>: 앱의 최상위 위젯을 생성합니다<ul>
+<li><code>const</code>를 사용하여 컴파일 타임에 상수로 만들어 성능을 향상시킵니다</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-TikTokApp-클래스"><a href="#2-TikTokApp-클래스" class="headerlink" title="2. TikTokApp 클래스"></a>2. <strong>TikTokApp 클래스</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TikTokApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> TikTokApp(&#123;<span class="keyword">super</span>.key&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>StatelessWidget</strong>: 상태가 변하지 않는 위젯입니다</li>
+<li><strong>const 생성자</strong>: 불필요한 재빌드를 방지합니다</li>
+<li><strong>super.key</strong>: 부모 클래스의 key 매개변수를 전달합니다<ul>
+<li>key는 위젯을 고유하게 식별하는데 사용됩니다</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-MaterialApp-설정"><a href="#3-MaterialApp-설정" class="headerlink" title="3. MaterialApp 설정"></a>3. <strong>MaterialApp 설정</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> MaterialApp(</span><br><span class="line">  title: <span class="string">&#x27;TikTok Clone&#x27;</span>,</span><br><span class="line">  theme: ThemeData(</span><br><span class="line">    colorScheme: ColorScheme.fromSeed(seedColor: <span class="keyword">const</span> Color(<span class="number">0xFFE9435A</span>)),</span><br><span class="line">    useMaterial3: <span class="keyword">false</span>,</span><br><span class="line">  ),</span><br><span class="line">  home: Container(),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><strong>MaterialApp 속성 설명:</strong></p>
+<ul>
+<li><p><strong>title</strong>: 앱의 제목</p>
+<ul>
+<li>태스크 매니저에서 보이는 이름입니다</li>
+<li>iOS에서는 사용되지 않습니다</li>
+</ul>
+</li>
+<li><p><strong>theme</strong>: 앱의 전체적인 테마 설정</p>
+<ul>
+<li><code>ThemeData</code>: Material Design 테마를 정의합니다</li>
+</ul>
+</li>
+<li><p><strong>colorScheme</strong>: 앱의 색상 체계</p>
+<ul>
+<li><code>ColorScheme.fromSeed()</code>: 시드 컬러를 기반으로 전체 색상 팔레트를 자동 생성합니다</li>
+<li><code>seedColor: Color(0xFFE9435A)</code>: TikTok의 시그니처 핑크색<ul>
+<li><code>0xFF</code>: 완전 불투명 (Alpha 255)</li>
+<li><code>E9435A</code>: RGB 값 (233, 67, 90)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>useMaterial3</strong>: Material Design 3 사용 여부</p>
+<ul>
+<li><code>false</code>: Material Design 2 사용 (기존 디자인 시스템)</li>
+<li>Material 2는 더 안정적이고 검증된 디자인을 제공합니다</li>
+</ul>
+</li>
+<li><p><strong>home</strong>: 앱의 기본 화면</p>
+<ul>
+<li>현재는 빈 <code>Container()</code> 사용</li>
+</ul>
+</li>
+</ul>
+<h3 id="📦-pubspec-yaml-설정"><a href="#📦-pubspec-yaml-설정" class="headerlink" title="📦 pubspec.yaml 설정"></a>📦 pubspec.yaml 설정</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">tiktok</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&quot;Tiktok Clone Project&quot;</span></span><br><span class="line"><span class="attr">publish_to:</span> <span class="string">&#x27;none&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span><span class="string">+1</span></span><br><span class="line"></span><br><span class="line"><span class="attr">environment:</span></span><br><span class="line">  <span class="attr">sdk:</span> <span class="string">&#x27;&gt;=3.3.0 &lt;4.0.0&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="attr">flutter:</span></span><br><span class="line">    <span class="attr">sdk:</span> <span class="string">flutter</span></span><br><span class="line">  <span class="attr">cupertino_icons:</span> <span class="string">^1.0.6</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dev_dependencies:</span></span><br><span class="line">  <span class="attr">flutter_test:</span></span><br><span class="line">    <span class="attr">sdk:</span> <span class="string">flutter</span></span><br><span class="line">  <span class="attr">flutter_lints:</span> <span class="string">^3.0.1</span></span><br><span class="line"></span><br><span class="line"><span class="attr">flutter:</span></span><br><span class="line">  <span class="attr">uses-material-design:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>주요 설정 설명:</strong></p>
+<ol>
+<li><p><strong>name: tiktok</strong></p>
+<ul>
+<li>프로젝트 이름 (패키지 이름으로 사용됩니다)</li>
+</ul>
+</li>
+<li><p><strong>publish_to: ‘none’</strong></p>
+<ul>
+<li>pub.dev에 실수로 배포되는 것을 방지합니다</li>
+<li>개인 프로젝트에 권장됩니다</li>
+</ul>
+</li>
+<li><p><strong>version: 1.0.0+1</strong></p>
+<ul>
+<li>앱 버전 번호</li>
+<li><code>1.0.0</code>: 버전 이름 (사용자에게 보이는 버전)</li>
+<li><code>+1</code>: 빌드 번호 (내부적으로 사용하는 번호)</li>
+</ul>
+</li>
+<li><p><strong>environment.sdk</strong></p>
+<ul>
+<li>Dart SDK 버전 범위 지정</li>
+<li><code>&gt;=3.3.0 &lt;4.0.0</code>: 3.3.0 이상, 4.0.0 미만</li>
+</ul>
+</li>
+<li><p><strong>dependencies</strong></p>
+<ul>
+<li><strong>flutter</strong>: Flutter SDK</li>
+<li><strong>cupertino_icons</strong>: iOS 스타일 아이콘 패키지</li>
+</ul>
+</li>
+<li><p><strong>dev_dependencies</strong></p>
+<ul>
+<li><strong>flutter_test</strong>: 테스트 프레임워크</li>
+<li><strong>flutter_lints</strong>: 코드 품질 검사 도구</li>
+</ul>
+</li>
+<li><p><strong>uses-material-design: true</strong></p>
+<ul>
+<li>Material Design 아이콘과 폰트를 사용 가능하게 합니다</li>
+</ul>
+</li>
+</ol>
+<h3 id="🎨-시각적-다이어그램"><a href="#🎨-시각적-다이어그램" class="headerlink" title="🎨 시각적 다이어그램"></a>🎨 시각적 다이어그램</h3><h4 id="프로젝트-구조"><a href="#프로젝트-구조" class="headerlink" title="프로젝트 구조"></a>프로젝트 구조</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────┐</span><br><span class="line">│         Flutter Project             │</span><br><span class="line">├─────────────────────────────────────┤</span><br><span class="line">│                                     │</span><br><span class="line">│  ┌──────────────────────────────┐  │</span><br><span class="line">│  │        main.dart              │  │</span><br><span class="line">│  │  ┌────────────────────────┐  │  │</span><br><span class="line">│  │  │    void main()         │  │  │</span><br><span class="line">│  │  │    runApp(TikTokApp)   │  │  │</span><br><span class="line">│  │  └────────────────────────┘  │  │</span><br><span class="line">│  │                               │  │</span><br><span class="line">│  │  ┌────────────────────────┐  │  │</span><br><span class="line">│  │  │   TikTokApp Widget     │  │  │</span><br><span class="line">│  │  │   (StatelessWidget)    │  │  │</span><br><span class="line">│  │  │                        │  │  │</span><br><span class="line">│  │  │   ┌──────────────┐     │  │  │</span><br><span class="line">│  │  │   │ MaterialApp  │     │  │  │</span><br><span class="line">│  │  │   │   - title    │     │  │  │</span><br><span class="line">│  │  │   │   - theme    │     │  │  │</span><br><span class="line">│  │  │   │   - home     │     │  │  │</span><br><span class="line">│  │  │   └──────────────┘     │  │  │</span><br><span class="line">│  │  └────────────────────────┘  │  │</span><br><span class="line">│  └──────────────────────────────┘  │</span><br><span class="line">│                                     │</span><br><span class="line">│  ┌──────────────────────────────┐  │</span><br><span class="line">│  │       constants/             │  │</span><br><span class="line">│  │  - sizes.dart (빈 파일)      │  │</span><br><span class="line">│  │  - gaps.dart (빈 파일)       │  │</span><br><span class="line">│  └──────────────────────────────┘  │</span><br><span class="line">└─────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h4 id="앱-실행-흐름"><a href="#앱-실행-흐름" class="headerlink" title="앱 실행 흐름"></a>앱 실행 흐름</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1. main() 함수 실행</span><br><span class="line">    ↓</span><br><span class="line">2. runApp(TikTokApp()) 호출</span><br><span class="line">    ↓</span><br><span class="line">3. TikTokApp 위젯 생성</span><br><span class="line">    ↓</span><br><span class="line">4. build() 메서드 실행</span><br><span class="line">    ↓</span><br><span class="line">5. MaterialApp 반환</span><br><span class="line">    ↓</span><br><span class="line">6. 테마 적용 (색상, Material 3)</span><br><span class="line">    ↓</span><br><span class="line">7. home에 Container() 표시</span><br><span class="line">    ↓</span><br><span class="line">8. 빈 화면 출력</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> Flutter 프로젝트가 정상적으로 생성되었는가?</li>
+<li><input disabled="" type="checkbox"> main.dart 파일이 lib&#x2F; 폴더에 있는가?</li>
+<li><input disabled="" type="checkbox"> MaterialApp의 테마 색상이 설정되었는가?</li>
+<li><input disabled="" type="checkbox"> useMaterial3가 false로 설정되었는가?</li>
+<li><input disabled="" type="checkbox"> constants 폴더가 생성되었는가?</li>
+<li><input disabled="" type="checkbox"> pubspec.yaml의 기본 설정이 완료되었는가?</li>
+</ul>
+<h3 id="🔑-핵심-개념-정리"><a href="#🔑-핵심-개념-정리" class="headerlink" title="🔑 핵심 개념 정리"></a>🔑 핵심 개념 정리</h3><table>
+<thead>
+<tr>
+<th>개념</th>
+<th>설명</th>
+<th>왜 중요한가?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>main()</strong></td>
+<td>앱의 시작점</td>
+<td>모든 Flutter 앱은 main()에서 시작합니다</td>
+</tr>
+<tr>
+<td><strong>runApp()</strong></td>
+<td>위젯 트리를 화면에 렌더링</td>
+<td>Flutter 앱을 실행하는 필수 함수입니다</td>
+</tr>
+<tr>
+<td><strong>StatelessWidget</strong></td>
+<td>불변하는 위젯</td>
+<td>상태가 없어 더 효율적입니다</td>
+</tr>
+<tr>
+<td><strong>MaterialApp</strong></td>
+<td>Material Design 앱의 루트</td>
+<td>네비게이션, 테마 등을 관리합니다</td>
+</tr>
+<tr>
+<td><strong>ColorScheme.fromSeed</strong></td>
+<td>시드 컬러에서 팔레트 생성</td>
+<td>일관된 색상 체계를 자동으로 만듭니다</td>
+</tr>
+<tr>
+<td><strong>const</strong></td>
+<td>컴파일 타임 상수</td>
+<td>불필요한 재빌드를 방지합니다</td>
+</tr>
+</tbody></table>
+<h3 id="💡-실습-과제"><a href="#💡-실습-과제" class="headerlink" title="💡 실습 과제"></a>💡 실습 과제</h3><ol>
+<li><p><strong>색상 변경하기</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 다른 색상으로 시도해보세요</span></span><br><span class="line">seedColor: <span class="keyword">const</span> Color(<span class="number">0xFF0000FF</span>)  <span class="comment">// 파란색</span></span><br><span class="line">seedColor: <span class="keyword">const</span> Color(<span class="number">0xFF00FF00</span>)  <span class="comment">// 초록색</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>앱 제목 변경하기</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">title: <span class="string">&#x27;My First App&#x27;</span>,</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Material 3로 변경해보기</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useMaterial3: <span class="keyword">true</span>,</span><br><span class="line"><span class="comment">// 차이점을 관찰해보세요</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="❓-자주-묻는-질문"><a href="#❓-자주-묻는-질문" class="headerlink" title="❓ 자주 묻는 질문"></a>❓ 자주 묻는 질문</h3><p><strong>Q1: const를 왜 사용하나요?</strong></p>
+<blockquote>
+<p>A: const는 컴파일 타임에 상수로 만들어 불필요한 재빌드를 방지하고 메모리를 절약합니다. 변하지 않는 위젯은 항상 const로 만드는 것이 좋습니다.</p>
+</blockquote>
+<p><strong>Q2: StatelessWidget vs StatefulWidget 차이는?</strong></p>
+<blockquote>
+<p>A: StatelessWidget은 한 번 그려지면 변하지 않습니다. StatefulWidget은 setState()로 상태를 변경하고 다시 그릴 수 있습니다. 초기 설정에는 변할 일이 없으므로 StatelessWidget을 사용합니다.</p>
+</blockquote>
+<p><strong>Q3: ColorScheme.fromSeed의 장점은?</strong></p>
+<blockquote>
+<p>A: 하나의 시드 컬러에서 primary, secondary, background 등 전체 색상 팔레트를 자동으로 생성해 일관된 디자인을 유지할 수 있습니다.</p>
+</blockquote>
+<p><strong>Q4: 왜 home에 빈 Container()를 넣나요?</strong></p>
+<blockquote>
+<p>A: MaterialApp은 home이 필수이기 때문입니다. 나중에 실제 화면을 만들면 이 Container를 교체합니다.</p>
+</blockquote>
+<hr>
+<h2 id="2-Sizes-상수-시스템-구축"><a href="#2-Sizes-상수-시스템-구축" class="headerlink" title="2. Sizes 상수 시스템 구축"></a>2. Sizes 상수 시스템 구축</h2><h3 id="📌-학습-목표-1"><a href="#📌-학습-목표-1" class="headerlink" title="📌 학습 목표"></a>📌 학습 목표</h3><ul>
+<li>크기 상수를 관리하는 시스템을 이해합니다</li>
+<li>하드코딩을 피하는 방법을 배웁니다</li>
+<li>일관된 디자인 시스템을 구축하는 방법을 학습합니다</li>
+<li>static const의 사용법을 익힙니다</li>
+</ul>
+<h3 id="📂-파일-위치"><a href="#📂-파일-위치" class="headerlink" title="📂 파일 위치"></a>📂 파일 위치</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lib/</span><br><span class="line">└── constants/</span><br><span class="line">    └── sizes.dart</span><br></pre></td></tr></table></figure>
+
+<h3 id="💻-sizes-dart-전체-코드"><a href="#💻-sizes-dart-전체-코드" class="headerlink" title="💻 sizes.dart 전체 코드"></a>💻 sizes.dart 전체 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sizes</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size1 = <span class="number">1.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size2 = <span class="number">2.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size3 = <span class="number">3.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size4 = <span class="number">4.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size5 = <span class="number">5.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size6 = <span class="number">6.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size7 = <span class="number">7.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size8 = <span class="number">8.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size9 = <span class="number">9.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size10 = <span class="number">10.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size11 = <span class="number">11.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size12 = <span class="number">12.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size14 = <span class="number">14.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size16 = <span class="number">16.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size20 = <span class="number">20.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size24 = <span class="number">24.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size28 = <span class="number">28.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size32 = <span class="number">32.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size36 = <span class="number">36.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size40 = <span class="number">40.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size44 = <span class="number">44.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size48 = <span class="number">48.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size52 = <span class="number">52.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size56 = <span class="number">56.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size60 = <span class="number">60.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size64 = <span class="number">64.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size72 = <span class="number">72.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size80 = <span class="number">80.0</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size96 = <span class="number">96.0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="📖-코드-상세-설명-1"><a href="#📖-코드-상세-설명-1" class="headerlink" title="📖 코드 상세 설명"></a>📖 코드 상세 설명</h3><h4 id="1-클래스-구조"><a href="#1-클래스-구조" class="headerlink" title="1. 클래스 구조"></a>1. <strong>클래스 구조</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sizes</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 상수들...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>왜 클래스를 사용하나요?</strong><ul>
+<li>관련된 상수들을 하나로 묶어 관리합니다</li>
+<li>네임스페이스 역할을 하여 다른 곳의 변수명과 충돌을 방지합니다</li>
+<li><code>Sizes.size16</code>처럼 명확하게 사용할 수 있습니다</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-static-const-키워드"><a href="#2-static-const-키워드" class="headerlink" title="2. static const 키워드"></a>2. <strong>static const 키워드</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size16 = <span class="number">16.0</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>static 키워드:</strong></p>
+<ul>
+<li>클래스 인스턴스를 생성하지 않고 사용할 수 있습니다</li>
+<li>메모리에 한 번만 할당됩니다</li>
+<li><code>Sizes.size16</code>처럼 클래스명으로 직접 접근합니다</li>
+</ul>
+<p><strong>const 키워드:</strong></p>
+<ul>
+<li>컴파일 타임에 값이 결정되는 상수입니다</li>
+<li>런타임에 변경할 수 없습니다</li>
+<li>메모리를 절약하고 성능을 향상시킵니다</li>
+</ul>
+<p><strong>왜 둘 다 사용하나요?</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 나쁜 방법</span></span><br><span class="line"><span class="keyword">final</span> size16 = <span class="number">16.0</span>;  <span class="comment">// 인스턴스마다 생성됨</span></span><br><span class="line"><span class="keyword">static</span> size16 = <span class="number">16.0</span>;  <span class="comment">// 변경 가능</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 좋은 방법</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size16 = <span class="number">16.0</span>;  <span class="comment">// 한 번만 생성, 변경 불가</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-크기-값-체계"><a href="#3-크기-값-체계" class="headerlink" title="3. 크기 값 체계"></a>3. <strong>크기 값 체계</strong></h4><p><strong>작은 크기 (1-12):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size1 = <span class="number">1.0</span>;   <span class="comment">// 매우 작은 여백, 테두리</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size2 = <span class="number">2.0</span>;   <span class="comment">// 작은 여백</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size4 = <span class="number">4.0</span>;   <span class="comment">// 기본 여백</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size8 = <span class="number">8.0</span>;   <span class="comment">// 일반 여백</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size12 = <span class="number">12.0</span>; <span class="comment">// 중간 여백</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>중간 크기 (14-32):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size14 = <span class="number">14.0</span>; <span class="comment">// 작은 패딩</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size16 = <span class="number">16.0</span>; <span class="comment">// 기본 패딩</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size20 = <span class="number">20.0</span>; <span class="comment">// 일반 패딩</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size24 = <span class="number">24.0</span>; <span class="comment">// 큰 패딩</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size32 = <span class="number">32.0</span>; <span class="comment">// 매우 큰 패딩</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>큰 크기 (36-96):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size36 = <span class="number">36.0</span>; <span class="comment">// 아이콘 크기</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size48 = <span class="number">48.0</span>; <span class="comment">// 큰 아이콘/버튼</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size64 = <span class="number">64.0</span>; <span class="comment">// 프로필 이미지</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size96 = <span class="number">96.0</span>; <span class="comment">// 큰 이미지/컨테이너</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="🎯-사용-예시"><a href="#🎯-사용-예시" class="headerlink" title="🎯 사용 예시"></a>🎯 사용 예시</h3><h4 id="Before-하드코딩-❌"><a href="#Before-하드코딩-❌" class="headerlink" title="Before (하드코딩 ❌)"></a>Before (하드코딩 ❌)</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  width: <span class="number">16.0</span>,           <span class="comment">// 숫자를 직접 입력</span></span><br><span class="line">  height: <span class="number">48.0</span>,          <span class="comment">// 일관성 없음</span></span><br><span class="line">  padding: EdgeInsets.all(<span class="number">24.0</span>),  <span class="comment">// 변경이 어려움</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="After-상수-사용-✅"><a href="#After-상수-사용-✅" class="headerlink" title="After (상수 사용 ✅)"></a>After (상수 사용 ✅)</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  width: Sizes.size16,   <span class="comment">// 명확한 의미</span></span><br><span class="line">  height: Sizes.size48,  <span class="comment">// 일관성 유지</span></span><br><span class="line">  padding: EdgeInsets.all(Sizes.size24),  <span class="comment">// 쉬운 변경</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="🎨-시각적-다이어그램-1"><a href="#🎨-시각적-다이어그램-1" class="headerlink" title="🎨 시각적 다이어그램"></a>🎨 시각적 다이어그램</h3><h4 id="크기-체계-시각화"><a href="#크기-체계-시각화" class="headerlink" title="크기 체계 시각화"></a>크기 체계 시각화</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">작은 크기                  중간 크기                  큰 크기</span><br><span class="line">─────────────────────────────────────────────────────────────</span><br><span class="line">1px  ▏                    14px ▐                     36px ████</span><br><span class="line">2px  ▌                    16px █                     48px ██████</span><br><span class="line">4px  █                    20px ██                    64px ████████</span><br><span class="line">8px  ██                   24px ███                   96px ████████████</span><br><span class="line">12px ███                  32px ████</span><br><span class="line"></span><br><span class="line">용도: 여백, 테두리        용도: 패딩, 마진          용도: 아이콘, 이미지</span><br></pre></td></tr></table></figure>
+
+<h4 id="Sizes-클래스-사용-흐름"><a href="#Sizes-클래스-사용-흐름" class="headerlink" title="Sizes 클래스 사용 흐름"></a>Sizes 클래스 사용 흐름</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────┐</span><br><span class="line">│          Sizes 클래스                │</span><br><span class="line">├─────────────────────────────────────┤</span><br><span class="line">│                                     │</span><br><span class="line">│  static const size1 = 1.0           │</span><br><span class="line">│  static const size2 = 2.0           │</span><br><span class="line">│  static const size4 = 4.0           │</span><br><span class="line">│         ...                         │</span><br><span class="line">│  static const size96 = 96.0         │</span><br><span class="line">│                                     │</span><br><span class="line">└─────────────────────────────────────┘</span><br><span class="line">           ↓ 사용</span><br><span class="line">┌─────────────────────────────────────┐</span><br><span class="line">│        다른 파일에서 사용            │</span><br><span class="line">├─────────────────────────────────────┤</span><br><span class="line">│                                     │</span><br><span class="line">│  import &#x27;package:tiktok/constants/  │</span><br><span class="line">│         sizes.dart&#x27;;                │</span><br><span class="line">│                                     │</span><br><span class="line">│  Container(                         │</span><br><span class="line">│    width: Sizes.size16,  ← 접근     │</span><br><span class="line">│    height: Sizes.size48,            │</span><br><span class="line">│  )                                  │</span><br><span class="line">│                                     │</span><br><span class="line">└─────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="💡-왜-이런-시스템이-필요한가"><a href="#💡-왜-이런-시스템이-필요한가" class="headerlink" title="💡 왜 이런 시스템이 필요한가?"></a>💡 왜 이런 시스템이 필요한가?</h3><h4 id="1-일관성-Consistency"><a href="#1-일관성-Consistency" class="headerlink" title="1. 일관성 (Consistency)"></a>1. <strong>일관성 (Consistency)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 하드코딩: 비슷한 크기가 여러 곳에서 다르게 사용됨</span></span><br><span class="line">padding: EdgeInsets.all(<span class="number">16.0</span>)</span><br><span class="line">padding: EdgeInsets.all(<span class="number">15.0</span>)  <span class="comment">// 실수</span></span><br><span class="line">padding: EdgeInsets.all(<span class="number">17.0</span>)  <span class="comment">// 실수</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 상수 사용: 항상 같은 값</span></span><br><span class="line">padding: EdgeInsets.all(Sizes.size16)</span><br><span class="line">padding: EdgeInsets.all(Sizes.size16)</span><br><span class="line">padding: EdgeInsets.all(Sizes.size16)</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-유지보수-Maintainability"><a href="#2-유지보수-Maintainability" class="headerlink" title="2. 유지보수 (Maintainability)"></a>2. <strong>유지보수 (Maintainability)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 하드코딩: 모든 곳을 찾아서 수정해야 함</span></span><br><span class="line"><span class="comment">// 100개 파일에서 16.0을 20.0으로 변경? 😱</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 상수 사용: 한 곳만 수정</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sizes</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> size16 = <span class="number">20.0</span>;  <span class="comment">// 여기만 바꾸면 모든 곳 변경!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-가독성-Readability"><a href="#3-가독성-Readability" class="headerlink" title="3. 가독성 (Readability)"></a>3. <strong>가독성 (Readability)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 하드코딩: 의미를 알 수 없음</span></span><br><span class="line">Container(width: <span class="number">16.0</span>)  <span class="comment">// 16은 무슨 의미?</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 상수 사용: 의미가 명확함</span></span><br><span class="line">Container(width: Sizes.size16)  <span class="comment">// 크기 16을 사용한다는 의미!</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-디자인-시스템-Design-System"><a href="#4-디자인-시스템-Design-System" class="headerlink" title="4. 디자인 시스템 (Design System)"></a>4. <strong>디자인 시스템 (Design System)</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">모든 UI는 정해진 크기만 사용</span><br><span class="line">↓</span><br><span class="line">일관된 디자인 시스템 구축</span><br><span class="line">↓</span><br><span class="line">전문적인 앱 완성</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> Sizes 클래스가 생성되었는가?</li>
+<li><input disabled="" type="checkbox"> static const로 모든 상수가 선언되었는가?</li>
+<li><input disabled="" type="checkbox"> 1부터 96까지 필요한 크기가 모두 포함되었는가?</li>
+<li><input disabled="" type="checkbox"> 타입이 double (1.0, 2.0…)로 되어 있는가?</li>
+</ul>
+<h3 id="🔑-핵심-개념-정리-1"><a href="#🔑-핵심-개념-정리-1" class="headerlink" title="🔑 핵심 개념 정리"></a>🔑 핵심 개념 정리</h3><table>
+<thead>
+<tr>
+<th>개념</th>
+<th>설명</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>static</strong></td>
+<td>클래스 레벨 멤버</td>
+<td><code>Sizes.size16</code> 인스턴스 없이 사용</td>
+</tr>
+<tr>
+<td><strong>const</strong></td>
+<td>컴파일 타임 상수</td>
+<td>변경 불가, 메모리 효율적</td>
+</tr>
+<tr>
+<td><strong>하드코딩 방지</strong></td>
+<td>숫자 직접 입력 금지</td>
+<td><code>16.0</code> → <code>Sizes.size16</code></td>
+</tr>
+<tr>
+<td><strong>디자인 시스템</strong></td>
+<td>일관된 크기 체계</td>
+<td>모든 UI가 동일한 크기 사용</td>
+</tr>
+</tbody></table>
+<h3 id="💡-실습-과제-1"><a href="#💡-실습-과제-1" class="headerlink" title="💡 실습 과제"></a>💡 실습 과제</h3><ol>
+<li><p><strong>Sizes 클래스를 사용하여 Container 만들기</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  width: Sizes.size64,</span><br><span class="line">  height: Sizes.size64,</span><br><span class="line">  padding: EdgeInsets.all(Sizes.size16),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>자주 사용하는 크기 찾기</strong></p>
+<ul>
+<li>어떤 크기가 가장 많이 사용될 것 같나요?</li>
+<li>패딩, 마진, 아이콘에 어떤 크기를 쓸까요?</li>
+</ul>
+</li>
+<li><p><strong>없는 크기가 필요하다면?</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 만약 size18이 필요하다면?</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> size18 = <span class="number">18.0</span>;  <span class="comment">// 추가!</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="❓-자주-묻는-질문-1"><a href="#❓-자주-묻는-질문-1" class="headerlink" title="❓ 자주 묻는 질문"></a>❓ 자주 묻는 질문</h3><p><strong>Q1: 왜 size13, size15 같은 숫자는 없나요?</strong></p>
+<blockquote>
+<p>A: 디자인 시스템에서는 일관된 간격을 위해 특정 숫자만 사용합니다. 4의 배수나 자주 사용하는 숫자만 포함하여 선택의 폭을 줄이고 일관성을 높입니다.</p>
+</blockquote>
+<p><strong>Q2: double 타입 대신 int를 사용하면 안되나요?</strong></p>
+<blockquote>
+<p>A: Flutter에서 크기는 대부분 double을 사용합니다. <code>1</code>이 아닌 <code>1.0</code>을 사용하면 타입 변환 없이 바로 사용할 수 있어 편리합니다.</p>
+</blockquote>
+<p><strong>Q3: Sizes 클래스의 인스턴스를 만들어야 하나요?</strong></p>
+<blockquote>
+<p>A: 아니요! static이므로 <code>Sizes.size16</code>처럼 클래스명으로 바로 접근합니다. 인스턴스를 만들 필요가 없습니다.</p>
+</blockquote>
+<p><strong>Q4: 다른 파일에서 어떻게 사용하나요?</strong></p>
+<blockquote>
+<p>A: 파일 상단에 <code>import &#39;package:tiktok/constants/sizes.dart&#39;;</code>를 추가하면 됩니다.</p>
+</blockquote>
+<hr>
+<h2 id="3-Gaps-위젯-시스템-구축"><a href="#3-Gaps-위젯-시스템-구축" class="headerlink" title="3. Gaps 위젯 시스템 구축"></a>3. Gaps 위젯 시스템 구축</h2><h3 id="📌-학습-목표-2"><a href="#📌-학습-목표-2" class="headerlink" title="📌 학습 목표"></a>📌 학습 목표</h3><ul>
+<li>재사용 가능한 간격 위젯을 만드는 방법을 배웁니다</li>
+<li>Vertical과 Horizontal 간격의 차이를 이해합니다</li>
+<li>SizedBox 위젯의 활용법을 익힙니다</li>
+<li>const 위젯을 통한 성능 최적화를 학습합니다</li>
+</ul>
+<h3 id="📂-파일-위치-1"><a href="#📂-파일-위치-1" class="headerlink" title="📂 파일 위치"></a>📂 파일 위치</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lib/</span><br><span class="line">└── constants/</span><br><span class="line">    └── gaps.dart</span><br></pre></td></tr></table></figure>
+
+<h3 id="💻-gaps-dart-전체-코드"><a href="#💻-gaps-dart-전체-코드" class="headerlink" title="💻 gaps.dart 전체 코드"></a>💻 gaps.dart 전체 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:tiktok/constants/sizes.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Gaps</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Vertical Gaps</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v1 = SizedBox(height: Sizes.size1);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v2 = SizedBox(height: Sizes.size2);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v3 = SizedBox(height: Sizes.size3);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v4 = SizedBox(height: Sizes.size4);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v5 = SizedBox(height: Sizes.size5);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v6 = SizedBox(height: Sizes.size6);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v7 = SizedBox(height: Sizes.size7);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v8 = SizedBox(height: Sizes.size8);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v9 = SizedBox(height: Sizes.size9);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v10 = SizedBox(height: Sizes.size10);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v11 = SizedBox(height: Sizes.size11);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v12 = SizedBox(height: Sizes.size12);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v14 = SizedBox(height: Sizes.size14);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v16 = SizedBox(height: Sizes.size16);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v20 = SizedBox(height: Sizes.size20);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v24 = SizedBox(height: Sizes.size24);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v28 = SizedBox(height: Sizes.size28);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v32 = SizedBox(height: Sizes.size32);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v36 = SizedBox(height: Sizes.size36);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v40 = SizedBox(height: Sizes.size40);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v44 = SizedBox(height: Sizes.size44);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v48 = SizedBox(height: Sizes.size48);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v52 = SizedBox(height: Sizes.size52);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v56 = SizedBox(height: Sizes.size56);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v60 = SizedBox(height: Sizes.size60);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v64 = SizedBox(height: Sizes.size64);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v72 = SizedBox(height: Sizes.size72);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v80 = SizedBox(height: Sizes.size80);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> v96 = SizedBox(height: Sizes.size96);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Horizontal Gaps</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h1 = SizedBox(width: Sizes.size1);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h2 = SizedBox(width: Sizes.size2);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h3 = SizedBox(width: Sizes.size3);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h4 = SizedBox(width: Sizes.size4);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h5 = SizedBox(width: Sizes.size5);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h6 = SizedBox(width: Sizes.size6);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h7 = SizedBox(width: Sizes.size7);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h8 = SizedBox(width: Sizes.size8);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h9 = SizedBox(width: Sizes.size9);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h10 = SizedBox(width: Sizes.size10);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h11 = SizedBox(width: Sizes.size11);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h12 = SizedBox(width: Sizes.size12);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h14 = SizedBox(width: Sizes.size14);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h16 = SizedBox(width: Sizes.size16);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h20 = SizedBox(width: Sizes.size20);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h24 = SizedBox(width: Sizes.size24);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h28 = SizedBox(width: Sizes.size28);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h32 = SizedBox(width: Sizes.size32);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h36 = SizedBox(width: Sizes.size36);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h40 = SizedBox(width: Sizes.size40);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h44 = SizedBox(width: Sizes.size44);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h48 = SizedBox(width: Sizes.size48);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h52 = SizedBox(width: Sizes.size52);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h56 = SizedBox(width: Sizes.size56);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h60 = SizedBox(width: Sizes.size60);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h64 = SizedBox(width: Sizes.size64);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h72 = SizedBox(width: Sizes.size72);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h80 = SizedBox(width: Sizes.size80);</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> h96 = SizedBox(width: Sizes.size96);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="📖-코드-상세-설명-2"><a href="#📖-코드-상세-설명-2" class="headerlink" title="📖 코드 상세 설명"></a>📖 코드 상세 설명</h3><h4 id="1-import-문"><a href="#1-import-문" class="headerlink" title="1. import 문"></a>1. <strong>import 문</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:tiktok/constants/sizes.dart&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>package:flutter&#x2F;material.dart:</strong></p>
+<ul>
+<li>SizedBox 위젯을 사용하기 위해 필요합니다</li>
+<li>Flutter의 Material Design 위젯을 제공합니다</li>
+</ul>
+<p><strong>package:tiktok&#x2F;constants&#x2F;sizes.dart:</strong></p>
+<ul>
+<li>앞서 만든 Sizes 클래스를 사용하기 위해 import합니다</li>
+<li><code>Sizes.size16</code> 같은 상수를 사용할 수 있게 됩니다</li>
+</ul>
+<h4 id="2-Vertical-Gaps-수직-간격"><a href="#2-Vertical-Gaps-수직-간격" class="headerlink" title="2. Vertical Gaps (수직 간격)"></a>2. <strong>Vertical Gaps (수직 간격)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> v16 = SizedBox(height: Sizes.size16);</span><br></pre></td></tr></table></figure>
+
+<p><strong>구성 요소:</strong></p>
+<ul>
+<li><strong>static const</strong>: Sizes와 동일하게 한 번만 생성되는 상수입니다</li>
+<li><strong>v16</strong>: “vertical 16”의 약자입니다</li>
+<li><strong>SizedBox</strong>: Flutter의 빈 공간을 만드는 위젯입니다</li>
+<li><strong>height</strong>: 수직 방향의 크기를 지정합니다</li>
+<li><strong>Sizes.size16</strong>: 앞서 만든 크기 상수를 재사용합니다</li>
+</ul>
+<p><strong>왜 SizedBox를 사용하나요?</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SizedBox는 보이지 않는 빈 공간을 만듭니다</span></span><br><span class="line">Column(</span><br><span class="line">  children: [</span><br><span class="line">    Text(<span class="string">&#x27;첫 번째&#x27;</span>),</span><br><span class="line">    SizedBox(height: <span class="number">16</span>),  <span class="comment">// 16픽셀 빈 공간</span></span><br><span class="line">    Text(<span class="string">&#x27;두 번째&#x27;</span>),</span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-Horizontal-Gaps-수평-간격"><a href="#3-Horizontal-Gaps-수평-간격" class="headerlink" title="3. Horizontal Gaps (수평 간격)"></a>3. <strong>Horizontal Gaps (수평 간격)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> h16 = SizedBox(width: Sizes.size16);</span><br></pre></td></tr></table></figure>
+
+<p><strong>Vertical과의 차이:</strong></p>
+<ul>
+<li><strong>v16</strong>: <code>height</code> 사용 → 위아래 간격 (↕)</li>
+<li><strong>h16</strong>: <code>width</code> 사용 → 좌우 간격 (↔)</li>
+</ul>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Row(</span><br><span class="line">  children: [</span><br><span class="line">    Text(<span class="string">&#x27;왼쪽&#x27;</span>),</span><br><span class="line">    SizedBox(width: <span class="number">16</span>),  <span class="comment">// 16픽셀 빈 공간</span></span><br><span class="line">    Text(<span class="string">&#x27;오른쪽&#x27;</span>),</span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-Sizes-클래스-재사용"><a href="#4-Sizes-클래스-재사용" class="headerlink" title="4. Sizes 클래스 재사용"></a>4. <strong>Sizes 클래스 재사용</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sizes의 값을 그대로 사용</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> v16 = SizedBox(height: Sizes.size16);</span><br><span class="line">                                   ↑</span><br><span class="line">                                   이미 정의된 상수 재사용</span><br></pre></td></tr></table></figure>
+
+<p><strong>장점:</strong></p>
+<ul>
+<li>Sizes를 변경하면 Gaps도 자동으로 변경됩니다</li>
+<li>중복된 숫자를 입력할 필요가 없습니다</li>
+<li>일관성이 보장됩니다</li>
+</ul>
+<h3 id="🎯-사용-예시-1"><a href="#🎯-사용-예시-1" class="headerlink" title="🎯 사용 예시"></a>🎯 사용 예시</h3><h4 id="Before-매번-SizedBox-작성-❌"><a href="#Before-매번-SizedBox-작성-❌" class="headerlink" title="Before (매번 SizedBox 작성 ❌)"></a>Before (매번 SizedBox 작성 ❌)</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Column(</span><br><span class="line">  children: [</span><br><span class="line">    Text(<span class="string">&#x27;제목&#x27;</span>),</span><br><span class="line">    SizedBox(height: <span class="number">16.0</span>),        <span class="comment">// 반복</span></span><br><span class="line">    Text(<span class="string">&#x27;내용&#x27;</span>),</span><br><span class="line">    SizedBox(height: <span class="number">16.0</span>),        <span class="comment">// 반복</span></span><br><span class="line">    Text(<span class="string">&#x27;더보기&#x27;</span>),</span><br><span class="line">    SizedBox(height: <span class="number">24.0</span>),        <span class="comment">// 다른 크기도 있음</span></span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="After-Gaps-사용-✅"><a href="#After-Gaps-사용-✅" class="headerlink" title="After (Gaps 사용 ✅)"></a>After (Gaps 사용 ✅)</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Column(</span><br><span class="line">  children: [</span><br><span class="line">    Text(<span class="string">&#x27;제목&#x27;</span>),</span><br><span class="line">    Gaps.v16,          <span class="comment">// 간단!</span></span><br><span class="line">    Text(<span class="string">&#x27;내용&#x27;</span>),</span><br><span class="line">    Gaps.v16,          <span class="comment">// 일관성!</span></span><br><span class="line">    Text(<span class="string">&#x27;더보기&#x27;</span>),</span><br><span class="line">    Gaps.v24,          <span class="comment">// 명확!</span></span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="🎨-시각적-다이어그램-2"><a href="#🎨-시각적-다이어그램-2" class="headerlink" title="🎨 시각적 다이어그램"></a>🎨 시각적 다이어그램</h3><h4 id="Vertical-Gaps-수직-간격"><a href="#Vertical-Gaps-수직-간격" class="headerlink" title="Vertical Gaps (수직 간격)"></a>Vertical Gaps (수직 간격)</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────┐</span><br><span class="line">│   Text 위젯     │</span><br><span class="line">└─────────────────┘</span><br><span class="line">        ↓</span><br><span class="line">   Gaps.v16 (height: 16)</span><br><span class="line">        ↓</span><br><span class="line">        ▼  16px 빈 공간</span><br><span class="line">        ↓</span><br><span class="line">┌─────────────────┐</span><br><span class="line">│   Text 위젯     │</span><br><span class="line">└─────────────────┘</span><br><span class="line">        ↓</span><br><span class="line">   Gaps.v24 (height: 24)</span><br><span class="line">        ↓</span><br><span class="line">        ▼  24px 빈 공간</span><br><span class="line">        ▼</span><br><span class="line">        ↓</span><br><span class="line">┌─────────────────┐</span><br><span class="line">│   Text 위젯     │</span><br><span class="line">└─────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h4 id="Horizontal-Gaps-수평-간격"><a href="#Horizontal-Gaps-수평-간격" class="headerlink" title="Horizontal Gaps (수평 간격)"></a>Horizontal Gaps (수평 간격)</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──────┐      ┌──────┐      ┌──────┐</span><br><span class="line">│ Text │  →   │ Text │  →   │ Text │</span><br><span class="line">└──────┘      └──────┘      └──────┘</span><br><span class="line">         ◄─►           ◄──►</span><br><span class="line">         h16           h24</span><br><span class="line">       (16px)        (24px)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Gaps-클래스-구조"><a href="#Gaps-클래스-구조" class="headerlink" title="Gaps 클래스 구조"></a>Gaps 클래스 구조</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────┐</span><br><span class="line">│          Gaps 클래스                 │</span><br><span class="line">├─────────────────────────────────────┤</span><br><span class="line">│                                     │</span><br><span class="line">│  ┌────────────────────────────┐    │</span><br><span class="line">│  │    Vertical Gaps (v)       │    │</span><br><span class="line">│  │  v1, v2, ... v96           │    │</span><br><span class="line">│  │  SizedBox(height: ...)     │    │</span><br><span class="line">│  └────────────────────────────┘    │</span><br><span class="line">│                                     │</span><br><span class="line">│  ┌────────────────────────────┐    │</span><br><span class="line">│  │   Horizontal Gaps (h)      │    │</span><br><span class="line">│  │  h1, h2, ... h96           │    │</span><br><span class="line">│  │  SizedBox(width: ...)      │    │</span><br><span class="line">│  └────────────────────────────┘    │</span><br><span class="line">│                                     │</span><br><span class="line">└─────────────────────────────────────┘</span><br><span class="line">           ↓ 사용</span><br><span class="line">┌─────────────────────────────────────┐</span><br><span class="line">│        Column/Row에서 사용           │</span><br><span class="line">├─────────────────────────────────────┤</span><br><span class="line">│  Column(                            │</span><br><span class="line">│    children: [                      │</span><br><span class="line">│      Text(&#x27;A&#x27;),                     │</span><br><span class="line">│      Gaps.v16,  ← 수직 간격         │</span><br><span class="line">│      Text(&#x27;B&#x27;),                     │</span><br><span class="line">│    ],                               │</span><br><span class="line">│  )                                  │</span><br><span class="line">│                                     │</span><br><span class="line">│  Row(                               │</span><br><span class="line">│    children: [                      │</span><br><span class="line">│      Text(&#x27;X&#x27;),                     │</span><br><span class="line">│      Gaps.h16,  ← 수평 간격         │</span><br><span class="line">│      Text(&#x27;Y&#x27;),                     │</span><br><span class="line">│    ],                               │</span><br><span class="line">│  )                                  │</span><br><span class="line">└─────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="💡-왜-Gaps-시스템이-필요한가"><a href="#💡-왜-Gaps-시스템이-필요한가" class="headerlink" title="💡 왜 Gaps 시스템이 필요한가?"></a>💡 왜 Gaps 시스템이 필요한가?</h3><h4 id="1-코드-간결성-Simplicity"><a href="#1-코드-간결성-Simplicity" class="headerlink" title="1. 코드 간결성 (Simplicity)"></a>1. <strong>코드 간결성 (Simplicity)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 길고 복잡함</span></span><br><span class="line">SizedBox(height: Sizes.size16)</span><br><span class="line">SizedBox(width: Sizes.size20)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 짧고 명확함</span></span><br><span class="line">Gaps.v16</span><br><span class="line">Gaps.h20</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-타입-안정성-Type-Safety"><a href="#2-타입-안정성-Type-Safety" class="headerlink" title="2. 타입 안정성 (Type Safety)"></a>2. <strong>타입 안정성 (Type Safety)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 실수 가능</span></span><br><span class="line">SizedBox(width: Sizes.size16)  <span class="comment">// Column에서는 height를 써야 하는데!</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 명확한 의도</span></span><br><span class="line">Gaps.v16  <span class="comment">// v = vertical, 수직이구나!</span></span><br><span class="line">Gaps.h16  <span class="comment">// h = horizontal, 수평이구나!</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-성능-최적화-Performance"><a href="#3-성능-최적화-Performance" class="headerlink" title="3. 성능 최적화 (Performance)"></a>3. <strong>성능 최적화 (Performance)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// const SizedBox는 한 번만 생성됨</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> v16 = SizedBox(height: Sizes.size16);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 매번 같은 Gaps.v16을 사용해도</span></span><br><span class="line"><span class="comment">// 메모리에는 한 개만 존재!</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-가독성-향상-Readability"><a href="#4-가독성-향상-Readability" class="headerlink" title="4. 가독성 향상 (Readability)"></a>4. <strong>가독성 향상 (Readability)</strong></h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 뭘 하는 건지 파악이 어려움</span></span><br><span class="line">Column(</span><br><span class="line">  children: [</span><br><span class="line">    Text(<span class="string">&#x27;A&#x27;</span>),</span><br><span class="line">    SizedBox(height: <span class="number">16</span>),</span><br><span class="line">    Text(<span class="string">&#x27;B&#x27;</span>),</span><br><span class="line">    SizedBox(height: <span class="number">16</span>),</span><br><span class="line">  ],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 의도가 명확함</span></span><br><span class="line">Column(</span><br><span class="line">  children: [</span><br><span class="line">    Text(<span class="string">&#x27;A&#x27;</span>),</span><br><span class="line">    Gaps.v16,  <span class="comment">// 16px 수직 간격</span></span><br><span class="line">    Text(<span class="string">&#x27;B&#x27;</span>),</span><br><span class="line">    Gaps.v16,  <span class="comment">// 16px 수직 간격</span></span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="🔄-main-dart에서-Gaps-사용하기"><a href="#🔄-main-dart에서-Gaps-사용하기" class="headerlink" title="🔄 main.dart에서 Gaps 사용하기"></a>🔄 main.dart에서 Gaps 사용하기</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:tiktok/constants/sizes.dart&#x27;</span>;  <span class="comment">// Sizes import</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  runApp(<span class="keyword">const</span> TikTokApp());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TikTokApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> TikTokApp(&#123;<span class="keyword">super</span>.key&#125;);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      title: <span class="string">&#x27;TikTok Clone&#x27;</span>,</span><br><span class="line">      theme: ThemeData(</span><br><span class="line">        colorScheme: ColorScheme.fromSeed(seedColor: <span class="keyword">const</span> Color(<span class="number">0xFFE9435A</span>)),</span><br><span class="line">        useMaterial3: <span class="keyword">false</span>,</span><br><span class="line">      ),</span><br><span class="line">      home: Padding(</span><br><span class="line">        padding: <span class="keyword">const</span> EdgeInsets.all(Sizes.size14),  <span class="comment">// Sizes 사용!</span></span><br><span class="line">        child: Container(),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>변경 사항:</strong></p>
+<ol>
+<li><code>import &#39;package:tiktok/constants/sizes.dart&#39;;</code> 추가</li>
+<li><code>EdgeInsets.all(Sizes.size14)</code> 사용</li>
+<li>숫자 <code>14.0</code> 대신 <code>Sizes.size14</code> 사용</li>
+</ol>
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> Gaps 클래스가 생성되었는가?</li>
+<li><input disabled="" type="checkbox"> Vertical Gaps (v1~v96)가 모두 정의되었는가?</li>
+<li><input disabled="" type="checkbox"> Horizontal Gaps (h1~h96)가 모두 정의되었는가?</li>
+<li><input disabled="" type="checkbox"> Sizes.dart를 import했는가?</li>
+<li><input disabled="" type="checkbox"> static const SizedBox로 정의되었는가?</li>
+<li><input disabled="" type="checkbox"> v는 height, h는 width를 사용하는가?</li>
+</ul>
+<h3 id="🔑-핵심-개념-정리-2"><a href="#🔑-핵심-개념-정리-2" class="headerlink" title="🔑 핵심 개념 정리"></a>🔑 핵심 개념 정리</h3><table>
+<thead>
+<tr>
+<th>개념</th>
+<th>설명</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SizedBox</strong></td>
+<td>빈 공간을 만드는 위젯</td>
+<td><code>SizedBox(height: 16)</code></td>
+</tr>
+<tr>
+<td><strong>Vertical Gap</strong></td>
+<td>위아래 간격 (Column)</td>
+<td><code>Gaps.v16</code></td>
+</tr>
+<tr>
+<td><strong>Horizontal Gap</strong></td>
+<td>좌우 간격 (Row)</td>
+<td><code>Gaps.h16</code></td>
+</tr>
+<tr>
+<td><strong>const 위젯</strong></td>
+<td>한 번만 생성되는 위젯</td>
+<td>메모리 절약, 성능 향상</td>
+</tr>
+<tr>
+<td><strong>재사용성</strong></td>
+<td>Sizes 상수 재활용</td>
+<td>일관성 유지</td>
+</tr>
+</tbody></table>
+<h3 id="💡-실습-과제-2"><a href="#💡-실습-과제-2" class="headerlink" title="💡 실습 과제"></a>💡 실습 과제</h3><ol>
+<li><p><strong>Column에서 Gaps 사용하기</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Column(</span><br><span class="line">  children: [</span><br><span class="line">    Text(<span class="string">&#x27;첫 줄&#x27;</span>),</span><br><span class="line">    Gaps.v16,</span><br><span class="line">    Text(<span class="string">&#x27;둘째 줄&#x27;</span>),</span><br><span class="line">    Gaps.v24,</span><br><span class="line">    Text(<span class="string">&#x27;셋째 줄&#x27;</span>),</span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Row에서 Gaps 사용하기</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Row(</span><br><span class="line">  children: [</span><br><span class="line">    Icon(Icons.star),</span><br><span class="line">    Gaps.h8,</span><br><span class="line">    Text(<span class="string">&#x27;별점&#x27;</span>),</span><br><span class="line">    Gaps.h16,</span><br><span class="line">    Text(<span class="string">&#x27;5.0&#x27;</span>),</span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>다양한 크기 실험하기</strong></p>
+<ul>
+<li>Gaps.v8과 Gaps.v16의 차이를 확인해보세요</li>
+<li>Gaps.h24와 Gaps.h32를 비교해보세요</li>
+</ul>
+</li>
+</ol>
+<h3 id="❓-자주-묻는-질문-2"><a href="#❓-자주-묻는-질문-2" class="headerlink" title="❓ 자주 묻는 질문"></a>❓ 자주 묻는 질문</h3><p><strong>Q1: v와 h를 헷갈리면 어떻게 하나요?</strong></p>
+<blockquote>
+<p>A: v &#x3D; vertical (수직, ↕), h &#x3D; horizontal (수평, ↔)으로 기억하세요. Column은 세로 배치이므로 v를, Row는 가로 배치이므로 h를 사용합니다.</p>
+</blockquote>
+<p><strong>Q2: SizedBox 대신 Padding을 쓰면 안되나요?</strong></p>
+<blockquote>
+<p>A: Padding은 위젯을 감싸는 용도이고, SizedBox는 순수하게 빈 공간을 만듭니다. 간격을 만들 때는 SizedBox가 더 적합합니다.</p>
+</blockquote>
+<p><strong>Q3: 왜 모든 크기를 다 만드나요? 필요한 것만 만들면 안될까요?</strong></p>
+<blockquote>
+<p>A: 미리 다 만들어두면 나중에 일일이 추가할 필요가 없어 편리합니다. 사용하지 않는 것은 최적화 과정에서 제거됩니다.</p>
+</blockquote>
+<p><strong>Q4: const를 빼면 어떻게 되나요?</strong></p>
+<blockquote>
+<p>A: 작동은 하지만 매번 새로운 SizedBox가 생성되어 메모리를 낭비하고 성능이 떨어집니다.</p>
+</blockquote>
+<hr>
+<h2 id="4-FVM-버전-관리-설정"><a href="#4-FVM-버전-관리-설정" class="headerlink" title="4. FVM 버전 관리 설정"></a>4. FVM 버전 관리 설정</h2><h3 id="📌-학습-목표-3"><a href="#📌-학습-목표-3" class="headerlink" title="📌 학습 목표"></a>📌 학습 목표</h3><ul>
+<li>FVM(Flutter Version Management)의 개념을 이해합니다</li>
+<li>프로젝트별 Flutter 버전 관리 방법을 배웁니다</li>
+<li>.fvmrc 설정 파일의 역할을 이해합니다</li>
+<li>Flutter 버전 업데이트 과정을 학습합니다</li>
+</ul>
+<h3 id="📂-관련-파일"><a href="#📂-관련-파일" class="headerlink" title="📂 관련 파일"></a>📂 관련 파일</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">프로젝트 루트/</span><br><span class="line">├── .fvmrc                    # FVM 버전 설정</span><br><span class="line">├── .fvm/</span><br><span class="line">│   ├── fvm_config.json       # FVM 상세 설정</span><br><span class="line">│   ├── flutter_sdk -&gt; ...    # Flutter SDK 심볼릭 링크</span><br><span class="line">│   ├── version               # 버전 번호</span><br><span class="line">│   └── release               # 릴리즈 정보</span><br><span class="line">├── .gitignore                # FVM 관련 ignore 추가</span><br><span class="line">└── .vscode/</span><br><span class="line">    └── settings.json         # VSCode FVM 설정</span><br></pre></td></tr></table></figure>
+
+<h3 id="💻-설정-파일-내용"><a href="#💻-설정-파일-내용" class="headerlink" title="💻 설정 파일 내용"></a>💻 설정 파일 내용</h3><h4 id="1-fvmrc"><a href="#1-fvmrc" class="headerlink" title="1. .fvmrc"></a>1. <strong>.fvmrc</strong></h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;flutter&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3.32.8&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>역할:</strong></p>
+<ul>
+<li>프로젝트에서 사용할 Flutter 버전을 지정합니다</li>
+<li>FVM이 이 파일을 읽고 해당 버전을 활성화합니다</li>
+<li>팀원 모두가 같은 Flutter 버전을 사용하게 합니다</li>
+</ul>
+<h4 id="2-fvm-fvm-config-json"><a href="#2-fvm-fvm-config-json" class="headerlink" title="2. .fvm&#x2F;fvm_config.json"></a>2. <strong>.fvm&#x2F;fvm_config.json</strong></h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;flutterSdkVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3.32.8&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>역할:</strong></p>
+<ul>
+<li>FVM 내부 설정 파일입니다</li>
+<li>실제 사용 중인 Flutter SDK 버전 정보를 저장합니다</li>
+<li>.fvmrc와 동기화됩니다</li>
+</ul>
+<h4 id="3-gitignore-추가"><a href="#3-gitignore-추가" class="headerlink" title="3. .gitignore 추가"></a>3. <strong>.gitignore 추가</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># FVM Version Cache</span><br><span class="line">.fvm/flutter_sdk</span><br><span class="line"></span><br><span class="line"># 다른 기존 내용들...</span><br></pre></td></tr></table></figure>
+
+<p><strong>왜 flutter_sdk를 ignore하나요?</strong></p>
+<ul>
+<li><code>flutter_sdk</code>는 실제 Flutter SDK로의 심볼릭 링크입니다</li>
+<li>각 개발자의 컴퓨터마다 경로가 다릅니다</li>
+<li>Git에 포함하지 않고 FVM이 자동으로 생성하게 합니다</li>
+</ul>
+<h4 id="4-vscode-settings-json-추가"><a href="#4-vscode-settings-json-추가" class="headerlink" title="4. .vscode&#x2F;settings.json 추가"></a>4. <strong>.vscode&#x2F;settings.json 추가</strong></h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;dart.flutterSdkPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;.fvm/flutter_sdk&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;search.exclude&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;**/.fvm&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;files.watcherExclude&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;**/.fvm&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>각 설정의 의미:</strong></p>
+<ul>
+<li><strong>dart.flutterSdkPath</strong>: VSCode가 FVM의 Flutter SDK를 사용하도록 지정</li>
+<li><strong>search.exclude</strong>: .fvm 폴더를 검색에서 제외</li>
+<li><strong>files.watcherExclude</strong>: .fvm 폴더 변경 감지 제외 (성능 향상)</li>
+</ul>
+<h3 id="📖-FVM-상세-설명"><a href="#📖-FVM-상세-설명" class="headerlink" title="📖 FVM 상세 설명"></a>📖 FVM 상세 설명</h3><h4 id="1-FVM이란"><a href="#1-FVM이란" class="headerlink" title="1. FVM이란?"></a>1. <strong>FVM이란?</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FVM (Flutter Version Management)</span><br><span class="line">= Flutter 버전 관리 도구</span><br><span class="line"></span><br><span class="line">프로젝트마다 다른 Flutter 버전을 사용할 수 있게 해줍니다!</span><br></pre></td></tr></table></figure>
+
+<p><strong>왜 필요한가?</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">프로젝트 A → Flutter 3.32.8 필요</span><br><span class="line">프로젝트 B → Flutter 3.10.0 필요</span><br><span class="line"></span><br><span class="line">FVM 없이:</span><br><span class="line">  Flutter 버전 변경할 때마다 재설치 필요 😱</span><br><span class="line"></span><br><span class="line">FVM 사용:</span><br><span class="line">  프로젝트 폴더 이동하면 자동으로 버전 전환! 😊</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-FVM-작동-원리"><a href="#2-FVM-작동-원리" class="headerlink" title="2. FVM 작동 원리"></a>2. <strong>FVM 작동 원리</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. FVM이 여러 Flutter 버전을 저장</span><br><span class="line">   ~/fvm/versions/</span><br><span class="line">   ├── 3.32.8/</span><br><span class="line">   ├── 3.10.0/</span><br><span class="line">   └── ...</span><br><span class="line"></span><br><span class="line">2. 프로젝트에서 .fvmrc 읽기</span><br><span class="line">   &#123; &quot;flutter&quot;: &quot;3.32.8&quot; &#125;</span><br><span class="line"></span><br><span class="line">3. 해당 버전으로 심볼릭 링크 생성</span><br><span class="line">   .fvm/flutter_sdk → ~/fvm/versions/3.32.8</span><br><span class="line"></span><br><span class="line">4. IDE와 터미널이 링크된 버전 사용</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-커밋-변경-사항-분석"><a href="#3-커밋-변경-사항-분석" class="headerlink" title="3. 커밋 변경 사항 분석"></a>3. <strong>커밋 변경 사항 분석</strong></h4><p><strong>변경된 파일 7개:</strong></p>
+<ol>
+<li><strong>.fvmrc</strong>: Flutter 버전을 3.32.8로 지정</li>
+<li><strong>.gitignore</strong>: FVM 캐시 ignore 추가</li>
+<li><strong>.vscode&#x2F;settings.json</strong>: VSCode FVM 설정</li>
+<li><strong>ios&#x2F;…&#x2F;Runner.xcscheme</strong>: iOS 빌드 설정 업데이트</li>
+<li><strong>ios&#x2F;Runner&#x2F;AppDelegate.swift</strong>: iOS 앱 델리게이트 업데이트</li>
+<li><strong>pubspec.lock</strong>: 종속성 버전 업데이트</li>
+<li><strong>pubspec.yaml</strong>: SDK 버전 범위 업데이트</li>
+</ol>
+<p><strong>pubspec.yaml 변경:</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">environment:</span></span><br><span class="line">  <span class="attr">sdk:</span> <span class="string">&#x27;&gt;=3.3.0 &lt;4.0.0&#x27;</span>  <span class="comment"># Dart SDK 버전 범위</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="🎨-시각적-다이어그램-3"><a href="#🎨-시각적-다이어그램-3" class="headerlink" title="🎨 시각적 다이어그램"></a>🎨 시각적 다이어그램</h3><h4 id="FVM-버전-관리-흐름"><a href="#FVM-버전-관리-흐름" class="headerlink" title="FVM 버전 관리 흐름"></a>FVM 버전 관리 흐름</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────┐</span><br><span class="line">│         개발자 컴퓨터                    │</span><br><span class="line">├─────────────────────────────────────────┤</span><br><span class="line">│                                         │</span><br><span class="line">│  ~/fvm/versions/                        │</span><br><span class="line">│  ┌──────────────────────────────┐      │</span><br><span class="line">│  │  3.32.8/  (Flutter SDK)      │      │</span><br><span class="line">│  │  3.10.0/  (Flutter SDK)      │      │</span><br><span class="line">│  │  3.0.0/   (Flutter SDK)      │      │</span><br><span class="line">│  └──────────────────────────────┘      │</span><br><span class="line">│         ↑                               │</span><br><span class="line">│         │ FVM이 관리                    │</span><br><span class="line">│         ↓                               │</span><br><span class="line">│  ┌──────────────────────────────┐      │</span><br><span class="line">│  │  프로젝트/.fvm/              │      │</span><br><span class="line">│  │  ┌─────────────────────┐     │      │</span><br><span class="line">│  │  │ flutter_sdk         │     │      │</span><br><span class="line">│  │  │   ↓ (심볼릭 링크)   │     │      │</span><br><span class="line">│  │  │ ~/fvm/versions/     │     │      │</span><br><span class="line">│  │  │      3.32.8         │     │      │</span><br><span class="line">│  │  └─────────────────────┘     │      │</span><br><span class="line">│  └──────────────────────────────┘      │</span><br><span class="line">│         ↓                               │</span><br><span class="line">│  ┌──────────────────────────────┐      │</span><br><span class="line">│  │  VSCode / 터미널             │      │</span><br><span class="line">│  │  3.32.8 버전 사용! ✅        │      │</span><br><span class="line">│  └──────────────────────────────┘      │</span><br><span class="line">└─────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h4 id="버전-전환-과정"><a href="#버전-전환-과정" class="headerlink" title="버전 전환 과정"></a>버전 전환 과정</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Step 1: 프로젝트 폴더 진입</span><br><span class="line">$ cd tiktok_project</span><br><span class="line"></span><br><span class="line">Step 2: FVM이 .fvmrc 파일 읽기</span><br><span class="line">&#123; &quot;flutter&quot;: &quot;3.32.8&quot; &#125;</span><br><span class="line"></span><br><span class="line">Step 3: 해당 버전이 설치되어 있는지 확인</span><br><span class="line">~/fvm/versions/3.32.8 ✅ 있음</span><br><span class="line"></span><br><span class="line">Step 4: 심볼릭 링크 생성/업데이트</span><br><span class="line">.fvm/flutter_sdk → ~/fvm/versions/3.32.8</span><br><span class="line"></span><br><span class="line">Step 5: 개발 도구들이 링크된 버전 사용</span><br><span class="line">VSCode, Android Studio, 터미널 모두 3.32.8 사용!</span><br></pre></td></tr></table></figure>
+
+<h3 id="💡-FVM-사용법"><a href="#💡-FVM-사용법" class="headerlink" title="💡 FVM 사용법"></a>💡 FVM 사용법</h3><h4 id="1-FVM-설치-최초-1회"><a href="#1-FVM-설치-최초-1회" class="headerlink" title="1. FVM 설치 (최초 1회)"></a>1. <strong>FVM 설치 (최초 1회)</strong></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># macOS/Linux</span></span><br><span class="line">brew tap leoafarias/fvm</span><br><span class="line">brew install fvm</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-Flutter-버전-설치"><a href="#2-Flutter-버전-설치" class="headerlink" title="2. Flutter 버전 설치"></a>2. <strong>Flutter 버전 설치</strong></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 특정 버전 설치</span></span><br><span class="line">fvm install 3.32.8</span><br><span class="line"></span><br><span class="line"><span class="comment"># 최신 stable 버전 설치</span></span><br><span class="line">fvm install stable</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-프로젝트에-버전-설정"><a href="#3-프로젝트에-버전-설정" class="headerlink" title="3. 프로젝트에 버전 설정"></a>3. <strong>프로젝트에 버전 설정</strong></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 프로젝트 폴더에서</span></span><br><span class="line">fvm use 3.32.8</span><br><span class="line"></span><br><span class="line"><span class="comment"># .fvmrc 파일이 자동 생성됩니다</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-FVM-Flutter-명령어-실행"><a href="#4-FVM-Flutter-명령어-실행" class="headerlink" title="4. FVM Flutter 명령어 실행"></a>4. <strong>FVM Flutter 명령어 실행</strong></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># FVM을 통해 Flutter 명령어 실행</span></span><br><span class="line">fvm flutter --version</span><br><span class="line">fvm flutter pub get</span><br><span class="line">fvm flutter run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 또는 global 설정</span></span><br><span class="line">fvm global 3.32.8</span><br><span class="line">flutter --version  <span class="comment"># 이제 3.32.8 사용</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="🔧-팀-협업-시나리오"><a href="#🔧-팀-협업-시나리오" class="headerlink" title="🔧 팀 협업 시나리오"></a>🔧 팀 협업 시나리오</h3><h4 id="상황-새-팀원이-프로젝트-clone"><a href="#상황-새-팀원이-프로젝트-clone" class="headerlink" title="상황: 새 팀원이 프로젝트 clone"></a>상황: 새 팀원이 프로젝트 clone</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 프로젝트 clone</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;repository&gt;</span><br><span class="line"><span class="built_in">cd</span> tiktok_project</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. FVM 설치 확인</span></span><br><span class="line">fvm --version</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. .fvmrc 읽고 Flutter 설치</span></span><br><span class="line">fvm install</span><br><span class="line"><span class="comment"># → 자동으로 3.32.8 설치</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 종속성 설치</span></span><br><span class="line">fvm flutter pub get</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 실행</span></span><br><span class="line">fvm flutter run</span><br></pre></td></tr></table></figure>
+
+<p><strong>팀원 모두 같은 Flutter 버전 사용! ✅</strong></p>
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> FVM이 설치되어 있는가?</li>
+<li><input disabled="" type="checkbox"> .fvmrc 파일이 생성되었는가?</li>
+<li><input disabled="" type="checkbox"> Flutter 버전이 3.32.8로 설정되었는가?</li>
+<li><input disabled="" type="checkbox"> .gitignore에 .fvm&#x2F;flutter_sdk가 추가되었는가?</li>
+<li><input disabled="" type="checkbox"> VSCode settings.json이 설정되었는가?</li>
+<li><input disabled="" type="checkbox"> <code>fvm flutter --version</code>으로 버전 확인이 되는가?</li>
+</ul>
+<h3 id="🔑-핵심-개념-정리-3"><a href="#🔑-핵심-개념-정리-3" class="headerlink" title="🔑 핵심 개념 정리"></a>🔑 핵심 개념 정리</h3><table>
+<thead>
+<tr>
+<th>개념</th>
+<th>설명</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>FVM</strong></td>
+<td>Flutter 버전 관리 도구</td>
+<td>프로젝트별 다른 Flutter 버전</td>
+</tr>
+<tr>
+<td><strong>.fvmrc</strong></td>
+<td>프로젝트 Flutter 버전 지정</td>
+<td><code>{&quot;flutter&quot;: &quot;3.32.8&quot;}</code></td>
+</tr>
+<tr>
+<td><strong>심볼릭 링크</strong></td>
+<td>다른 위치를 가리키는 링크</td>
+<td><code>.fvm/flutter_sdk → ~/fvm/versions/3.32.8</code></td>
+</tr>
+<tr>
+<td><strong>버전 일관성</strong></td>
+<td>팀원 모두 같은 버전 사용</td>
+<td>환경 차이로 인한 버그 방지</td>
+</tr>
+</tbody></table>
+<h3 id="💡-실습-과제-3"><a href="#💡-실습-과제-3" class="headerlink" title="💡 실습 과제"></a>💡 실습 과제</h3><ol>
+<li><p><strong>현재 Flutter 버전 확인</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fvm flutter --version</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>설치된 FVM 버전 목록 보기</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fvm list</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>프로젝트 Flutter 버전 확인</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> .fvmrc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>다른 버전 설치해보기</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fvm install 3.10.0</span><br><span class="line"><span class="comment"># 여러 버전 관리 가능!</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="❓-자주-묻는-질문-3"><a href="#❓-자주-묻는-질문-3" class="headerlink" title="❓ 자주 묻는 질문"></a>❓ 자주 묻는 질문</h3><p><strong>Q1: FVM 없이 개발하면 안되나요?</strong></p>
+<blockquote>
+<p>A: 가능하지만, 팀원마다 다른 Flutter 버전을 사용하면 “내 컴퓨터에서는 되는데?” 같은 문제가 발생합니다. FVM으로 버전을 통일하는 것이 좋습니다.</p>
+</blockquote>
+<p><strong>Q2: .fvm 폴더를 Git에 포함해야 하나요?</strong></p>
+<blockquote>
+<p>A: .fvmrc와 fvm_config.json만 포함하고, flutter_sdk는 제외합니다. 각 개발자가 FVM으로 자동 생성하게 합니다.</p>
+</blockquote>
+<p><strong>Q3: VSCode가 올바른 Flutter SDK를 못 찾으면?</strong></p>
+<blockquote>
+<p>A: VSCode를 재시작하거나 Command Palette(Cmd+Shift+P)에서 “Reload Window”를 실행하세요.</p>
+</blockquote>
+<p><strong>Q4: Flutter 버전을 업데이트하려면?</strong></p>
+<blockquote>
+<p>A:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fvm install 3.33.0    <span class="comment"># 새 버전 설치</span></span><br><span class="line">fvm use 3.33.0        <span class="comment"># 프로젝트에 적용</span></span><br></pre></td></tr></table></figure></blockquote>
+<p><strong>Q5: fvm flutter와 flutter 명령어 차이는?</strong></p>
+<blockquote>
+<p>A: <code>fvm flutter</code>는 프로젝트에 설정된 버전을 사용하고, <code>flutter</code>는 시스템 전역 버전을 사용합니다. FVM 프로젝트에서는 항상 <code>fvm flutter</code>를 사용하세요.</p>
+</blockquote>
+<hr>
+<h2 id="🎓-전체-복습-및-요약"><a href="#🎓-전체-복습-및-요약" class="headerlink" title="🎓 전체 복습 및 요약"></a>🎓 전체 복습 및 요약</h2><h3 id="📚-배운-내용-정리"><a href="#📚-배운-내용-정리" class="headerlink" title="📚 배운 내용 정리"></a>📚 배운 내용 정리</h3><p>이번 강의에서 배운 4가지 핵심 주제:</p>
+<ol>
+<li><p><strong>Flutter 프로젝트 생성</strong></p>
+<ul>
+<li>MaterialApp 기본 구조</li>
+<li>테마와 색상 설정</li>
+<li>프로젝트 파일 구조</li>
+</ul>
+</li>
+<li><p><strong>Sizes 상수 시스템</strong></p>
+<ul>
+<li>static const를 사용한 크기 관리</li>
+<li>하드코딩 방지</li>
+<li>일관된 디자인 시스템</li>
+</ul>
+</li>
+<li><p><strong>Gaps 위젯 시스템</strong></p>
+<ul>
+<li>SizedBox를 활용한 간격 관리</li>
+<li>Vertical&#x2F;Horizontal 구분</li>
+<li>재사용 가능한 위젯</li>
+</ul>
+</li>
+<li><p><strong>FVM 버전 관리</strong></p>
+<ul>
+<li>프로젝트별 Flutter 버전 관리</li>
+<li>팀 협업 환경 구축</li>
+<li>버전 일관성 유지</li>
+</ul>
+</li>
+</ol>
+<h3 id="🔗-개념-연결-맵"><a href="#🔗-개념-연결-맵" class="headerlink" title="🔗 개념 연결 맵"></a>🔗 개념 연결 맵</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────┐</span><br><span class="line">│            Flutter 프로젝트 초기 설정               │</span><br><span class="line">└─────────────────────────────────────────────────┘</span><br><span class="line">                      ↓</span><br><span class="line">        ┌─────────────┴──────────────┐</span><br><span class="line">        ↓                            ↓</span><br><span class="line">┌──────────────┐              ┌──────────────┐</span><br><span class="line">│  프로젝트 생성  │              │    버전 관리    │</span><br><span class="line">│  MaterialApp │              │     FVM      │</span><br><span class="line">└──────────────┘              └──────────────┘</span><br><span class="line">        ↓                            ↓</span><br><span class="line">        ↓                    팀원 모두 같은 환경</span><br><span class="line">        ↓</span><br><span class="line">┌──────────────┐</span><br><span class="line">│ 디자인 시스템 │</span><br><span class="line">└──────────────┘</span><br><span class="line">        ↓</span><br><span class="line">    ┌───┴───┐</span><br><span class="line">    ↓       ↓</span><br><span class="line">┌──────┐ ┌──────┐</span><br><span class="line">│Sizes │ │Gaps  │</span><br><span class="line">└──────┘ └──────┘</span><br><span class="line">    ↓       ↓</span><br><span class="line">일관된 크기  재사용 가능한 간격</span><br></pre></td></tr></table></figure>
+
+<h3 id="💪-실전-프로젝트-시작하기"><a href="#💪-실전-프로젝트-시작하기" class="headerlink" title="💪 실전 프로젝트 시작하기"></a>💪 실전 프로젝트 시작하기</h3><p>이제 배운 내용을 바탕으로 실전 코드를 작성할 준비가 되었습니다!</p>
+<p><strong>다음 단계:</strong></p>
+<ol>
+<li>Sizes와 Gaps를 활용한 UI 구성</li>
+<li>실제 화면 만들기 (SignUpScreen, LoginScreen 등)</li>
+<li>네비게이션과 라우팅</li>
+<li>상태 관리</li>
+</ol>
+<h3 id="🎯-최종-체크리스트"><a href="#🎯-최종-체크리스트" class="headerlink" title="🎯 최종 체크리스트"></a>🎯 최종 체크리스트</h3><p><strong>프로젝트 기본 설정:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Flutter 프로젝트가 생성되었다</li>
+<li><input disabled="" type="checkbox"> MaterialApp이 설정되었다</li>
+<li><input disabled="" type="checkbox"> 테마 색상이 적용되었다</li>
+</ul>
+<p><strong>디자인 시스템:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Sizes 클래스가 완성되었다</li>
+<li><input disabled="" type="checkbox"> Gaps 클래스가 완성되었다</li>
+<li><input disabled="" type="checkbox"> main.dart에서 Sizes를 사용하고 있다</li>
+</ul>
+<p><strong>개발 환경:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> FVM이 설치되었다</li>
+<li><input disabled="" type="checkbox"> Flutter 3.32.8이 설정되었다</li>
+<li><input disabled="" type="checkbox"> VSCode가 FVM을 인식한다</li>
+<li><input disabled="" type="checkbox"> 팀원도 같은 환경을 구축할 수 있다</li>
+</ul>
+<h3 id="📝-핵심-코드-패턴-정리"><a href="#📝-핵심-코드-패턴-정리" class="headerlink" title="📝 핵심 코드 패턴 정리"></a>📝 핵심 코드 패턴 정리</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 크기 사용</span></span><br><span class="line">Container(</span><br><span class="line">  width: Sizes.size64,</span><br><span class="line">  height: Sizes.size48,</span><br><span class="line">  padding: EdgeInsets.all(Sizes.size16),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 간격 사용</span></span><br><span class="line">Column(</span><br><span class="line">  children: [</span><br><span class="line">    Text(<span class="string">&#x27;첫 번째&#x27;</span>),</span><br><span class="line">    Gaps.v16,</span><br><span class="line">    Text(<span class="string">&#x27;두 번째&#x27;</span>),</span><br><span class="line">  ],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">Row(</span><br><span class="line">  children: [</span><br><span class="line">    Icon(Icons.star),</span><br><span class="line">    Gaps.h8,</span><br><span class="line">    Text(<span class="string">&#x27;별점&#x27;</span>),</span><br><span class="line">  ],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 테마 색상 사용</span></span><br><span class="line">MaterialApp(</span><br><span class="line">  theme: ThemeData(</span><br><span class="line">    colorScheme: ColorScheme.fromSeed(</span><br><span class="line">      seedColor: <span class="keyword">const</span> Color(<span class="number">0xFFE9435A</span>),</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📚-부록"><a href="#📚-부록" class="headerlink" title="📚 부록"></a>📚 부록</h2><h3 id="A-명령어-정리"><a href="#A-명령어-정리" class="headerlink" title="A. 명령어 정리"></a>A. 명령어 정리</h3><p><strong>Flutter 명령어:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flutter create tiktok          <span class="comment"># 프로젝트 생성</span></span><br><span class="line">flutter pub get                <span class="comment"># 패키지 설치</span></span><br><span class="line">flutter run                    <span class="comment"># 앱 실행</span></span><br><span class="line">flutter --version              <span class="comment"># 버전 확인</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>FVM 명령어:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fvm install 3.32.8             <span class="comment"># Flutter 버전 설치</span></span><br><span class="line">fvm use 3.32.8                 <span class="comment"># 프로젝트에 버전 설정</span></span><br><span class="line">fvm list                       <span class="comment"># 설치된 버전 목록</span></span><br><span class="line">fvm flutter run                <span class="comment"># FVM Flutter로 실행</span></span><br><span class="line">fvm global 3.32.8              <span class="comment"># 전역 버전 설정</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Git 명령어:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span> --oneline              <span class="comment"># 커밋 히스토리 확인</span></span><br><span class="line">git show &lt;commit_hash&gt;         <span class="comment"># 커밋 내용 보기</span></span><br><span class="line">git diff                       <span class="comment"># 변경 사항 확인</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="B-트러블슈팅"><a href="#B-트러블슈팅" class="headerlink" title="B. 트러블슈팅"></a>B. 트러블슈팅</h3><p><strong>문제 1: FVM 명령어를 찾을 수 없음</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PATH에 dart pub global 경로 추가</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$PATH</span>&quot;</span>:<span class="string">&quot;<span class="variable">$HOME</span>/.pub-cache/bin&quot;</span></span><br><span class="line"><span class="comment"># 또는 .zshrc / .bashrc에 영구 추가</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>문제 2: VSCode가 Flutter SDK를 찾지 못함</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .vscode/settings.json 확인</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;dart.flutterSdkPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;.fvm/flutter_sdk&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="comment">// VSCode 재시작</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>문제 3: Sizes&#x2F;Gaps를 찾을 수 없음</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// import 확인</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:tiktok/constants/sizes.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:tiktok/constants/gaps.dart&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="C-유용한-VSCode-확장"><a href="#C-유용한-VSCode-확장" class="headerlink" title="C. 유용한 VSCode 확장"></a>C. 유용한 VSCode 확장</h3><ol>
+<li><strong>Flutter</strong> - Flutter 개발 필수</li>
+<li><strong>Dart</strong> - Dart 언어 지원</li>
+<li><strong>Pubspec Assist</strong> - 패키지 추가 도우미</li>
+<li><strong>Error Lens</strong> - 에러 인라인 표시</li>
+<li><strong>GitLens</strong> - Git 기능 강화</li>
+</ol>
+<h3 id="D-참고-자료"><a href="#D-참고-자료" class="headerlink" title="D. 참고 자료"></a>D. 참고 자료</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://flutter.dev/docs">Flutter 공식 문서</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/leoafarias/fvm">FVM GitHub</a></li>
+<li><a target="_blank" rel="noopener" href="https://m3.material.io/">Material Design 3</a></li>
+<li><a target="_blank" rel="noopener" href="https://dart.dev/guides">Dart 언어 가이드</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/flutter/" rel="tag"><i class="fa fa-tag"></i> flutter</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/04/flutter/flutter-1/" rel="next" title="1. Flutter TikTok Clone - 인증(Authentication)">
+                  1. Flutter TikTok Clone - 인증(Authentication) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
