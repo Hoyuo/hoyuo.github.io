@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="챕터 4: RAG의 모든 것 (Retrieval-Augmented Generation)🎯 이 챕터에서 배울 것 RAG(검색 증강 생성)의 기본 개념과 전체 흐름(Load, Split, Embed, Store, Retrieve) 이해하기 UnstructuredFileLoader를 사용하여 다양한 형식의 문서를 로드하는 방법 CharacterTextSplit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4. RAG의 모든 것 (Retrieval-Augmented Generation)">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_4/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="챕터 4: RAG의 모든 것 (Retrieval-Augmented Generation)🎯 이 챕터에서 배울 것 RAG(검색 증강 생성)의 기본 개념과 전체 흐름(Load, Split, Embed, Store, Retrieve) 이해하기 UnstructuredFileLoader를 사용하여 다양한 형식의 문서를 로드하는 방법 CharacterTextSplit">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-05T15:14:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="langchain">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_4/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_4/","path":"2025/10/06/langchain/lecture_chapter_4/","title":"4. RAG의 모든 것 (Retrieval-Augmented Generation)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>4. RAG의 모든 것 (Retrieval-Augmented Generation) | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">9</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%EC%B1%95%ED%84%B0-4-RAG%EC%9D%98-%EB%AA%A8%EB%93%A0-%EA%B2%83-Retrieval-Augmented-Generation"><span class="nav-number">1.</span> <span class="nav-text">챕터 4: RAG의 모든 것 (Retrieval-Augmented Generation)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4-%EC%B1%95%ED%84%B0%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 이 챕터에서 배울 것</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Load-Split-feat-Tiktoken"><span class="nav-number">1.2.</span> <span class="nav-text">4.1 - Load &amp; Split (feat. Tiktoken)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EB%AC%B8%EC%84%9C-%EB%A1%9C%EB%93%9C-%EB%B0%8F-%EB%B6%84%ED%95%A0"><span class="nav-number">1.2.2.</span> <span class="nav-text">📝 1단계: 문서 로드 및 분할</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.2.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Embed-Store-Vector-Stores"><span class="nav-number">1.3.</span> <span class="nav-text">4.2 - Embed &amp; Store (Vector Stores)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EB%B2%A1%ED%84%B0%EB%A1%9C-%EB%B3%80%ED%99%98%ED%95%98%EC%97%AC-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0"><span class="nav-number">1.3.2.</span> <span class="nav-text">📝 1단계: 텍스트를 벡터로 변환하여 저장하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-RetrievalQA-Chain"><span class="nav-number">1.4.</span> <span class="nav-text">4.3 - RetrievalQA Chain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-RAG-%EC%B2%B4%EC%9D%B8%EC%9C%BC%EB%A1%9C-%EC%A7%88%EB%AC%B8-%EB%8B%B5%EB%B3%80%ED%95%98%EA%B8%B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">📝 1단계: RAG 체인으로 질문-답변하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">1.4.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-LCEL-%EA%B8%B0%EB%B0%98-RAG-%EC%B2%B4%EC%9D%B8-Stuff-Map-Reduce"><span class="nav-number">1.5.</span> <span class="nav-text">4.4 - LCEL 기반 RAG 체인 (Stuff &amp; Map-Reduce)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Stuff-%EC%B2%B4%EC%9D%B8-%EC%A7%81%EC%A0%91-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">1.5.2.</span> <span class="nav-text">📝 1단계: Stuff 체인 직접 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">1.5.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="4. RAG의 모든 것 (Retrieval-Augmented Generation) | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          4. RAG의 모든 것 (Retrieval-Augmented Generation)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:14" itemprop="dateCreated datePublished" datetime="2025-10-06T00:14:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="챕터-4-RAG의-모든-것-Retrieval-Augmented-Generation"><a href="#챕터-4-RAG의-모든-것-Retrieval-Augmented-Generation" class="headerlink" title="챕터 4: RAG의 모든 것 (Retrieval-Augmented Generation)"></a>챕터 4: RAG의 모든 것 (Retrieval-Augmented Generation)</h1><h2 id="🎯-이-챕터에서-배울-것"><a href="#🎯-이-챕터에서-배울-것" class="headerlink" title="🎯 이 챕터에서 배울 것"></a>🎯 이 챕터에서 배울 것</h2><ul>
+<li>RAG(검색 증강 생성)의 기본 개념과 전체 흐름(Load, Split, Embed, Store, Retrieve) 이해하기</li>
+<li><code>UnstructuredFileLoader</code>를 사용하여 다양한 형식의 문서를 로드하는 방법</li>
+<li><code>CharacterTextSplitter</code>와 <code>Tiktoken</code>을 사용하여 문서를 의미 있는 조각(chunk)으로 분할하는 방법</li>
+<li><code>OpenAIEmbeddings</code>와 <code>VectorStore</code>(FAISS&#x2F;Chroma)를 사용하여 문서 조각을 벡터로 변환하고 저장하는 방법</li>
+<li><code>RetrievalQA</code> 체인을 사용하여 RAG 파이프라인을 간단하게 구축하는 방법</li>
+<li>LCEL을 사용하여 <code>Stuff</code> 및 <code>Map-Reduce</code>와 같은 RAG 체인을 직접 구현하는 방법</li>
+</ul>
+<hr>
+<h2 id="4-1-Load-Split-feat-Tiktoken"><a href="#4-1-Load-Split-feat-Tiktoken" class="headerlink" title="4.1 - Load &amp; Split (feat. Tiktoken)"></a>4.1 - Load &amp; Split (feat. Tiktoken)</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>RAG의 첫 두 단계인 **Load(로드)**와 **Split(분할)**의 개념을 이해합니다.</li>
+<li><code>UnstructuredFileLoader</code>를 사용하여 <code>.docx</code>, <code>.txt</code> 등 다양한 파일을 로드합니다.</li>
+<li><code>CharacterTextSplitter</code>를 사용하여 로드된 문서를 작은 조각으로 분할합니다.</li>
+<li><code>from_tiktoken_encoder</code>를 사용하여 OpenAI 모델의 토큰 계산 방식에 맞춰 더 정확하게 분할합니다.</li>
+</ul>
+<h3 id="📝-1단계-문서-로드-및-분할"><a href="#📝-1단계-문서-로드-및-분할" class="headerlink" title="📝 1단계: 문서 로드 및 분할"></a>📝 1단계: 문서 로드 및 분할</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> UnstructuredFileLoader</span><br><span class="line"><span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> CharacterTextSplitter</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 문서를 분할할 스플리터 정의</span></span><br><span class="line">splitter = CharacterTextSplitter.from_tiktoken_encoder(</span><br><span class="line">    separator=<span class="string">&quot;\n&quot;</span>,      <span class="comment"># 분할 기준</span></span><br><span class="line">    chunk_size=<span class="number">600</span>,     <span class="comment"># 조각의 최대 크기 (토큰 기준)</span></span><br><span class="line">    chunk_overlap=<span class="number">100</span>,  <span class="comment"># 조각 간의 겹침 크기</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 문서를 로드할 로더 정의</span></span><br><span class="line">loader = UnstructuredFileLoader(<span class="string">&quot;./files/chapter_one.docx&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 로드하고 분할하기</span></span><br><span class="line">loader.load_and_split(text_splitter=splitter)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. RAG의 첫걸음: Load &amp; Split</strong><br>LLM은 한 번에 처리할 수 있는 텍스트의 양(컨텍스트 윈도우)에 제한이 있습니다. 따라서 긴 문서를 LLM에게 제공하려면, 먼저 문서를 불러와(Load) 잘게 쪼개는(Split) 과정이 필요합니다.</p>
+<ul>
+<li><strong><code>UnstructuredFileLoader</code></strong>: 텍스트, PDF, 워드 문서 등 다양한 형식의 파일을 처리할 수 있는 강력한 로더입니다.</li>
+<li><strong><code>CharacterTextSplitter</code></strong>: 가장 기본적인 스플리터로, 지정된 문자를 기준으로 텍스트를 분할합니다.</li>
+<li><strong><code>from_tiktoken_encoder</code></strong>: 단순히 글자 수가 아닌, OpenAI의 <code>Tiktoken</code> 라이브러리를 사용하여 토큰 수를 기준으로 <code>chunk_size</code>를 계산합니다. 이는 모델의 컨텍스트 윈도우를 더 정확하게 관리할 수 있게 해줍니다.</li>
+<li><strong><code>chunk_overlap</code></strong>: 분할된 조각들이 서로 약간의 내용을 겹치게 만들어, 문맥이 잘리는 것을 방지하고 의미가 잘 유지되도록 돕습니다.</li>
+</ul>
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>UnstructuredFileLoader</code>를 사용하여 파일을 로드했나요?</li>
+<li><input disabled="" type="checkbox"> <code>CharacterTextSplitter.from_tiktoken_encoder</code>를 사용하여 스플리터를 정의했나요?</li>
+<li><input disabled="" type="checkbox"> <code>load_and_split</code> 메소드로 문서 로드와 분할을 한 번에 실행했나요?</li>
+</ul>
+<hr>
+<h2 id="4-2-Embed-Store-Vector-Stores"><a href="#4-2-Embed-Store-Vector-Stores" class="headerlink" title="4.2 - Embed &amp; Store (Vector Stores)"></a>4.2 - Embed &amp; Store (Vector Stores)</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>RAG의 세 번째와 네 번째 단계인 **Embed(임베딩)**와 **Store(저장)**의 개념을 이해합니다.</li>
+<li><code>OpenAIEmbeddings</code>를 사용하여 텍스트 조각을 벡터(숫자의 배열)로 변환합니다.</li>
+<li><code>FAISS</code> 또는 <code>Chroma</code>와 같은 벡터 스토어에 임베딩된 벡터를 저장하고 검색하는 방법을 배웁니다.</li>
+<li><code>CacheBackedEmbeddings</code>를 사용하여 임베딩 과정을 캐싱하고 비용을 절약합니다.</li>
+</ul>
+<h3 id="📝-1단계-텍스트를-벡터로-변환하여-저장하기"><a href="#📝-1단계-텍스트를-벡터로-변환하여-저장하기" class="headerlink" title="📝 1단계: 텍스트를 벡터로 변환하여 저장하기"></a>📝 1단계: 텍스트를 벡터로 변환하여 저장하기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.embeddings <span class="keyword">import</span> OpenAIEmbeddings, CacheBackedEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> FAISS <span class="comment"># 또는 Chroma</span></span><br><span class="line"><span class="keyword">from</span> langchain.storage <span class="keyword">import</span> LocalFileStore</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... (loader, splitter, docs는 이전 단계와 동일)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 임베딩 모델 정의</span></span><br><span class="line">embeddings = OpenAIEmbeddings()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 임베딩 캐시 설정</span></span><br><span class="line">cache_dir = LocalFileStore(<span class="string">&quot;./.cache/&quot;</span>)</span><br><span class="line">cached_embeddings = CacheBackedEmbeddings.from_bytes_store(embeddings, cache_dir)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 벡터 스토어 생성 및 저장</span></span><br><span class="line">vectorstore = FAISS.from_documents(docs, cached_embeddings)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 유사도 검색</span></span><br><span class="line">results = vectorstore.similarity_search(<span class="string">&quot;where does winston live&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-1"><a href="#🔍-코드-상세-설명-1" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. 임베딩 (Embedding)</strong><br>임베딩은 텍스트를 컴퓨터가 이해할 수 있는 숫자의 배열, 즉 벡터(vector)로 변환하는 과정입니다. 이 벡터는 텍스트의 의미를 다차원 공간의 한 점으로 표현합니다. 의미가 비슷한 텍스트들은 공간상에서 가까운 위치에 있게 됩니다.</p>
+<ul>
+<li><strong><code>OpenAIEmbeddings</code></strong>: OpenAI의 임베딩 모델을 사용하여 텍스트를 벡터로 변환합니다.</li>
+</ul>
+<p><strong>2. 벡터 스토어 (Vector Store)</strong><br>벡터 스토어는 생성된 벡터들을 효율적으로 저장하고, 특정 벡터와 의미적으로 가장 유사한 다른 벡터들을 빠르게 검색할 수 있는 데이터베이스입니다.</p>
+<ul>
+<li><strong><code>FAISS</code> &#x2F; <code>Chroma</code></strong>: 대표적인 오픈소스 벡터 스토어 라이브러리입니다.</li>
+<li><strong><code>from_documents</code></strong>: 문서 조각(<code>docs</code>)과 임베딩 모델(<code>cached_embeddings</code>)을 받아, 내부적으로 각 조각을 벡터로 변환한 후 벡터 스토어에 저장합니다.</li>
+<li><strong><code>similarity_search</code></strong>: 주어진 질문을 벡터로 변환한 뒤, 벡터 스토어에서 가장 가까운(유사한) 벡터들을 가진 문서 조각들을 찾아 반환합니다.</li>
+</ul>
+<p><strong>3. <code>CacheBackedEmbeddings</code></strong><br>임베딩은 비용이 발생하는 API 호출일 수 있습니다. <code>CacheBackedEmbeddings</code>는 한 번 임베딩된 결과를 파일 시스템(<code>LocalFileStore</code>)에 저장하여, 동일한 텍스트에 대한 임베딩 요청이 다시 들어올 경우 API를 호출하는 대신 캐시에서 결과를 가져와 비용과 시간을 절약합니다.</p>
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>OpenAIEmbeddings</code> 모델을 초기화했나요?</li>
+<li><input disabled="" type="checkbox"> <code>CacheBackedEmbeddings</code>를 설정하여 비용을 절약했나요?</li>
+<li><input disabled="" type="checkbox"> <code>FAISS.from_documents</code>를 사용하여 벡터 스토어를 생성했나요?</li>
+<li><input disabled="" type="checkbox"> <code>similarity_search</code>로 질문과 관련된 문서 조각을 성공적으로 검색했나요?</li>
+</ul>
+<hr>
+<h2 id="4-3-RetrievalQA-Chain"><a href="#4-3-RetrievalQA-Chain" class="headerlink" title="4.3 - RetrievalQA Chain"></a>4.3 - RetrievalQA Chain</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>RAG의 마지막 단계인 **Retrieve(검색)**와 **Generate(생성)**를 하나로 묶는 방법</li>
+<li><code>RetrievalQA</code> 체인을 사용하여 RAG 파이프라인을 쉽게 구축하는 방법</li>
+</ul>
+<h3 id="📝-1단계-RAG-체인으로-질문-답변하기"><a href="#📝-1단계-RAG-체인으로-질문-답변하기" class="headerlink" title="📝 1단계: RAG 체인으로 질문-답변하기"></a>📝 1단계: RAG 체인으로 질문-답변하기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chains <span class="keyword">import</span> RetrievalQA</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... (llm, vectorstore 설정은 이전 단계와 동일)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. Retriever(검색기) 생성</span></span><br><span class="line">retriever = vectorstore.as_retriever()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. RetrievalQA 체인 생성</span></span><br><span class="line">chain = RetrievalQA.from_chain_type(</span><br><span class="line">    llm=llm,</span><br><span class="line">    chain_type=<span class="string">&quot;map_rerank&quot;</span>, <span class="comment"># 체인 타입 (stuff, map_reduce, refine, map_rerank)</span></span><br><span class="line">    retriever=retriever,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 체인 실행</span></span><br><span class="line">chain.run(<span class="string">&quot;Describe Victory Mansions&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-2"><a href="#🔍-코드-상세-설명-2" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>RetrievalQA</code></strong><br><code>RetrievalQA</code>는 RAG의 전체 과정을 추상화하여 제공하는 편리한 체인입니다. 내부적으로 다음과 같은 작업을 수행합니다.</p>
+<ol>
+<li>사용자의 질문을 받습니다.</li>
+<li><code>retriever</code>를 사용하여 질문과 관련된 문서 조각들을 벡터 스토어에서 검색합니다.</li>
+<li>검색된 문서 조각들을 질문과 함께 프롬프트에 넣어 LLM에게 전달합니다.</li>
+<li>LLM은 주어진 문서 조각(context)을 기반으로 질문에 대한 답변을 생성합니다.</li>
+</ol>
+<ul>
+<li><strong><code>retriever</code></strong>: <code>vectorstore.as_retriever()</code>를 통해 벡터 스토어를 검색기 인터페이스로 변환합니다.</li>
+<li><strong><code>chain_type</code></strong>: 검색된 문서들을 처리하는 방식을 결정합니다. (자세한 내용은 다음 섹션에서 다룹니다.)</li>
+</ul>
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>vectorstore.as_retriever()</code>를 사용하여 검색기를 만들었나요?</li>
+<li><input disabled="" type="checkbox"> <code>RetrievalQA.from_chain_type</code>을 사용하여 체인을 생성했나요?</li>
+<li><input disabled="" type="checkbox"> <code>chain.run</code>으로 질문을 하고, 문서 내용을 기반으로 한 답변을 받았나요?</li>
+</ul>
+<hr>
+<h2 id="4-4-LCEL-기반-RAG-체인-Stuff-Map-Reduce"><a href="#4-4-LCEL-기반-RAG-체인-Stuff-Map-Reduce" class="headerlink" title="4.4 - LCEL 기반 RAG 체인 (Stuff &amp; Map-Reduce)"></a>4.4 - LCEL 기반 RAG 체인 (Stuff &amp; Map-Reduce)</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>LCEL을 사용하여 RAG 파이프라인을 직접 제어하고 커스터마이징하는 방법</li>
+<li><strong>Stuff</strong>: 가장 간단한 RAG 체인으로, 검색된 모든 문서를 하나의 프롬프트에 넣는 방식</li>
+<li><strong>Map-Reduce</strong>: 문서가 너무 많아 하나의 컨텍스트에 다 들어가지 않을 때 사용하는 고급 기법</li>
+</ul>
+<h3 id="📝-1단계-Stuff-체인-직접-만들기"><a href="#📝-1단계-Stuff-체인-직접-만들기" class="headerlink" title="📝 1단계: Stuff 체인 직접 만들기"></a>📝 1단계: Stuff 체인 직접 만들기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.schema.runnable <span class="keyword">import</span> RunnablePassthrough</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... (llm, retriever, prompt 설정)</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;Answer questions using only the following context:\n\n&#123;context&#125;&quot;</span>),</span><br><span class="line">    (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;question&#125;&quot;</span>),</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Stuff Chain with LCEL</span></span><br><span class="line">chain = (</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;context&quot;</span>: retriever, <span class="comment"># retriever가 질문을 받아 관련 문서를 반환</span></span><br><span class="line">        <span class="string">&quot;question&quot;</span>: RunnablePassthrough(), <span class="comment"># 사용자의 질문을 그대로 전달</span></span><br><span class="line">    &#125;</span><br><span class="line">    | prompt</span><br><span class="line">    | llm</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain.invoke(<span class="string">&quot;Describe Victory Mansions&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-3"><a href="#🔍-코드-상세-설명-3" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. Stuff Chain</strong></p>
+<ul>
+<li><code>retriever</code>가 검색한 모든 문서 조각을 <code>{context}</code> 플레이스홀더에 “욱여넣는(stuff)” 가장 직관적인 방식입니다.</li>
+<li>간단하고 성능이 좋지만, 검색된 문서의 총량이 모델의 컨텍스트 윈도우를 초과하면 오류가 발생합니다.</li>
+</ul>
+<p><strong>2. Map-Reduce Chain</strong></p>
+<ul>
+<li><strong>Map 단계</strong>: 검색된 각 문서 조각에 대해 독립적으로 질문을 던져 중간 요약&#x2F;답변을 생성합니다. (<code>map_doc_chain</code>)</li>
+<li><strong>Reduce 단계</strong>: 생성된 모든 중간 답변들을 모아, 최종적으로 하나의 종합적인 답변을 생성합니다. (<code>final_prompt</code> | <code>llm</code>)</li>
+<li>문서의 양이 매우 많을 때 유용하지만, 여러 번의 LLM 호출로 인해 비용이 더 많이 들고 시간이 오래 걸릴 수 있습니다.</li>
+</ul>
+<p><strong>LCEL로 구현한 Map-Reduce Chain:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. Map 단계: 각 문서를 요약하는 체인</span></span><br><span class="line">map_doc_prompt = ChatPromptTemplate.from_template(<span class="string">&quot;Relevant text: &#123;context&#125;...&quot;</span>)</span><br><span class="line">map_doc_chain = map_doc_prompt | llm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 검색된 모든 문서에 map_doc_chain을 적용하는 람다 함수</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">map_docs</span>(<span class="params">inputs</span>):</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;\n\n&quot;</span>.join(map_doc_chain.invoke(...) <span class="keyword">for</span> doc <span class="keyword">in</span> documents)</span><br><span class="line"></span><br><span class="line">map_chain = &#123;<span class="string">&quot;documents&quot;</span>: retriever, <span class="string">&quot;question&quot;</span>: RunnablePassthrough()&#125; | RunnableLambda(map_docs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. Reduce 단계: 요약된 내용들을 종합하여 최종 답변 생성</span></span><br><span class="line">final_prompt = ChatPromptTemplate.from_template(<span class="string">&quot;Create a final answer from: &#123;context&#125;...&quot;</span>)</span><br><span class="line">chain = &#123;<span class="string">&quot;context&quot;</span>: map_chain, <span class="string">&quot;question&quot;</span>: RunnablePassthrough()&#125; | final_prompt | llm</span><br><span class="line"></span><br><span class="line">chain.invoke(<span class="string">&quot;How many ministries are mentioned&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> LCEL을 사용하여 <code>retriever</code>와 <code>prompt</code>, <code>llm</code>을 연결한 <code>Stuff</code> 체인을 만들어 보았나요?</li>
+<li><input disabled="" type="checkbox"> <code>Map-Reduce</code>의 개념을 이해하고, 왜 <code>Stuff</code> 체인보다 더 많은 문서를 처리할 수 있는지 파악했나요?</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/langchain/" rel="tag"><i class="fa fa-tag"></i> langchain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_3/" rel="prev" title="3. 챗봇의 기억력, Memory">
+                  <i class="fa fa-angle-left"></i> 3. 챗봇의 기억력, Memory
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_5/" rel="next" title="5. Streamlit으로 DocumentGPT 앱 만들기">
+                  5. Streamlit으로 DocumentGPT 앱 만들기 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="챕터 7: 구조화된 출력 - QuizGPT 만들기🎯 이 챕터에서 배울 것 LLM이 생성하는 텍스트를 우리가 원하는 정확한 형식(JSON)으로 제어하는 방법 WikipediaRetriever를 사용하여 외부 지식 소스에서 동적으로 콘텐츠를 가져오는 방법 Pydantic&#x2F;JSON Output Parser: 프롬프트 엔지니어링과 파서를 통해 LLM의">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7. 구조화된 출력 - QuizGPT 만들기">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_7/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="챕터 7: 구조화된 출력 - QuizGPT 만들기🎯 이 챕터에서 배울 것 LLM이 생성하는 텍스트를 우리가 원하는 정확한 형식(JSON)으로 제어하는 방법 WikipediaRetriever를 사용하여 외부 지식 소스에서 동적으로 콘텐츠를 가져오는 방법 Pydantic&#x2F;JSON Output Parser: 프롬프트 엔지니어링과 파서를 통해 LLM의">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-05T15:17:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="langchain">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_7/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_7/","path":"2025/10/06/langchain/lecture_chapter_7/","title":"7. 구조화된 출력 - QuizGPT 만들기"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>7. 구조화된 출력 - QuizGPT 만들기 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">9</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%EC%B1%95%ED%84%B0-7-%EA%B5%AC%EC%A1%B0%ED%99%94%EB%90%9C-%EC%B6%9C%EB%A0%A5-QuizGPT-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">1.</span> <span class="nav-text">챕터 7: 구조화된 출력 - QuizGPT 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4-%EC%B1%95%ED%84%B0%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 이 챕터에서 배울 것</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%86%8C%EC%8A%A4-%EC%97%B0%EA%B2%B0-%EB%B0%8F-%EB%AA%A8%EB%8D%B8-%EC%84%A4%EC%A0%95"><span class="nav-number">1.2.</span> <span class="nav-text">7.1 - 데이터 소스 연결 및 모델 설정</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Wikipedia-Retriever-%EC%97%B0%EB%8F%99"><span class="nav-number">1.2.2.</span> <span class="nav-text">📝 1단계: Wikipedia Retriever 연동</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.2.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-Output-Parsers-LLM-%EA%B8%B8%EB%93%A4%EC%9D%B4%EA%B8%B0"><span class="nav-number">1.3.</span> <span class="nav-text">7.2 - Output Parsers: LLM 길들이기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-2%EB%8B%A8%EA%B3%84-%EC%B2%B4%EC%9D%B8%EA%B3%BC-JSON-%ED%8C%8C%EC%84%9C-%EA%B5%AC%ED%98%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">📝 1단계: 2단계 체인과 JSON 파서 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-%ED%80%B4%EC%A6%88-UI-%EB%B0%8F-%EC%B1%84%EC%A0%90"><span class="nav-number">1.4.</span> <span class="nav-text">7.3 - 퀴즈 UI 및 채점</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%ED%80%B4%EC%A6%88-%ED%8F%BC-Form-%EC%83%9D%EC%84%B1-%EB%B0%8F-%EC%B1%84%EC%A0%90-%EB%A1%9C%EC%A7%81-%EA%B5%AC%ED%98%84"><span class="nav-number">1.4.2.</span> <span class="nav-text">📝 1단계: 퀴즈 폼(Form) 생성 및 채점 로직 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">1.4.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-Function-Calling-%EB%8D%94-%EC%95%88%EC%A0%95%EC%A0%81%EC%9D%B8-%EA%B5%AC%EC%A1%B0%ED%99%94"><span class="nav-number">1.5.</span> <span class="nav-text">7.4 - Function Calling: 더 안정적인 구조화</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Function-Calling%EC%9C%BC%EB%A1%9C-%ED%80%B4%EC%A6%88-%EC%83%9D%EC%84%B1%ED%95%98%EA%B8%B0"><span class="nav-number">1.5.2.</span> <span class="nav-text">📝 1단계: Function Calling으로 퀴즈 생성하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">1.5.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="7. 구조화된 출력 - QuizGPT 만들기 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          7. 구조화된 출력 - QuizGPT 만들기
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:17" itemprop="dateCreated datePublished" datetime="2025-10-06T00:17:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="챕터-7-구조화된-출력-QuizGPT-만들기"><a href="#챕터-7-구조화된-출력-QuizGPT-만들기" class="headerlink" title="챕터 7: 구조화된 출력 - QuizGPT 만들기"></a>챕터 7: 구조화된 출력 - QuizGPT 만들기</h1><h2 id="🎯-이-챕터에서-배울-것"><a href="#🎯-이-챕터에서-배울-것" class="headerlink" title="🎯 이 챕터에서 배울 것"></a>🎯 이 챕터에서 배울 것</h2><ul>
+<li>LLM이 생성하는 텍스트를 우리가 원하는 정확한 형식(JSON)으로 제어하는 방법</li>
+<li><code>WikipediaRetriever</code>를 사용하여 외부 지식 소스에서 동적으로 콘텐츠를 가져오는 방법</li>
+<li><strong>Pydantic&#x2F;JSON Output Parser</strong>: 프롬프트 엔지니어링과 파서를 통해 LLM의 출력을 구조화하는 기법</li>
+<li><strong>Function Calling</strong>: 모델이 특정 함수의 인자(argument) 형식에 맞춰 JSON을 생성하도록 강제하는 더 강력하고 안정적인 기법</li>
+<li>두 개의 체인(퀴즈 생성, 채점)을 연결하여 복합적인 애플리케이션을 구축하는 방법</li>
+<li>Streamlit의 <code>st.form</code>을 사용하여 여러 개의 질문을 한 번에 제출하고 처리하는 방법</li>
+</ul>
+<hr>
+<h2 id="7-1-데이터-소스-연결-및-모델-설정"><a href="#7-1-데이터-소스-연결-및-모델-설정" class="headerlink" title="7.1 - 데이터 소스 연결 및 모델 설정"></a>7.1 - 데이터 소스 연결 및 모델 설정</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>WikipediaRetriever</code>를 사용하여 사용자가 입력한 주제에 대한 Wikipedia 문서를 실시간으로 가져오는 방법</li>
+<li><code>gpt-3.5-turbo-1106</code>과 같은 최신 모델을 사용하여 성능과 비용 효율성을 높이는 방법</li>
+<li>Streamlit의 <code>st.sidebar</code>와 <code>st.selectbox</code>를 활용하여 사용자에게 데이터 소스(파일 또는 Wikipedia) 선택 옵션을 제공하는 방법</li>
+</ul>
+<h3 id="📝-1단계-Wikipedia-Retriever-연동"><a href="#📝-1단계-Wikipedia-Retriever-연동" class="headerlink" title="📝 1단계: Wikipedia Retriever 연동"></a>📝 1단계: Wikipedia Retriever 연동</h3><p><strong>전체 코드 (pages&#x2F;03_QuizGPT.py):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> streamlit <span class="keyword">as</span> st</span><br><span class="line"><span class="keyword">from</span> langchain.retrievers <span class="keyword">import</span> WikipediaRetriever</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># GPT-3.5-Turbo-1106 모델 사용</span></span><br><span class="line">llm = ChatOpenAI(</span><br><span class="line">    temperature=<span class="number">0.1</span>,</span><br><span class="line">    model=<span class="string">&quot;gpt-3.5-turbo-1106&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> st.sidebar:</span><br><span class="line">    docs = <span class="literal">None</span></span><br><span class="line">    choice = st.selectbox(</span><br><span class="line">        <span class="string">&quot;Choose what you want to use.&quot;</span>,</span><br><span class="line">        (<span class="string">&quot;File&quot;</span>, <span class="string">&quot;Wikipedia Article&quot;</span>),</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">if</span> choice == <span class="string">&quot;File&quot;</span>:</span><br><span class="line">        <span class="comment"># ... 파일 업로드 로직 ...</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        topic = st.text_input(<span class="string">&quot;Search Wikipedia...&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> topic:</span><br><span class="line">            <span class="comment"># Wikipedia에서 관련 문서 검색</span></span><br><span class="line">            retriever = WikipediaRetriever(top_k_results=<span class="number">5</span>)</span><br><span class="line">            <span class="keyword">with</span> st.status(<span class="string">&quot;Searching Wikipedia...&quot;</span>):</span><br><span class="line">                docs = retriever.get_relevant_documents(topic)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> docs:</span><br><span class="line">    st.markdown(<span class="string">&quot;Get started by uploading a file or searching on Wikipedia...&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    st.write(docs) <span class="comment"># 로드된 문서 표시</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>WikipediaRetriever</code></strong></p>
+<ul>
+<li>LangChain에서 제공하는 특수한 검색기(Retriever)로, 사용자의 쿼리를 받아 Wikipedia에서 관련 문서를 검색하고 <code>Document</code> 객체 리스트로 반환합니다.</li>
+<li><code>top_k_results</code>: 검색 결과 중에서 상위 몇 개의 문서를 가져올지 지정합니다.</li>
+<li>이를 통해 사용자는 파일 업로드뿐만 아니라, 특정 주제에 대해 즉석에서 퀴즈를 생성할 수 있게 됩니다.</li>
+</ul>
+<p><strong>2. GPT-4 Turbo (<code>gpt-3.5-turbo-1106</code>)</strong></p>
+<ul>
+<li>이 모델은 더 긴 컨텍스트 윈도우를 지원하고, JSON 모드와 같은 새로운 기능을 제공하며, 이전 모델보다 비용 효율적입니다. 구조화된 데이터를 다루는 이번 챕터에 매우 적합합니다.</li>
+</ul>
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>wikipedia</code> 라이브러리를 설치했나요?</li>
+<li><input disabled="" type="checkbox"> <code>WikipediaRetriever</code>를 사용하여 주제를 검색하고 <code>Document</code>를 성공적으로 가져왔나요?</li>
+<li><input disabled="" type="checkbox"> <code>st.selectbox</code>를 통해 두 가지 데이터 소스(파일, Wikipedia) 중 하나를 선택하는 UI를 구현했나요?</li>
+</ul>
+<hr>
+<h2 id="7-2-Output-Parsers-LLM-길들이기"><a href="#7-2-Output-Parsers-LLM-길들이기" class="headerlink" title="7.2 - Output Parsers: LLM 길들이기"></a>7.2 - Output Parsers: LLM 길들이기</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>LLM이 생성한 평범한 텍스트를 엄격한 JSON 형식으로 변환하는 2단계 체인(생성 -&gt; 포맷팅) 설계</li>
+<li><code>questions_prompt</code>: 주어진 컨텍스트를 기반으로 특정 형식의 텍스트 퀴즈를 생성하도록 지시</li>
+<li><code>formatting_prompt</code>: 생성된 텍스트 퀴즈를 JSON 형식으로 변환하도록 지시</li>
+<li><code>JsonOutputParser</code>: LLM이 생성한 JSON 문자열을 Python 딕셔너리로 파싱하는 방법</li>
+</ul>
+<h3 id="📝-1단계-2단계-체인과-JSON-파서-구현"><a href="#📝-1단계-2단계-체인과-JSON-파서-구현" class="headerlink" title="📝 1단계: 2단계 체인과 JSON 파서 구현"></a>📝 1단계: 2단계 체인과 JSON 파서 구현</h3><p><strong>전체 코드 (pages&#x2F;03_QuizGPT.py):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> langchain.schema <span class="keyword">import</span> BaseOutputParser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 사용자 정의 JSON 파서</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">JsonOutputParser</span>(<span class="title class_ inherited__">BaseOutputParser</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse</span>(<span class="params">self, text</span>):</span><br><span class="line">        text = text.replace(<span class="string">&quot;```&quot;</span>, <span class="string">&quot;&quot;</span>).replace(<span class="string">&quot;json&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> json.loads(text)</span><br><span class="line"></span><br><span class="line">output_parser = JsonOutputParser()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 퀴즈 질문 생성을 위한 프롬프트와 체인</span></span><br><span class="line">questions_prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;... Based ONLY on the following context make 10 questions... Use (o) to signal the correct answer. ... Context: &#123;context&#125;&quot;</span>)</span><br><span class="line">])</span><br><span class="line">questions_chain = &#123;<span class="string">&quot;context&quot;</span>: format_docs&#125; | questions_prompt | llm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 생성된 질문을 JSON으로 포맷팅하기 위한 프롬프트와 체인</span></span><br><span class="line">formatting_prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;... You format exam questions into JSON format. ... Example Output: ... Questions: &#123;context&#125;&quot;</span>)</span><br><span class="line">])</span><br><span class="line">formatting_chain = formatting_prompt | llm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 최종 체인: 생성 -&gt; 포맷팅 -&gt; 파싱</span></span><br><span class="line">chain = &#123;<span class="string">&quot;context&quot;</span>: questions_chain&#125; | formatting_chain | output_parser</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... Streamlit 로직 ...</span></span><br><span class="line"><span class="keyword">if</span> start:</span><br><span class="line">    response = chain.invoke(docs)</span><br><span class="line">    st.write(response) <span class="comment"># Python 딕셔너리가 출력됨</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-1"><a href="#🔍-코드-상세-설명-1" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. 왜 2단계 체인을 사용하는가?</strong><br>LLM에게 한 번의 프롬프트로 복잡한 작업(내용 기반 질문 생성 + 완벽한 JSON 형식 준수)을 모두 시키면 실패할 확률이 높습니다. 작업을 두 단계로 나누면 각 단계의 역할이 명확해져 훨씬 안정적인 결과를 얻을 수 있습니다.</p>
+<ul>
+<li><strong><code>questions_chain</code></strong>: 내용에 집중하여 퀴즈 질문과 답변을 텍스트로 생성합니다.</li>
+<li><strong><code>formatting_chain</code></strong>: 앞서 생성된 텍스트를 입력으로 받아, 오직 JSON 형식으로 변환하는 데에만 집중합니다.</li>
+</ul>
+<p><strong>2. <code>JsonOutputParser</code></strong></p>
+<ul>
+<li>LLM은 종종 JSON 응답을 <code>```json ... ```</code> 코드 블록으로 감싸서 반환합니다. 이 파서는 <code>parse</code> 메소드에서 이러한 불필요한 문자열을 제거하고 <code>json.loads()</code>를 사용하여 순수한 JSON 문자열을 Python 객체(딕셔너리&#x2F;리스트)로 변환합니다.</li>
+</ul>
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 질문 생성과 JSON 포맷팅을 위한 두 개의 분리된 <code>ChatPromptTemplate</code>을 만들었나요?</li>
+<li><input disabled="" type="checkbox"> <code>BaseOutputParser</code>를 상속받아 <code>JsonOutputParser</code>를 구현했나요?</li>
+<li><input disabled="" type="checkbox"> LCEL을 사용하여 <code>questions_chain</code>, <code>formatting_chain</code>, <code>output_parser</code>를 순서대로 연결했나요?</li>
+</ul>
+<hr>
+<h2 id="7-3-퀴즈-UI-및-채점"><a href="#7-3-퀴즈-UI-및-채점" class="headerlink" title="7.3 - 퀴즈 UI 및 채점"></a>7.3 - 퀴즈 UI 및 채점</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>@st.cache_data</code>를 사용하여 비용이 많이 드는 체인 실행 결과를 캐싱하는 방법</li>
+<li><code>st.form</code>을 사용하여 여러 개의 질문과 라디오 버튼을 그룹화하고 한 번에 제출하는 방법</li>
+<li>사용자가 제출한 답안을 정답과 비교하여 즉시 피드백을 제공하는 방법</li>
+</ul>
+<h3 id="📝-1단계-퀴즈-폼-Form-생성-및-채점-로직-구현"><a href="#📝-1단계-퀴즈-폼-Form-생성-및-채점-로직-구현" class="headerlink" title="📝 1단계: 퀴즈 폼(Form) 생성 및 채점 로직 구현"></a>📝 1단계: 퀴즈 폼(Form) 생성 및 채점 로직 구현</h3><p><strong>전체 코드 (pages&#x2F;03_QuizGPT.py):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ... (이전 코드)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@st.cache_data(<span class="params">show_spinner=<span class="string">&quot;Making quiz...&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_quiz_chain</span>(<span class="params">_docs, topic</span>):</span><br><span class="line">    chain = &#123;<span class="string">&quot;context&quot;</span>: questions_chain&#125; | formatting_chain | output_parser</span><br><span class="line">    <span class="keyword">return</span> chain.invoke(_docs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... (사이드바 로직)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> docs:</span><br><span class="line">    response = run_quiz_chain(docs, topic <span class="keyword">if</span> topic <span class="keyword">else</span> file.name)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">with</span> st.form(<span class="string">&quot;questions_form&quot;</span>):</span><br><span class="line">        <span class="keyword">for</span> question <span class="keyword">in</span> response[<span class="string">&quot;questions&quot;</span>]:</span><br><span class="line">            st.write(question[<span class="string">&quot;question&quot;</span>])</span><br><span class="line">            <span class="comment"># 라디오 버튼으로 선택지 표시</span></span><br><span class="line">            value = st.radio(</span><br><span class="line">                <span class="string">&quot;Select an option.&quot;</span>,</span><br><span class="line">                [answer[<span class="string">&quot;answer&quot;</span>] <span class="keyword">for</span> answer <span class="keyword">in</span> question[<span class="string">&quot;answers&quot;</span>]],</span><br><span class="line">                index=<span class="literal">None</span>, <span class="comment"># 기본 선택 없음</span></span><br><span class="line">            )</span><br><span class="line">            <span class="comment"># 정답 확인 로직</span></span><br><span class="line">            <span class="keyword">if</span> &#123;<span class="string">&quot;answer&quot;</span>: value, <span class="string">&quot;correct&quot;</span>: <span class="literal">True</span>&#125; <span class="keyword">in</span> question[<span class="string">&quot;answers&quot;</span>]:</span><br><span class="line">                st.success(<span class="string">&quot;Correct!&quot;</span>)</span><br><span class="line">            <span class="keyword">elif</span> value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                st.error(<span class="string">&quot;Wrong!&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        button = st.form_submit_button()</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-2"><a href="#🔍-코드-상세-설명-2" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>st.form</code></strong></p>
+<ul>
+<li><code>with st.form(...)</code> 블록 안에 있는 모든 위젯들은 하나의 폼으로 그룹화됩니다. 사용자가 여러 개의 라디오 버튼이나 텍스트 입력을 변경해도 앱은 재실행되지 않습니다.</li>
+<li>오직 <code>st.form_submit_button()</code>을 클릭했을 때만 스크립트가 재실행되며, 그 시점의 모든 위젯 값들이 한 번에 제출됩니다. 이는 퀴즈나 설문조사와 같이 여러 입력을 한 번에 처리해야 할 때 매우 유용합니다.</li>
+</ul>
+<p><strong>2. 채점 로직</strong></p>
+<ul>
+<li><code>st.radio</code>는 사용자가 선택한 답변의 문자열을 <code>value</code>에 저장합니다.</li>
+<li><code>{&quot;answer&quot;: value, &quot;correct&quot;: True} in question[&quot;answers&quot;]</code> 코드는 사용자가 선택한 답변이 정답 리스트 안에 있는지 확인하는 간결하고 효과적인 방법입니다.</li>
+</ul>
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>run_quiz_chain</code> 함수에 <code>@st.cache_data</code>를 적용하여 퀴즈 생성을 캐싱했나요?</li>
+<li><input disabled="" type="checkbox"> <code>st.form</code>을 사용하여 퀴즈 전체를 감쌌나요?</li>
+<li><input disabled="" type="checkbox"> <code>for</code> 루프 안에서 <code>st.radio</code>를 사용하여 각 질문에 대한 선택지를 표시했나요?</li>
+<li><input disabled="" type="checkbox"> 사용자의 선택(<code>value</code>)을 정답과 비교하여 “Correct!” 또는 “Wrong!” 메시지를 표시했나요?</li>
+</ul>
+<hr>
+<h2 id="7-4-Function-Calling-더-안정적인-구조화"><a href="#7-4-Function-Calling-더-안정적인-구조화" class="headerlink" title="7.4 - Function Calling: 더 안정적인 구조화"></a>7.4 - Function Calling: 더 안정적인 구조화</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>OpenAI의 Function Calling 기능을 사용하여 LLM이 항상 지정된 JSON 스키마에 맞춰 응답하도록 강제하는 방법</li>
+</ul>
+<h3 id="📝-1단계-Function-Calling으로-퀴즈-생성하기"><a href="#📝-1단계-Function-Calling으로-퀴즈-생성하기" class="headerlink" title="📝 1단계: Function Calling으로 퀴즈 생성하기"></a>📝 1단계: Function Calling으로 퀴즈 생성하기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 함수 스키마 정의 (JSON 스키마 형식)</span></span><br><span class="line">function = &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;create_quiz&quot;</span>,</span><br><span class="line">    <span class="string">&quot;description&quot;</span>: <span class="string">&quot;...&quot;</span>,</span><br><span class="line">    <span class="string">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;object&quot;</span>,</span><br><span class="line">        <span class="string">&quot;properties&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;questions&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;type&quot;</span>: <span class="string">&quot;array&quot;</span>,</span><br><span class="line">                <span class="string">&quot;items&quot;</span>: &#123; <span class="comment"># ... (질문, 답변, 정답 여부에 대한 상세 스키마) ... &#125;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;required&quot;</span>: [<span class="string">&quot;questions&quot;</span>],</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. LLM에 함수를 &quot;bind(연결)&quot;하기</span></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0.1</span>).bind(</span><br><span class="line">    function_call=&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;create_quiz&quot;</span>&#125;, <span class="comment"># 항상 이 함수를 호출하도록 강제</span></span><br><span class="line">    functions=[function],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">prompt = PromptTemplate.from_template(<span class="string">&quot;Make a quiz about &#123;city&#125;&quot;</span>)</span><br><span class="line">chain = prompt | llm</span><br><span class="line"></span><br><span class="line">response = chain.invoke(&#123;<span class="string">&quot;city&quot;</span>: <span class="string">&quot;rome&quot;</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 결과 추출</span></span><br><span class="line">arguments = response.additional_kwargs[<span class="string">&quot;function_call&quot;</span>][<span class="string">&quot;arguments&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-3"><a href="#🔍-코드-상세-설명-3" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. Function Calling이란?</strong><br>Function Calling은 LLM에게 단순히 텍스트로 답변하는 대신, 우리가 정의한 특정 함수의 인자(arguments) 형식에 맞는 JSON 객체를 생성하도록 요청하는 기능입니다. 이는 LLM의 출력 형식을 매우 안정적으로 제어할 수 있는 강력한 방법입니다.</p>
+<ul>
+<li><strong>장점</strong>: 복잡한 프롬프트 엔지니어링(예: 2단계 체인)이나 출력 파서 없이도, 모델이 거의 항상 완벽한 JSON 스키마를 준수하도록 강제할 수 있습니다.</li>
+</ul>
+<p><strong>2. <code>.bind(function_call=...)</code></strong></p>
+<ul>
+<li>LCEL의 <code>.bind()</code> 메소드를 사용하여 LLM을 호출할 때 특정 함수를 호출하도록 설정할 수 있습니다.</li>
+<li><code>function_call={&quot;name&quot;: &quot;create_quiz&quot;}</code>: LLM에게 <code>create_quiz</code> 함수의 인자 형식에 맞춰 응답하라고 <strong>강제</strong>합니다.</li>
+<li><code>functions=[function]</code>: LLM에게 <code>create_quiz</code> 함수의 스키마(구조)를 알려줍니다.</li>
+</ul>
+<p><strong>3. 결과</strong></p>
+<ul>
+<li>체인을 실행하면, <code>response</code>의 <code>content</code>는 비어있고, <code>additional_kwargs[&quot;function_call&quot;][&quot;arguments&quot;]</code> 안에 원하는 JSON 형식의 문자열이 담겨 반환됩니다.</li>
+</ul>
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> JSON 스키마 형식으로 함수의 이름, 설명, 파라미터를 상세히 정의했나요?</li>
+<li><input disabled="" type="checkbox"> <code>.bind()</code>를 사용하여 LLM에 함수 스키마와 함수 호출을 강제했나요?</li>
+<li><input disabled="" type="checkbox"> <code>response.additional_kwargs</code>에서 생성된 JSON 결과를 성공적으로 추출했나요?</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/langchain/" rel="tag"><i class="fa fa-tag"></i> langchain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_6/" rel="prev" title="6. OpenAI를 넘어서 - 로컬 LLM과 PrivateGPT">
+                  <i class="fa fa-angle-left"></i> 6. OpenAI를 넘어서 - 로컬 LLM과 PrivateGPT
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_8/" rel="next" title="8. 웹사이트 전체를 아는 챗봇, SiteGPT">
+                  8. 웹사이트 전체를 아는 챗봇, SiteGPT <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

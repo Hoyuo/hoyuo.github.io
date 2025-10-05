@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="챕터 2: 스마트한 프롬프트 엔지니어링🎯 이 챕터에서 배울 것 FewShotPromptTemplate을 사용하여 모델에게 예시를 제공하고 성능을 높이는 방법 ExampleSelector를 사용하여 동적으로 예시를 선택하는 방법 여러 프롬프트 템플릿을 PipelinePromptTemplate으로 결합하는 방법 LLM 호출 결과를 캐싱하여 비용과 시간을 절약">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2. 스마트한 프롬프트 엔지니어링">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_2/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="챕터 2: 스마트한 프롬프트 엔지니어링🎯 이 챕터에서 배울 것 FewShotPromptTemplate을 사용하여 모델에게 예시를 제공하고 성능을 높이는 방법 ExampleSelector를 사용하여 동적으로 예시를 선택하는 방법 여러 프롬프트 템플릿을 PipelinePromptTemplate으로 결합하는 방법 LLM 호출 결과를 캐싱하여 비용과 시간을 절약">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-05T15:12:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="langchain">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_2/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_2/","path":"2025/10/06/langchain/lecture_chapter_2/","title":"2. 스마트한 프롬프트 엔지니어링"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2. 스마트한 프롬프트 엔지니어링 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">9</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%EC%B1%95%ED%84%B0-2-%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%95%9C-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81"><span class="nav-number">1.</span> <span class="nav-text">챕터 2: 스마트한 프롬프트 엔지니어링</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4-%EC%B1%95%ED%84%B0%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 이 챕터에서 배울 것</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-FewShotPromptTemplate"><span class="nav-number">1.2.</span> <span class="nav-text">2.1 - FewShotPromptTemplate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Few-Shot-%ED%94%84%EB%A1%AC%ED%94%84%ED%8C%85-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">📝 1단계: Few-Shot 프롬프팅 적용하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.2.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-FewShotChatMessagePromptTemplate"><span class="nav-number">1.3.</span> <span class="nav-text">2.2 - FewShotChatMessagePromptTemplate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EB%8C%80%ED%99%94%ED%98%95-Few-Shot-%ED%94%84%EB%A1%AC%ED%94%84%ED%8C%85"><span class="nav-number">1.3.2.</span> <span class="nav-text">📝 1단계: 대화형 Few-Shot 프롬프팅</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Example-Selectors"><span class="nav-number">1.4.</span> <span class="nav-text">2.3 - Example Selectors</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EB%9E%9C%EB%8D%A4-%EC%98%88%EC%8B%9C-%EC%84%A0%ED%83%9D%EA%B8%B0-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">📝 1단계: 랜덤 예시 선택기 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">1.4.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-Serialization-and-Composition-PipelinePromptTemplate"><span class="nav-number">1.5.</span> <span class="nav-text">2.4 - Serialization and Composition (PipelinePromptTemplate)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">1.5.2.</span> <span class="nav-text">📝 1단계: 프롬프트 파이프라인 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">1.5.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Caching"><span class="nav-number">1.6.</span> <span class="nav-text">2.5 - Caching</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-4"><span class="nav-number">1.6.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-LLM-%EC%BA%90%EC%8B%9C-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0"><span class="nav-number">1.6.2.</span> <span class="nav-text">📝 1단계: LLM 캐시 설정하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-4"><span class="nav-number">1.6.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-4"><span class="nav-number">1.6.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Serialization-Usage-Model"><span class="nav-number">1.7.</span> <span class="nav-text">2.6 - Serialization (Usage &amp; Model)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-5"><span class="nav-number">1.7.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%82%AC%EC%9A%A9%EB%9F%89-%EC%B6%94%EC%A0%81-%EB%B0%8F-%EB%AA%A8%EB%8D%B8-%EC%A7%81%EB%A0%AC%ED%99%94"><span class="nav-number">1.7.2.</span> <span class="nav-text">📝 1단계: 사용량 추적 및 모델 직렬화</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-5"><span class="nav-number">1.7.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-5"><span class="nav-number">1.7.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2. 스마트한 프롬프트 엔지니어링 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2. 스마트한 프롬프트 엔지니어링
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:12" itemprop="dateCreated datePublished" datetime="2025-10-06T00:12:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="챕터-2-스마트한-프롬프트-엔지니어링"><a href="#챕터-2-스마트한-프롬프트-엔지니어링" class="headerlink" title="챕터 2: 스마트한 프롬프트 엔지니어링"></a>챕터 2: 스마트한 프롬프트 엔지니어링</h1><h2 id="🎯-이-챕터에서-배울-것"><a href="#🎯-이-챕터에서-배울-것" class="headerlink" title="🎯 이 챕터에서 배울 것"></a>🎯 이 챕터에서 배울 것</h2><ul>
+<li><code>FewShotPromptTemplate</code>을 사용하여 모델에게 예시를 제공하고 성능을 높이는 방법</li>
+<li><code>ExampleSelector</code>를 사용하여 동적으로 예시를 선택하는 방법</li>
+<li>여러 프롬프트 템플릿을 <code>PipelinePromptTemplate</code>으로 결합하는 방법</li>
+<li>LLM 호출 결과를 캐싱하여 비용과 시간을 절약하는 방법</li>
+<li>프롬프트와 모델 설정을 파일로 저장하고 불러오는 직렬화(Serialization) 방법</li>
+</ul>
+<hr>
+<h2 id="2-1-FewShotPromptTemplate"><a href="#2-1-FewShotPromptTemplate" class="headerlink" title="2.1 - FewShotPromptTemplate"></a>2.1 - FewShotPromptTemplate</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>FewShotPromptTemplate</code>의 개념과 필요성 이해하기</li>
+<li>모델에게 몇 가지 예시(few-shot)를 제공하여 원하는 출력 형식을 학습시키는 방법</li>
+</ul>
+<h3 id="📝-1단계-Few-Shot-프롬프팅-적용하기"><a href="#📝-1단계-Few-Shot-프롬프팅-적용하기" class="headerlink" title="📝 1단계: Few-Shot 프롬프팅 적용하기"></a>📝 1단계: Few-Shot 프롬프팅 적용하기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.prompts.few_shot <span class="keyword">import</span> FewShotPromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain.callbacks <span class="keyword">import</span> StreamingStdOutCallbackHandler</span><br><span class="line"><span class="keyword">from</span> langchain.prompts.prompt <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line">chat = ChatOpenAI(</span><br><span class="line">    temperature=<span class="number">0.1</span>,</span><br><span class="line">    streaming=<span class="literal">True</span>,</span><br><span class="line">    callbacks=[StreamingStdOutCallbackHandler()],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">examples = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;question&quot;</span>: <span class="string">&quot;What do you know about France?&quot;</span>,</span><br><span class="line">        <span class="string">&quot;answer&quot;</span>: <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Here is what I know:</span></span><br><span class="line"><span class="string">        Capital: Paris</span></span><br><span class="line"><span class="string">        Language: French</span></span><br><span class="line"><span class="string">        Food: Wine and Cheese</span></span><br><span class="line"><span class="string">        Currency: Euro</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment"># ... (다른 예시들)</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">example_prompt = PromptTemplate.from_template(<span class="string">&quot;Human: &#123;question&#125;\nAI:&#123;answer&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">prompt = FewShotPromptTemplate(</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    examples=examples,</span><br><span class="line">    suffix=<span class="string">&quot;Human: What do you know about &#123;country&#125;?&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;country&quot;</span>],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain = prompt | chat</span><br><span class="line">chain.invoke(&#123;<span class="string">&quot;country&quot;</span>: <span class="string">&quot;Turkey&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. Few-Shot 프롬프팅이란?</strong><br>모델에게 단순히 질문만 던지는 것(Zero-Shot)이 아니라, 몇 가지 질문과 답변의 예시를 함께 제공하여 모델이 더 정확하고 일관된 형식으로 답변하도록 유도하는 기법입니다.</p>
+<ul>
+<li><strong>왜 사용하는가?</strong>: 모델이 복잡한 지시를 더 잘 따르게 하거나, 특정 출력 형식을 유지해야 할 때 매우 유용합니다.</li>
+</ul>
+<p><strong>2. <code>FewShotPromptTemplate</code></strong><br>이 템플릿은 여러 개의 예시(<code>examples</code>)와 예시의 형식을 정의하는 <code>example_prompt</code>, 그리고 실제 사용자의 질문 부분(<code>suffix</code>)을 조합하여 최종 프롬프트를 생성합니다.</p>
+<p><strong>동작 흐름:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1. `examples` 리스트에 있는 각 예시가 `example_prompt`에 따라 포맷팅됨</span><br><span class="line">   (예: &quot;Human: What do you know about France?\nAI:Here is what I know...&quot;)</span><br><span class="line">      |</span><br><span class="line">      V</span><br><span class="line">2. 포맷팅된 모든 예시들이 하나로 합쳐짐</span><br><span class="line">      |</span><br><span class="line">      V</span><br><span class="line">3. 마지막에 `suffix`가 추가됨</span><br><span class="line">   (예: &quot;Human: What do you know about Turkey?&quot;)</span><br><span class="line">      |</span><br><span class="line">      V</span><br><span class="line">4. 완성된 프롬프트가 `chat` 모델로 전달됨</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>FewShotPromptTemplate</code>을 import 했나요?</li>
+<li><input disabled="" type="checkbox"> 여러 개의 예시를 담은 딕셔너리 리스트를 만들었나요?</li>
+<li><input disabled="" type="checkbox"> <code>PromptTemplate</code>으로 예시의 형식을 정의했나요?</li>
+<li><input disabled="" type="checkbox"> <code>FewShotPromptTemplate</code>에 <code>examples</code>, <code>example_prompt</code>, <code>suffix</code>를 전달하여 최종 프롬프트를 생성했나요?</li>
+</ul>
+<hr>
+<h2 id="2-2-FewShotChatMessagePromptTemplate"><a href="#2-2-FewShotChatMessagePromptTemplate" class="headerlink" title="2.2 - FewShotChatMessagePromptTemplate"></a>2.2 - FewShotChatMessagePromptTemplate</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>ChatOpenAI</code>와 같은 챗 모델에 특화된 <code>FewShotChatMessagePromptTemplate</code> 사용법</li>
+<li><code>ChatPromptTemplate</code>을 활용하여 대화 형식의 예시를 구성하는 방법</li>
+</ul>
+<h3 id="📝-1단계-대화형-Few-Shot-프롬프팅"><a href="#📝-1단계-대화형-Few-Shot-프롬프팅" class="headerlink" title="📝 1단계: 대화형 Few-Shot 프롬프팅"></a>📝 1단계: 대화형 Few-Shot 프롬프팅</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts.few_shot <span class="keyword">import</span> FewShotChatMessagePromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... (chat, examples 설정은 이전과 유사)</span></span><br><span class="line"></span><br><span class="line">example_prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;What do you know about &#123;country&#125;?&quot;</span>),</span><br><span class="line">        (<span class="string">&quot;ai&quot;</span>, <span class="string">&quot;&#123;answer&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">example_prompt = FewShotChatMessagePromptTemplate(</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    examples=examples,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">final_prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;You are a geography expert, you give short answers.&quot;</span>),</span><br><span class="line">        example_prompt,</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;What do you know about &#123;country&#125;?&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain = final_prompt | chat</span><br><span class="line">chain.invoke(&#123;<span class="string">&quot;country&quot;</span>: <span class="string">&quot;Thailand&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-1"><a href="#🔍-코드-상세-설명-1" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>FewShotChatMessagePromptTemplate</code></strong><br>이전 단계의 <code>FewShotPromptTemplate</code>이 전체 프롬프트를 하나의 큰 문자열로 만드는 반면, 이 템플릿은 <code>SystemMessage</code>, <code>HumanMessage</code>, <code>AIMessage</code> 등 메시지 객체의 리스트를 생성합니다. 이는 챗 모델에 더 적합한 방식입니다.</p>
+<ul>
+<li><strong><code>ChatPromptTemplate.from_messages</code></strong>: <code>(&quot;human&quot;, &quot;...&quot;)</code>, <code>(&quot;ai&quot;, &quot;...&quot;)</code> 와 같은 튜플을 사용하여 대화 형식의 예시 템플릿을 쉽게 만들 수 있습니다.</li>
+</ul>
+<p><strong>동작 흐름:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. `final_prompt`가 `invoke`의 입력을 받음</span><br><span class="line">      |</span><br><span class="line">      V</span><br><span class="line">2. `SystemMessage`가 생성됨</span><br><span class="line">      |</span><br><span class="line">      V</span><br><span class="line">3. `FewShotChatMessagePromptTemplate`이 `examples`를 `ChatPromptTemplate` 형식에 맞춰 `HumanMessage`와 `AIMessage`의 쌍으로 된 리스트를 생성</span><br><span class="line">      |</span><br><span class="line">      V</span><br><span class="line">4. 마지막 `HumanMessage`가 생성됨</span><br><span class="line">      |</span><br><span class="line">      V</span><br><span class="line">5. 이 모든 메시지 객체들이 담긴 리스트가 `chat` 모델로 전달됨</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>FewShotChatMessagePromptTemplate</code>을 import 했나요?</li>
+<li><input disabled="" type="checkbox"> <code>ChatPromptTemplate.from_messages</code>를 사용하여 대화형 예시 템플릿을 만들었나요?</li>
+<li><input disabled="" type="checkbox"> 최종 <code>ChatPromptTemplate</code>에 시스템 메시지, few-shot 프롬프트, 사용자 질문을 모두 포함시켰나요?</li>
+</ul>
+<hr>
+<h2 id="2-3-Example-Selectors"><a href="#2-3-Example-Selectors" class="headerlink" title="2.3 - Example Selectors"></a>2.3 - Example Selectors</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>BaseExampleSelector</code>를 상속받아 커스텀 예시 선택기를 만드는 방법</li>
+<li>프롬프트 길이를 고려하여 동적으로 예시를 선택하는 <code>LengthBasedExampleSelector</code>의 필요성 이해하기</li>
+</ul>
+<h3 id="📝-1단계-랜덤-예시-선택기-만들기"><a href="#📝-1단계-랜덤-예시-선택기-만들기" class="headerlink" title="📝 1단계: 랜덤 예시 선택기 만들기"></a>📝 1단계: 랜덤 예시 선택기 만들기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts.example_selector.base <span class="keyword">import</span> BaseExampleSelector</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RandomExampleSelector</span>(<span class="title class_ inherited__">BaseExampleSelector</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, examples</span>):</span><br><span class="line">        <span class="variable language_">self</span>.examples = examples</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_example</span>(<span class="params">self, example</span>):</span><br><span class="line">        <span class="variable language_">self</span>.examples.append(example)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">select_examples</span>(<span class="params">self, input_variables</span>):</span><br><span class="line">        <span class="keyword">from</span> random <span class="keyword">import</span> choice</span><br><span class="line">        <span class="keyword">return</span> [choice(<span class="variable language_">self</span>.examples)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... (prompt, chat 설정은 이전과 유사)</span></span><br><span class="line"></span><br><span class="line">example_selector = RandomExampleSelector(examples=examples)</span><br><span class="line"></span><br><span class="line">prompt = FewShotPromptTemplate(</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    example_selector=example_selector, <span class="comment"># &#x27;examples&#x27; 대신 &#x27;example_selector&#x27; 사용</span></span><br><span class="line">    suffix=<span class="string">&quot;Human: What do you know about &#123;country&#125;?&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;country&quot;</span>],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-2"><a href="#🔍-코드-상세-설명-2" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>ExampleSelector</code>란?</strong><br>모델에게 제공할 예시를 동적으로 선택하는 로직을 담은 클래스입니다. 모든 예시를 다 넣기에는 프롬프트가 너무 길어질 때 (토큰 제한 초과) 특히 유용합니다.</p>
+<ul>
+<li><strong><code>BaseExampleSelector</code></strong>: 커스텀 선택기를 만들려면 이 클래스를 상속하고 <code>select_examples</code> 메소드를 구현해야 합니다.</li>
+<li><strong><code>RandomExampleSelector</code></strong>: 이 예제에서는 전체 예시 중 하나를 무작위로 선택하는 간단한 선택기를 만들었습니다.</li>
+<li><strong><code>LengthBasedExampleSelector</code></strong>: LangChain에 내장된 선택기로, 프롬프트의 총 길이를 계산하여 토큰 제한을 넘지 않도록 예시 개수를 조절해주는 매우 실용적인 도구입니다.</li>
+</ul>
+<p><strong>2. <code>FewShotPromptTemplate</code>과 함께 사용하기</strong><br><code>FewShotPromptTemplate</code>을 생성할 때, <code>examples=[...]</code> 대신 <code>example_selector=MySelector(...)</code>를 전달하면, 프롬프트를 포맷할 때마다 선택기의 <code>select_examples</code> 메소드가 호출되어 동적으로 예시가 선택됩니다.</p>
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>BaseExampleSelector</code>를 상속하여 나만의 선택기를 만들었나요?</li>
+<li><input disabled="" type="checkbox"> <code>select_examples</code> 메소드를 구현하여 예시를 선택하는 로직을 작성했나요?</li>
+<li><input disabled="" type="checkbox"> <code>FewShotPromptTemplate</code>에 <code>example_selector</code>를 전달하여 사용했나요?</li>
+</ul>
+<hr>
+<h2 id="2-4-Serialization-and-Composition-PipelinePromptTemplate"><a href="#2-4-Serialization-and-Composition-PipelinePromptTemplate" class="headerlink" title="2.4 - Serialization and Composition (PipelinePromptTemplate)"></a>2.4 - Serialization and Composition (PipelinePromptTemplate)</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>여러 개의 프롬프트 템플릿을 하나의 파이프라인으로 결합하는 <code>PipelinePromptTemplate</code> 사용법</li>
+<li>프롬프트를 <code>.json</code>이나 <code>.yaml</code> 파일로 저장하고 불러오는 방법 (직렬화)</li>
+</ul>
+<h3 id="📝-1단계-프롬프트-파이프라인-만들기"><a href="#📝-1단계-프롬프트-파이프라인-만들기" class="headerlink" title="📝 1단계: 프롬프트 파이프라인 만들기"></a>📝 1단계: 프롬프트 파이프라인 만들기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts.pipeline <span class="keyword">import</span> PipelinePromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... (chat 설정)</span></span><br><span class="line"></span><br><span class="line">intro = PromptTemplate.from_template(<span class="string">&quot;You are impersonating a &#123;character&#125;&quot;</span>)</span><br><span class="line">example = PromptTemplate.from_template(<span class="string">&quot;Human: &#123;example_question&#125;\nYou: &#123;example_answer&#125;&quot;</span>)</span><br><span class="line">start = PromptTemplate.from_template(<span class="string">&quot;Human: &#123;question&#125;\nYou:&quot;</span>)</span><br><span class="line"></span><br><span class="line">final_prompt_str = <span class="string">&quot;&#123;intro&#125;\n&#123;example&#125;\n&#123;start&#125;&quot;</span></span><br><span class="line">final_prompt = PromptTemplate.from_template(final_prompt_str)</span><br><span class="line"></span><br><span class="line">prompts = [</span><br><span class="line">    (<span class="string">&quot;intro&quot;</span>, intro),</span><br><span class="line">    (<span class="string">&quot;example&quot;</span>, example),</span><br><span class="line">    (<span class="string">&quot;start&quot;</span>, start),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">full_prompt = PipelinePromptTemplate(</span><br><span class="line">    final_prompt=final_prompt,</span><br><span class="line">    pipeline_prompts=prompts,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain = full_prompt | chat</span><br><span class="line">chain.invoke(&#123;...&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-3"><a href="#🔍-코드-상세-설명-3" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>PipelinePromptTemplate</code></strong><br>여러 개의 작은 프롬프트 템플릿 조각들을 결합하여 하나의 최종 프롬프트를 만드는 복잡한 작업을 관리해줍니다. 각 조각은 독립적으로 포맷팅된 후, <code>final_prompt</code>에 의해 최종적으로 조합됩니다.</p>
+<ul>
+<li><strong>왜 사용하는가?</strong>: 역할, 예시, 지시사항 등 프롬프트의 각 부분을 모듈화하여 재사용하고 관리하기 용이합니다.</li>
+</ul>
+<p><strong>2. 직렬화 (Serialization)</strong><br>LangChain의 많은 구성 요소(프롬프트, 체인, 모델 등)는 <code>.json</code>이나 <code>.yaml</code> 형식으로 쉽게 저장하고 불러올 수 있습니다. 이는 프롬프트를 코드와 분리하여 관리하거나, 다른 사람과 공유할 때 매우 유용합니다.</p>
+<p><strong>예시 (prompt.yaml):</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">_type:</span> <span class="string">&quot;prompt&quot;</span></span><br><span class="line"><span class="attr">template:</span> <span class="string">&quot;What is the capital of &#123;country&#125;&quot;</span></span><br><span class="line"><span class="attr">input_variables:</span> [<span class="string">&quot;country&quot;</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 불러오기</span></span><br><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> load_prompt</span><br><span class="line">prompt = load_prompt(<span class="string">&quot;prompt.yaml&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 여러 개의 <code>PromptTemplate</code>을 만들었나요?</li>
+<li><input disabled="" type="checkbox"> <code>PipelinePromptTemplate</code>을 사용하여 작은 템플릿들을 하나의 최종 프롬프트로 결합했나요?</li>
+<li><input disabled="" type="checkbox"> 프롬프트를 <code>.yaml</code> 또는 <code>.json</code> 파일로 저장하고 <code>load_prompt</code>로 불러와 보았나요?</li>
+</ul>
+<hr>
+<h2 id="2-5-Caching"><a href="#2-5-Caching" class="headerlink" title="2.5 - Caching"></a>2.5 - Caching</h2><h3 id="🎯-이번-단계에서-배울-것-4"><a href="#🎯-이번-단계에서-배울-것-4" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>LLM 호출 결과를 캐싱하여 API 비용과 응답 시간을 줄이는 방법</li>
+<li><code>InMemoryCache</code>와 <code>SQLiteCache</code>의 차이점</li>
+</ul>
+<h3 id="📝-1단계-LLM-캐시-설정하기"><a href="#📝-1단계-LLM-캐시-설정하기" class="headerlink" title="📝 1단계: LLM 캐시 설정하기"></a>📝 1단계: LLM 캐시 설정하기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.<span class="built_in">globals</span> <span class="keyword">import</span> set_llm_cache</span><br><span class="line"><span class="keyword">from</span> langchain.cache <span class="keyword">import</span> InMemoryCache, SQLiteCache</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># 전역 캐시 설정 (애플리케이션 시작 시 한 번만 실행)</span></span><br><span class="line">set_llm_cache(SQLiteCache(<span class="string">&quot;cache.db&quot;</span>))</span><br><span class="line"></span><br><span class="line">chat = ChatOpenAI(temperature=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 첫 번째 호출: OpenAI API를 호출하고 결과를 캐시에 저장</span></span><br><span class="line">chat.predict(<span class="string">&quot;How do you make italian pasta&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 두 번째 호출: API를 호출하지 않고 캐시에서 즉시 결과를 가져옴</span></span><br><span class="line">chat.predict(<span class="string">&quot;How do you make italian pasta&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-4"><a href="#🔍-코드-상세-설명-4" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>set_llm_cache</code></strong><br>LangChain의 전역 설정을 통해 모든 LLM 호출에 대한 캐시를 활성화합니다. 동일한 모델에 동일한 입력이 주어지면, 실제 API를 호출하는 대신 캐시에 저장된 결과를 즉시 반환합니다.</p>
+<ul>
+<li><p><strong><code>InMemoryCache</code></strong>: 캐시를 메모리에 저장합니다. 애플리케이션이 종료되면 캐시도 사라집니다. 간단한 테스트에 유용합니다.</p>
+</li>
+<li><p><strong><code>SQLiteCache</code></strong>: 캐시를 파일(<code>cache.db</code>)에 저장합니다. 애플리케이션을 재시작해도 캐시가 유지됩니다. 영구적인 캐시가 필요할 때 사용합니다.</p>
+</li>
+<li><p><strong>왜 사용하는가?</strong>: 반복적인 API 호출을 줄여 비용을 절약하고, 애플리케이션의 응답 속도를 크게 향상시킬 수 있습니다. 특히 개발 및 테스트 단계에서 매우 유용합니다.</p>
+</li>
+</ul>
+<h3 id="✅-체크리스트-4"><a href="#✅-체크리스트-4" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>set_llm_cache</code>를 import하고 <code>SQLiteCache</code>를 사용하여 캐시를 설정했나요?</li>
+<li><input disabled="" type="checkbox"> 동일한 <code>predict</code> 호출을 두 번 실행하여 두 번째 호출이 훨씬 빠른 것을 확인했나요?</li>
+<li><input disabled="" type="checkbox"> <code>cache.db</code> 파일이 생성된 것을 확인했나요?</li>
+</ul>
+<hr>
+<h2 id="2-6-Serialization-Usage-Model"><a href="#2-6-Serialization-Usage-Model" class="headerlink" title="2.6 - Serialization (Usage &amp; Model)"></a>2.6 - Serialization (Usage &amp; Model)</h2><h3 id="🎯-이번-단계에서-배울-것-5"><a href="#🎯-이번-단계에서-배울-것-5" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>get_openai_callback</code>을 사용하여 토큰 사용량과 API 비용을 추적하는 방법</li>
+<li>챗 모델의 설정을 <code>.json</code> 파일로 저장하고 불러오는 방법</li>
+</ul>
+<h3 id="📝-1단계-사용량-추적-및-모델-직렬화"><a href="#📝-1단계-사용량-추적-및-모델-직렬화" class="headerlink" title="📝 1단계: 사용량 추적 및 모델 직렬화"></a>📝 1단계: 사용량 추적 및 모델 직렬화</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.callbacks <span class="keyword">import</span> get_openai_callback</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">chat = ChatOpenAI(temperature=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 사용량 추적</span></span><br><span class="line"><span class="keyword">with</span> get_openai_callback() <span class="keyword">as</span> usage:</span><br><span class="line">    a = chat.predict(<span class="string">&quot;What is the recipe for soju&quot;</span>)</span><br><span class="line">    b = chat.predict(<span class="string">&quot;What is the recipe for bread&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(usage)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 모델 설정 저장</span></span><br><span class="line">chat.save(<span class="string">&quot;model.json&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 모델 설정 불러오기</span></span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> load_model</span><br><span class="line">loaded_model = load_model(<span class="string">&quot;model.json&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-5"><a href="#🔍-코드-상세-설명-5" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>get_openai_callback</code></strong><br><code>with</code> 구문과 함께 사용하여 코드 블록 내에서 발생하는 모든 OpenAI API 호출에 대한 상세한 사용 정보를 얻을 수 있습니다.</p>
+<ul>
+<li><strong>추적 정보</strong>: 총 사용 토큰, 프롬프트 토큰, 완료 토큰, 성공한 요청 수, 총 비용(USD) 등을 제공합니다.</li>
+<li><strong>왜 사용하는가?</strong>: 애플리케이션의 API 비용을 모니터링하고 최적화하는 데 필수적입니다.</li>
+</ul>
+<p><strong>2. 모델 직렬화 (<code>.save</code>, <code>load_model</code>)</strong><br><code>ChatOpenAI</code> 객체에 설정된 <code>temperature</code>, <code>model_name</code> 등의 파라미터들을 <code>.json</code> 파일로 저장하거나 불러올 수 있습니다. 이를 통해 모델 구성을 코드와 분리하여 관리할 수 있습니다.</p>
+<p><strong>예시 (model.json):</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;model_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gpt-3.5-turbo-16k&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;temperature&quot;</span><span class="punctuation">:</span> <span class="number">0.1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;openai&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-5"><a href="#✅-체크리스트-5" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>get_openai_callback</code>을 사용하여 API 호출의 비용과 토큰 사용량을 출력해 보았나요?</li>
+<li><input disabled="" type="checkbox"> <code>chat.save(&quot;model.json&quot;)</code>을 사용하여 모델 설정을 저장했나요?</li>
+<li><input disabled="" type="checkbox"> <code>load_model(&quot;model.json&quot;)</code>을 사용하여 저장된 설정을 다시 불러왔나요?</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/langchain/" rel="tag"><i class="fa fa-tag"></i> langchain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_1/" rel="prev" title="1. LangChain의 첫걸음">
+                  <i class="fa fa-angle-left"></i> 1. LangChain의 첫걸음
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_3/" rel="next" title="3. 챗봇의 기억력, Memory">
+                  3. 챗봇의 기억력, Memory <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="챕터 3: 챗봇의 기억력, Memory🎯 이 챕터에서 배울 것 챗봇이 대화를 기억하게 만드는 ‘Memory’의 중요성 이해하기 ConversationBufferMemory: 모든 대화를 기억하는 가장 기본적인 메모리 ConversationBufferWindowMemory: 최근 대화만 기억하여 토큰을 절약하는 메모리 ConversationSummaryMe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3. 챗봇의 기억력, Memory">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_3/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="챕터 3: 챗봇의 기억력, Memory🎯 이 챕터에서 배울 것 챗봇이 대화를 기억하게 만드는 ‘Memory’의 중요성 이해하기 ConversationBufferMemory: 모든 대화를 기억하는 가장 기본적인 메모리 ConversationBufferWindowMemory: 최근 대화만 기억하여 토큰을 절약하는 메모리 ConversationSummaryMe">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-05T15:13:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="langchain">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_3/","path":"2025/10/06/langchain/lecture_chapter_3/","title":"3. 챗봇의 기억력, Memory"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3. 챗봇의 기억력, Memory | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">9</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%EC%B1%95%ED%84%B0-3-%EC%B1%97%EB%B4%87%EC%9D%98-%EA%B8%B0%EC%96%B5%EB%A0%A5-Memory"><span class="nav-number">1.</span> <span class="nav-text">챕터 3: 챗봇의 기억력, Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4-%EC%B1%95%ED%84%B0%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 이 챕터에서 배울 것</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-ConversationBuffer-Window-Memory"><span class="nav-number">1.2.</span> <span class="nav-text">3.1 - ConversationBuffer(Window)Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EB%8C%80%ED%99%94-%EA%B8%B0%EC%96%B5%ED%95%98%EA%B8%B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">📝 1단계: 대화 기억하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.2.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-ConversationSummary-Buffer-Memory"><span class="nav-number">1.3.</span> <span class="nav-text">3.2 - ConversationSummary(Buffer)Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EB%8C%80%ED%99%94-%EC%9A%94%EC%95%BD%ED%95%98%EC%97%AC-%EA%B8%B0%EC%96%B5%ED%95%98%EA%B8%B0"><span class="nav-number">1.3.2.</span> <span class="nav-text">📝 1단계: 대화 요약하여 기억하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-ConversationKGMemory"><span class="nav-number">1.4.</span> <span class="nav-text">3.3 - ConversationKGMemory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%A7%80%EC%8B%9D-%EA%B7%B8%EB%9E%98%ED%94%84%EB%A1%9C-%EB%8C%80%ED%99%94-%EA%B8%B0%EC%96%B5%ED%95%98%EA%B8%B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">📝 1단계: 지식 그래프로 대화 기억하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">1.4.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Memory%EC%99%80-Chain%EC%9D%98-%ED%86%B5%ED%95%A9"><span class="nav-number">1.5.</span> <span class="nav-text">3.4 - Memory와 Chain의 통합</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-LCEL%EB%A1%9C-%EB%A9%94%EB%AA%A8%EB%A6%AC-%ED%86%B5%ED%95%A9%ED%95%98%EA%B8%B0-%EC%B5%9C%EC%8B%A0-%EB%B0%A9%EC%8B%9D"><span class="nav-number">1.5.2.</span> <span class="nav-text">📝 1단계: LCEL로 메모리 통합하기 (최신 방식)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">1.5.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3. 챗봇의 기억력, Memory | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3. 챗봇의 기억력, Memory
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:13" itemprop="dateCreated datePublished" datetime="2025-10-06T00:13:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="챕터-3-챗봇의-기억력-Memory"><a href="#챕터-3-챗봇의-기억력-Memory" class="headerlink" title="챕터 3: 챗봇의 기억력, Memory"></a>챕터 3: 챗봇의 기억력, Memory</h1><h2 id="🎯-이-챕터에서-배울-것"><a href="#🎯-이-챕터에서-배울-것" class="headerlink" title="🎯 이 챕터에서 배울 것"></a>🎯 이 챕터에서 배울 것</h2><ul>
+<li>챗봇이 대화를 기억하게 만드는 ‘Memory’의 중요성 이해하기</li>
+<li><code>ConversationBufferMemory</code>: 모든 대화를 기억하는 가장 기본적인 메모리</li>
+<li><code>ConversationBufferWindowMemory</code>: 최근 대화만 기억하여 토큰을 절약하는 메모리</li>
+<li><code>ConversationSummaryMemory</code>: 긴 대화를 요약하여 핵심만 기억하는 메모리</li>
+<li><code>ConversationSummaryBufferMemory</code>: 최근 대화는 그대로, 오래된 대화는 요약하는 하이브리드 메모리</li>
+<li><code>ConversationKGMemory</code>: 대화에서 지식 그래프(Knowledge Graph)를 구축하는 고급 메모리</li>
+<li><code>LLMChain</code> 및 LCEL과 함께 Memory를 통합하는 방법</li>
+</ul>
+<hr>
+<h2 id="3-1-ConversationBuffer-Window-Memory"><a href="#3-1-ConversationBuffer-Window-Memory" class="headerlink" title="3.1 - ConversationBuffer(Window)Memory"></a>3.1 - ConversationBuffer(Window)Memory</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>ConversationBufferMemory</code>를 사용하여 전체 대화 기록을 저장하는 방법</li>
+<li><code>ConversationBufferWindowMemory</code>를 사용하여 최근 K개의 대화만 저장하는 방법</li>
+</ul>
+<h3 id="📝-1단계-대화-기억하기"><a href="#📝-1단계-대화-기억하기" class="headerlink" title="📝 1단계: 대화 기억하기"></a>📝 1단계: 대화 기억하기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.memory <span class="keyword">import</span> ConversationBufferMemory, ConversationBufferWindowMemory</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.schema.runnable <span class="keyword">import</span> RunnablePassthrough</span><br><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate, MessagesPlaceholder</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 가장 기본적인 메모리: 모든 대화를 저장</span></span><br><span class="line"><span class="comment"># memory = ConversationBufferMemory(return_messages=True)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 최근 K개의 대화만 저장하는 메모리</span></span><br><span class="line">memory = ConversationBufferWindowMemory(</span><br><span class="line">    return_messages=<span class="literal">True</span>,</span><br><span class="line">    k=<span class="number">4</span>, <span class="comment"># 최근 4개의 대화(Human+AI)를 기억</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(temperature=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;You are a helpful chatbot&quot;</span>),</span><br><span class="line">        MessagesPlaceholder(variable_name=<span class="string">&quot;history&quot;</span>), <span class="comment"># 메모리가 여기에 들어감</span></span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;message&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain = RunnablePassthrough.assign(history=<span class="keyword">lambda</span> x: memory.load_memory_variables(x)[<span class="string">&quot;history&quot;</span>]) | prompt | model</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">invoke_chain</span>(<span class="params">question</span>):</span><br><span class="line">    result = chain.invoke(&#123;<span class="string">&quot;message&quot;</span>: question&#125;)</span><br><span class="line">    memory.save_context(&#123;<span class="string">&quot;input&quot;</span>: question&#125;, &#123;<span class="string">&quot;output&quot;</span>: result.content&#125;)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. Memory란?</strong><br>챗봇은 기본적으로 “상태가 없는(stateless)” 특성을 가집니다. 즉, 방금 나눈 대화도 바로 잊어버립니다. Memory는 챗봇이 이전 대화 내용을 기억하고 다음 답변에 활용할 수 있도록 대화 기록을 저장하고 관리하는 구성 요소입니다.</p>
+<p><strong>2. <code>ConversationBufferMemory</code></strong></p>
+<ul>
+<li>모든 대화 내용을 순서대로 버퍼에 저장합니다.</li>
+<li>간단하지만, 대화가 길어지면 프롬프트에 포함되는 토큰 양이 무한정 늘어나 비용과 성능 문제가 발생할 수 있습니다.</li>
+</ul>
+<p><strong>3. <code>ConversationBufferWindowMemory</code></strong></p>
+<ul>
+<li><code>k</code> 파라미터로 지정된 개수만큼의 최근 대화만 저장합니다.</li>
+<li>토큰 사용량을 제어하면서도 최근 대화의 맥락은 유지할 수 있는 효율적인 방법입니다.</li>
+</ul>
+<p><strong>4. <code>MessagesPlaceholder</code></strong><br><code>ChatPromptTemplate</code> 내에서 메모리가 동적으로 삽입될 위치를 지정하는 플레이스홀더입니다. <code>variable_name</code>은 <code>memory</code>의 <code>memory_key</code>와 일치해야 합니다.</p>
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>ConversationBufferWindowMemory</code>를 초기화하고 <code>k</code> 값을 설정했나요?</li>
+<li><input disabled="" type="checkbox"> <code>MessagesPlaceholder</code>를 프롬프트에 추가했나요?</li>
+<li><input disabled="" type="checkbox"> 체인 실행 후 <code>memory.save_context</code>를 호출하여 대화를 저장했나요?</li>
+</ul>
+<hr>
+<h2 id="3-2-ConversationSummary-Buffer-Memory"><a href="#3-2-ConversationSummary-Buffer-Memory" class="headerlink" title="3.2 - ConversationSummary(Buffer)Memory"></a>3.2 - ConversationSummary(Buffer)Memory</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>ConversationSummaryMemory</code>: 전체 대화를 LLM을 사용해 요약하여 저장하는 방법</li>
+<li><code>ConversationSummaryBufferMemory</code>: 요약과 버퍼링을 결합한 하이브리드 메모리</li>
+</ul>
+<h3 id="📝-1단계-대화-요약하여-기억하기"><a href="#📝-1단계-대화-요약하여-기억하기" class="headerlink" title="📝 1단계: 대화 요약하여 기억하기"></a>📝 1단계: 대화 요약하여 기억하기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.memory <span class="keyword">import</span> ConversationSummaryMemory, ConversationSummaryBufferMemory</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 전체 대화를 요약하는 메모리</span></span><br><span class="line"><span class="comment"># memory = ConversationSummaryMemory(llm=llm)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 하이브리드 메모리</span></span><br><span class="line">memory = ConversationSummaryBufferMemory(</span><br><span class="line">    llm=llm,</span><br><span class="line">    max_token_limit=<span class="number">150</span>, <span class="comment"># 이 토큰 제한을 넘으면 가장 오래된 대화를 요약</span></span><br><span class="line">    return_messages=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add_message</span>(<span class="params"><span class="built_in">input</span>, output</span>):</span><br><span class="line">    memory.save_context(&#123;<span class="string">&quot;input&quot;</span>: <span class="built_in">input</span>&#125;, &#123;<span class="string">&quot;output&quot;</span>: output&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_history</span>():</span><br><span class="line">    <span class="keyword">return</span> memory.load_memory_variables(&#123;&#125;)</span><br><span class="line"></span><br><span class="line">add_message(<span class="string">&quot;Hi I&#x27;m Nicolas, I live in South Korea&quot;</span>, <span class="string">&quot;Wow that is so cool!&quot;</span>)</span><br><span class="line">add_message(<span class="string">&quot;South Korea is so pretty&quot;</span>, <span class="string">&quot;I wish I could go!!!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># max_token_limit을 넘는 긴 대화를 추가하면...</span></span><br><span class="line">add_message(<span class="string">&quot;How far is Brazil from Argentina?&quot;</span>, <span class="string">&quot;I don&#x27;t know! Super far!&quot;</span>)</span><br><span class="line"><span class="comment"># ... get_history()를 호출하면 오래된 대화가 요약된 것을 볼 수 있음</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-1"><a href="#🔍-코드-상세-설명-1" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>ConversationSummaryMemory</code></strong></p>
+<ul>
+<li>대화가 추가될 때마다 LLM을 호출하여 전체 대화 내용을 요약합니다.</li>
+<li>대화가 아무리 길어져도 프롬프트에 포함되는 토큰 양을 일정하게 유지할 수 있습니다.</li>
+<li>단점: 대화가 추가될 때마다 요약을 위해 LLM을 호출하므로 비용이 발생하고 약간의 지연이 생길 수 있습니다.</li>
+</ul>
+<p><strong>2. <code>ConversationSummaryBufferMemory</code></strong></p>
+<ul>
+<li><code>ConversationBufferMemory</code>와 <code>ConversationSummaryMemory</code>의 장점을 결합한 것입니다.</li>
+<li>평소에는 대화를 버퍼에 그대로 저장하다가, <code>max_token_limit</code>으로 지정된 토큰 양을 초과하면 가장 오래된 대화부터 요약하여 버퍼의 크기를 줄입니다.</li>
+<li>효율성과 정확성 사이의 균형을 맞춘 매우 실용적인 메모리입니다.</li>
+</ul>
+<p><strong>동작 흐름 (SummaryBuffer):</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1. 대화 1, 2, 3 추가 -&gt; 버퍼에 그대로 저장</span><br><span class="line">   [H: 안녕, 난 니코야, ...]</span><br><span class="line">   [A: 와 멋지다!]</span><br><span class="line">   [H: 한국은 예뻐, ...]</span><br><span class="line">   [A: 가고 싶다!]</span><br><span class="line"></span><br><span class="line">2. 대화 4 추가 (max_token_limit 초과)</span><br><span class="line">      |</span><br><span class="line">      V</span><br><span class="line">3. 가장 오래된 대화(1)를 요약하여 SystemMessage로 만듦</span><br><span class="line">   [S: 사용자는 니코이고 한국에 산다고 소개했다.]</span><br><span class="line">   [H: 한국은 예뻐, ...]</span><br><span class="line">   [A: 가고 싶다!]</span><br><span class="line">   [H: 브라질은 얼마나 멀어?]</span><br><span class="line">   [A: 엄청 멀어!]</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>ConversationSummaryBufferMemory</code>를 <code>llm</code>과 <code>max_token_limit</code>과 함께 초기화했나요?</li>
+<li><input disabled="" type="checkbox"> 여러 번의 대화를 추가한 후, <code>get_history()</code>를 통해 오래된 대화가 요약되는 것을 확인했나요?</li>
+</ul>
+<hr>
+<h2 id="3-3-ConversationKGMemory"><a href="#3-3-ConversationKGMemory" class="headerlink" title="3.3 - ConversationKGMemory"></a>3.3 - ConversationKGMemory</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>ConversationKGMemory</code>를 사용하여 대화에서 지식 그래프(Knowledge Graph)를 추출하고 활용하는 방법</li>
+</ul>
+<h3 id="📝-1단계-지식-그래프로-대화-기억하기"><a href="#📝-1단계-지식-그래프로-대화-기억하기" class="headerlink" title="📝 1단계: 지식 그래프로 대화 기억하기"></a>📝 1단계: 지식 그래프로 대화 기억하기</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.memory <span class="keyword">import</span> ConversationKGMemory</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">memory = ConversationKGMemory(</span><br><span class="line">    llm=llm,</span><br><span class="line">    return_messages=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add_message</span>(<span class="params"><span class="built_in">input</span>, output</span>):</span><br><span class="line">    memory.save_context(&#123;<span class="string">&quot;input&quot;</span>: <span class="built_in">input</span>&#125;, &#123;<span class="string">&quot;output&quot;</span>: output&#125;)</span><br><span class="line"></span><br><span class="line">add_message(<span class="string">&quot;Hi I&#x27;m Nicolas, I live in South Korea&quot;</span>, <span class="string">&quot;Wow that is so cool!&quot;</span>)</span><br><span class="line">add_message(<span class="string">&quot;Nicolas likes kimchi&quot;</span>, <span class="string">&quot;Wow that is so cool!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># &quot;니코가 무엇을 좋아하니?&quot; 와 같은 질문에 대한 맥락을 제공</span></span><br><span class="line">memory.load_memory_variables(&#123;<span class="string">&quot;inputs&quot;</span>: <span class="string">&quot;what does nicolas like&quot;</span>&#125;)</span><br><span class="line"><span class="comment"># 출력: &#123;&#x27;history&#x27;: [SystemMessage(content=&#x27;On Nicolas: Nicolas lives in South Korea. Nicolas likes kimchi.&#x27;)]&#125; </span></span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-2"><a href="#🔍-코드-상세-설명-2" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>ConversationKGMemory</code> (Knowledge Graph)</strong></p>
+<ul>
+<li>대화에서 중요한 개체(Entity, 예: 사람, 장소)와 그들 사이의 관계를 추출하여 지식 그래프 형태로 저장합니다.</li>
+<li>단순한 대화 기록이 아닌, 구조화된 정보를 기억하므로 특정 개체에 대한 질문에 더 정확한 맥락을 제공할 수 있습니다.</li>
+<li><strong>어떻게 작동하는가?</strong>: 내부적으로 LLM을 사용하여 대화에서 “(주어, 서술어, 목적어)” 형태의 트리플(triple)을 추출합니다. (예: <code>(Nicolas, lives in, South Korea)</code>, <code>(Nicolas, likes, kimchi)</code>)</li>
+<li><code>load_memory_variables</code>가 호출될 때, 현재 질문과 관련된 지식들을 요약하여 <code>SystemMessage</code>로 제공합니다.</li>
+</ul>
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>ConversationKGMemory</code>를 초기화했나요?</li>
+<li><input disabled="" type="checkbox"> 여러 정보를 담은 대화를 추가했나요?</li>
+<li><input disabled="" type="checkbox"> 특정 개체에 대한 질문을 <code>load_memory_variables</code>에 전달하여, 관련된 정보가 요약되어 반환되는 것을 확인했나요?</li>
+</ul>
+<hr>
+<h2 id="3-4-Memory와-Chain의-통합"><a href="#3-4-Memory와-Chain의-통합" class="headerlink" title="3.4 - Memory와 Chain의 통합"></a>3.4 - Memory와 Chain의 통합</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>레거시 <code>LLMChain</code>에 메모리를 직접 통합하는 방법</li>
+<li>최신 LCEL(LangChain Expression Language)을 사용하여 메모리를 체인에 통합하는 방법</li>
+</ul>
+<h3 id="📝-1단계-LCEL로-메모리-통합하기-최신-방식"><a href="#📝-1단계-LCEL로-메모리-통합하기-최신-방식" class="headerlink" title="📝 1단계: LCEL로 메모리 통합하기 (최신 방식)"></a>📝 1단계: LCEL로 메모리 통합하기 (최신 방식)</h3><p><strong>전체 코드 (notebook.ipynb):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.memory <span class="keyword">import</span> ConversationSummaryBufferMemory</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.schema.runnable <span class="keyword">import</span> RunnablePassthrough</span><br><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate, MessagesPlaceholder</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">memory = ConversationSummaryBufferMemory(</span><br><span class="line">    llm=llm,</span><br><span class="line">    max_token_limit=<span class="number">120</span>,</span><br><span class="line">    return_messages=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;You are a helpful AI talking to a human&quot;</span>),</span><br><span class="line">        MessagesPlaceholder(variable_name=<span class="string">&quot;history&quot;</span>),</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;question&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># LCEL 체인 구성</span></span><br><span class="line">chain = RunnablePassthrough.assign(history=<span class="keyword">lambda</span> x: memory.load_memory_variables(x)[<span class="string">&quot;history&quot;</span>]) | prompt | llm</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">invoke_chain</span>(<span class="params">question</span>):</span><br><span class="line">    result = chain.invoke(&#123;<span class="string">&quot;question&quot;</span>: question&#125;)</span><br><span class="line">    memory.save_context(&#123;<span class="string">&quot;input&quot;</span>: question&#125;, &#123;<span class="string">&quot;output&quot;</span>: result.content&#125;)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line">invoke_chain(<span class="string">&quot;My name is nico&quot;</span>)</span><br><span class="line">invoke_chain(<span class="string">&quot;What is my name?&quot;</span>) <span class="comment"># -&gt; &quot;Your name is Nico.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-3"><a href="#🔍-코드-상세-설명-3" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. LCEL 방식의 메모리 통합</strong><br>이것이 현재 LangChain에서 권장하는 방식입니다. 메모리를 체인의 일부로 명시적으로 연결하여 데이터 흐름을 더 명확하게 만듭니다.</p>
+<ul>
+<li><strong><code>RunnablePassthrough.assign(history=...)</code></strong>: 체인의 시작 부분에 새로운 <code>history</code> 키를 추가하는 단계입니다.</li>
+<li><strong><code>lambda x: memory.load_memory_variables(x)[&quot;history&quot;]</code></strong>: <code>invoke</code>가 호출될 때 <code>memory</code>에서 대화 기록을 로드하는 함수입니다. 이 함수는 체인이 실행될 때마다 호출되어 항상 최신 대화 기록을 가져옵니다.</li>
+<li><strong><code>memory.save_context(...)</code></strong>: 체인 실행이 끝난 후, 사용자의 질문과 모델의 답변을 수동으로 메모리에 저장하여 다음 대화를 준비합니다.</li>
+</ul>
+<p><strong>2. 레거시 <code>LLMChain</code> 방식 (참고)</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 예전 방식</span></span><br><span class="line"><span class="keyword">from</span> langchain.chains <span class="keyword">import</span> LLMChain</span><br><span class="line"></span><br><span class="line">chain = LLMChain(</span><br><span class="line">    llm=llm,</span><br><span class="line">    memory=memory, <span class="comment"># memory를 파라미터로 직접 전달</span></span><br><span class="line">    prompt=prompt,</span><br><span class="line">    verbose=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain.predict(question=<span class="string">&quot;My name is Nico&quot;</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>LLMChain</code>은 메모리 관리를 내부적으로 자동 처리해줘서 편리했지만, 복잡한 체인을 구성할 때 데이터 흐름이 불분명해지는 단점이 있었습니다. LCEL 방식은 이를 개선하여 더 명시적이고 유연한 체인 구성을 가능하게 합니다.</li>
+</ul>
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> LCEL을 사용하여 메모리 로드, 프롬프트, 모델을 순서대로 연결했나요?</li>
+<li><input disabled="" type="checkbox"> <code>RunnablePassthrough.assign</code>을 사용하여 체인에 <code>history</code>를 주입했나요?</li>
+<li><input disabled="" type="checkbox"> 체인 호출 후 <code>save_context</code>를 사용하여 대화 내용을 수동으로 저장했나요?</li>
+<li><input disabled="" type="checkbox"> 챗봇이 이전 대화 내용을 기억하고 답변하는 것을 확인했나요?</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/langchain/" rel="tag"><i class="fa fa-tag"></i> langchain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_2/" rel="prev" title="2. 스마트한 프롬프트 엔지니어링">
+                  <i class="fa fa-angle-left"></i> 2. 스마트한 프롬프트 엔지니어링
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_4/" rel="next" title="4. RAG의 모든 것 (Retrieval-Augmented Generation)">
+                  4. RAG의 모든 것 (Retrieval-Augmented Generation) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
