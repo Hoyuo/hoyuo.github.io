@@ -110,7 +110,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">13</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">15</span></a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
         </a>
@@ -173,7 +173,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">포스트</span>
         </a>
       </div>
@@ -196,6 +196,88 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chatper_13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/10/06/langchain/lecture_chatper_13/" class="post-title-link" itemprop="url">13. 다양한 LLM 활용하기 Bedrock과 Azure</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:23" itemprop="dateCreated datePublished" datetime="2025-10-06T00:23:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>지금까지 우리는 주로 OpenAI의 모델을 사용하여 애플리케이션을 구축했습니다. 하지만 LangChain의 가장 큰 장점 중 하나는 특정 언어 모델(LLM) 제공업체에 종속되지 않는다는 것입니다. 이 장에서는 LangChain의 유연성을 활용하여, Amazon Bedrock과 Microsoft Azure에서 제공하는 다른 강력한 LLM들을 우리 코드에 얼마나 쉽게 통합할 수 있는지 배웁니다.</p>
+<h2 id="이-장에서-배울-내용"><a href="#이-장에서-배울-내용" class="headerlink" title="이 장에서 배울 내용"></a>이 장에서 배울 내용</h2><ul>
+<li><strong>LLM의 다양성</strong>: OpenAI 외에도 Amazon Bedrock, Microsoft Azure 등 다양한 LLM 제공업체가 있음을 이해합니다.</li>
+<li><strong>Amazon Bedrock 연동</strong>: LangChain과 <code>boto3</code> 라이브러리를 사용하여 Amazon Bedrock에서 호스팅하는 Anthropic의 Claude 모델을 호출하는 방법을 배웁니다.</li>
+<li><strong>Azure OpenAI 연동</strong>: LangChain을 사용하여 Microsoft Azure 클라우드에 배포된 OpenAI 모델을 사용하는 방법을 익힙니다.</li>
+<li><strong>LangChain의 추상화</strong>: 기본 LLM이 바뀌더라도 LangChain의 핵심 로직(프롬프트, 체인)은 거의 변경되지 않는다는 점을 통해 LangChain의 강력한 추상화 능력을 확인합니다.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/06/langchain/lecture_chatper_13/#more" rel="contents">
+                더 읽어보기 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -258,6 +340,89 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/10/06/langchain/lecture_chatper_12/#more" rel="contents">
+                더 읽어보기 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chatper_11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/10/06/langchain/lecture_chatper_11/" class="post-title-link" itemprop="url">11. ChatGPT 플러그인 만들기 ChefGPT</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:21" itemprop="dateCreated datePublished" datetime="2025-10-06T00:21:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>이 장에서는 지금까지와는 다른 새로운 유형의 애플리케이션, 바로 ChatGPT 플러그인을 만들어 봅니다. FastAPI라는 강력한 Python 웹 프레임워크를 사용하여 API 서버를 구축하고, 이를 ChatGPT와 연동하여 특정 기능을 수행하는 ‘GPT Action’을 구현하는 전체 과정을 배우게 됩니다. 사용자가 입력한 재료에 따라 레시피를 추천해주는 “ChefGPT”를 만들면서 API 개발, 인증, 그리고 벡터 데이터베이스를 활용한 시맨틱 검색까지 다양한 기술을 경험할 것입니다.</p>
+<h2 id="이-장에서-배울-내용"><a href="#이-장에서-배울-내용" class="headerlink" title="이 장에서 배울 내용"></a>이 장에서 배울 내용</h2><ul>
+<li><strong>FastAPI 기초</strong>: 현대적인 고성능 웹 프레임워크 FastAPI를 사용하여 API 서버를 구축하는 방법을 배웁니다.</li>
+<li><strong>Pydantic 데이터 모델링</strong>: API의 요청 및 응답 데이터 구조를 명확하게 정의하고 검증하는 방법을 익힙니다.</li>
+<li><strong>ChatGPT Action 연동</strong>: 우리가 만든 API를 ChatGPT 플러그인으로 등록하고 연동하는 과정을 이해합니다.</li>
+<li><strong>OAuth2 인증</strong>: 사용자를 대신하여 안전하게 API를 호출할 수 있도록 OAuth2 인증 흐름을 구현합니다.</li>
+<li><strong>Pinecone 벡터 데이터베이스</strong>: 키워드 검색을 넘어, 문맥과 의미를 이해하는 시맨틱 검색을 위해 Pinecone 벡터 데이터베이스를 연동하고 활용하는 방법을 배웁니다.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/06/langchain/lecture_chatper_11/#more" rel="contents">
                 더 읽어보기 &raquo;
               </a>
             </div>
@@ -844,174 +1009,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/10/06/langchain/lecture_chapter_4/#more" rel="contents">
-                더 읽어보기 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoyuo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/06/langchain/lecture_chapter_3/" class="post-title-link" itemprop="url">3. 챗봇의 기억력, Memory</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">작성일</span>
-
-      <time title="Post created: 2025-10-06 00:13" itemprop="dateCreated datePublished" datetime="2025-10-06T00:13:00+09:00">2025-10-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="🎯-이-챕터에서-배울-것"><a href="#🎯-이-챕터에서-배울-것" class="headerlink" title="🎯 이 챕터에서 배울 것"></a>🎯 이 챕터에서 배울 것</h2><ul>
-<li>챗봇이 대화를 기억하게 만드는 ‘Memory’의 중요성 이해하기</li>
-<li><code>ConversationBufferMemory</code>: 모든 대화를 기억하는 가장 기본적인 메모리</li>
-<li><code>ConversationBufferWindowMemory</code>: 최근 대화만 기억하여 토큰을 절약하는 메모리</li>
-<li><code>ConversationSummaryMemory</code>: 긴 대화를 요약하여 핵심만 기억하는 메모리</li>
-<li><code>ConversationSummaryBufferMemory</code>: 최근 대화는 그대로, 오래된 대화는 요약하는 하이브리드 메모리</li>
-<li><code>ConversationKGMemory</code>: 대화에서 지식 그래프(Knowledge Graph)를 구축하는 고급 메모리</li>
-<li><code>LLMChain</code> 및 LCEL과 함께 Memory를 통합하는 방법</li>
-</ul>
-<hr>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/06/langchain/lecture_chapter_3/#more" rel="contents">
-                더 읽어보기 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoyuo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/06/langchain/lecture_chapter_2/" class="post-title-link" itemprop="url">2. 스마트한 프롬프트 엔지니어링</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">작성일</span>
-
-      <time title="Post created: 2025-10-06 00:12" itemprop="dateCreated datePublished" datetime="2025-10-06T00:12:00+09:00">2025-10-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="🎯-이-챕터에서-배울-것"><a href="#🎯-이-챕터에서-배울-것" class="headerlink" title="🎯 이 챕터에서 배울 것"></a>🎯 이 챕터에서 배울 것</h2><ul>
-<li><code>FewShotPromptTemplate</code>을 사용하여 모델에게 예시를 제공하고 성능을 높이는 방법</li>
-<li><code>ExampleSelector</code>를 사용하여 동적으로 예시를 선택하는 방법</li>
-<li>여러 프롬프트 템플릿을 <code>PipelinePromptTemplate</code>으로 결합하는 방법</li>
-<li>LLM 호출 결과를 캐싱하여 비용과 시간을 절약하는 방법</li>
-<li>프롬프트와 모델 설정을 파일로 저장하고 불러오는 직렬화(Serialization) 방법</li>
-</ul>
-<hr>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/06/langchain/lecture_chapter_2/#more" rel="contents">
                 더 읽어보기 &raquo;
               </a>
             </div>
