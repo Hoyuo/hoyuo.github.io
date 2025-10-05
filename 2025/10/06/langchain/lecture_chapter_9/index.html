@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="안녕하세요! 이번 챕터에서는 회의나 강의 영상으로부터 자동으로 회의록을 만들고, 내용을 요약하고, 궁금한 점을 질문할 수 있는 “MeetingGPT” 애플리케이션을 만들어 보겠습니다. 비디오 파일 처리, 음성 인식, 그리고 LangChain을 이용한 자연어 처리까지 다양한 기술을 경험하게 될 것입니다. 🎯 이번 챕터에서 배울 것 FFmpeg: 동영상에서">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9. MeetingGPT - 회의록 분석 및 요약 AI 만들기">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_9/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="안녕하세요! 이번 챕터에서는 회의나 강의 영상으로부터 자동으로 회의록을 만들고, 내용을 요약하고, 궁금한 점을 질문할 수 있는 “MeetingGPT” 애플리케이션을 만들어 보겠습니다. 비디오 파일 처리, 음성 인식, 그리고 LangChain을 이용한 자연어 처리까지 다양한 기술을 경험하게 될 것입니다. 🎯 이번 챕터에서 배울 것 FFmpeg: 동영상에서">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-05T15:19:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="langchain">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_9/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_9/","path":"2025/10/06/langchain/lecture_chapter_9/","title":"9. MeetingGPT - 회의록 분석 및 요약 AI 만들기"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>9. MeetingGPT - 회의록 분석 및 요약 AI 만들기 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">13</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EC%B1%95%ED%84%B0%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.</span> <span class="nav-text">🎯 이번 챕터에서 배울 것</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EB%B9%84%EB%94%94%EC%98%A4%EC%97%90%EC%84%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EC%B6%94%EC%B6%9C%ED%95%98%EA%B8%B0"><span class="nav-number">2.</span> <span class="nav-text">비디오에서 오디오 추출하기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-MeetingGPT-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%83%9D%EC%84%B1"><span class="nav-number">2.2.</span> <span class="nav-text">📝 1단계: MeetingGPT 페이지 생성</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">2.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%98%A4%EB%94%94%EC%98%A4-%EC%B6%94%EC%B6%9C-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84"><span class="nav-number">2.3.</span> <span class="nav-text">📝 2단계: 오디오 추출 기능 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80-%EB%B0%8F-%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8"><span class="nav-number">2.4.</span> <span class="nav-text">📝 3단계: 홈페이지 및 의존성 업데이트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">2.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C"><span class="nav-number">2.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EA%B8%B4-%EC%98%A4%EB%94%94%EC%98%A4-%ED%8C%8C%EC%9D%BC-%EB%B6%84%ED%95%A0%ED%95%98%EA%B8%B0"><span class="nav-number">3.</span> <span class="nav-text">긴 오디오 파일 분할하기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-pydub-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%86%8C%EA%B0%9C"><span class="nav-number">3.2.</span> <span class="nav-text">📝 1단계: pydub 라이브러리 소개</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%98%A4%EB%94%94%EC%98%A4-%ED%8C%8C%EC%9D%BC-%EB%A1%9C%EB%93%9C-%EB%B0%8F-%EB%B6%84%ED%95%A0-%EB%A1%9C%EC%A7%81-%EA%B5%AC%ED%98%84"><span class="nav-number">3.3.</span> <span class="nav-text">📝 2단계: 오디오 파일 로드 및 분할 로직 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">3.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-1"><span class="nav-number">3.5.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%98%A4%EB%94%94%EC%98%A4%EB%A5%BC-%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%A1%9C-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0-Whisper-API"><span class="nav-number">4.</span> <span class="nav-text">오디오를 텍스트로 변환하기 (Whisper API)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%BD%94%EB%93%9C-%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81"><span class="nav-number">4.2.</span> <span class="nav-text">📝 1단계: 코드 리팩토링</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-Whisper-API%EB%A1%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EB%B3%80%ED%99%98"><span class="nav-number">4.3.</span> <span class="nav-text">📝 2단계: Whisper API로 오디오 변환</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">4.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">4.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-2"><span class="nav-number">4.5.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EB%A9%94%EB%AA%A8%EB%A6%AC-%ED%9A%A8%EC%9C%A8%EC%A0%81%EC%9D%B8-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EB%B3%80%ED%99%98"><span class="nav-number">5.</span> <span class="nav-text">메모리 효율적인 텍스트 변환</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">5.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EA%B8%B0%EC%A1%B4-%EC%BD%94%EB%93%9C%EC%9D%98-%EB%AC%B8%EC%A0%9C%EC%A0%90"><span class="nav-number">5.2.</span> <span class="nav-text">📝 1단계: 기존 코드의 문제점</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%BD%94%EB%93%9C-%EA%B0%9C%EC%84%A0"><span class="nav-number">5.3.</span> <span class="nav-text">📝 2단계: 코드 개선</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-4"><span class="nav-number">5.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">5.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-3"><span class="nav-number">5.5.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4-UI-%EB%B0%8F-%EC%BA%90%EC%8B%B1-%EA%B5%AC%ED%98%84"><span class="nav-number">6.</span> <span class="nav-text">사용자 인터페이스(UI) 및 캐싱 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-4"><span class="nav-number">6.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%ED%95%A8%EC%88%98%EB%A5%BC-%EC%95%B1%EC%9C%BC%EB%A1%9C-%EC%9D%B4%EB%8F%99-%EB%B0%8F-%EC%BA%90%EC%8B%B1-%EC%A0%81%EC%9A%A9"><span class="nav-number">6.2.</span> <span class="nav-text">📝 1단계: 함수를 앱으로 이동 및 캐싱 적용</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-5"><span class="nav-number">6.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C-UI-%EB%B0%8F-%EC%B2%98%EB%A6%AC-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EA%B5%AC%EC%B6%95"><span class="nav-number">6.3.</span> <span class="nav-text">📝 2단계: 파일 업로드 UI 및 처리 파이프라인 구축</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-6"><span class="nav-number">6.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-4"><span class="nav-number">6.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-4"><span class="nav-number">6.5.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EA%B2%B0%EA%B3%BC-%ED%91%9C%EC%8B%9C%EB%A5%BC-%EC%9C%84%ED%95%9C-UI-%EA%B0%9C%EC%84%A0"><span class="nav-number">7.</span> <span class="nav-text">결과 표시를 위한 UI 개선</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-5"><span class="nav-number">7.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EB%8F%99%EC%A0%81%EC%9D%B8-%EC%83%81%ED%83%9C-%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8-%EA%B0%9C%EC%84%A0"><span class="nav-number">7.2.</span> <span class="nav-text">📝 1단계: 동적인 상태 업데이트 (개선)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%ED%83%AD-Tab-%EC%9C%BC%EB%A1%9C-%EA%B2%B0%EA%B3%BC-%EA%B5%AC%EC%84%B1%ED%95%98%EA%B8%B0"><span class="nav-number">7.3.</span> <span class="nav-text">📝 2단계: 탭(Tab)으로 결과 구성하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-7"><span class="nav-number">7.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-5"><span class="nav-number">7.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-5"><span class="nav-number">7.5.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refine-Chain%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%9A%94%EC%95%BD"><span class="nav-number">8.</span> <span class="nav-text">Refine Chain을 이용한 텍스트 요약</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-6"><span class="nav-number">8.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-LangChain-%EC%84%A4%EC%A0%95-%EB%B0%8F-%EB%AC%B8%EC%84%9C-%EB%B6%84%ED%95%A0"><span class="nav-number">8.2.</span> <span class="nav-text">📝 1단계: LangChain 설정 및 문서 분할</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-8"><span class="nav-number">8.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%B4%88%EA%B8%B0-%EC%9A%94%EC%95%BD-%EB%B0%8F-Refine-%EB%A1%9C%EC%A7%81-%EA%B5%AC%ED%98%84"><span class="nav-number">8.3.</span> <span class="nav-text">📝 2단계: 초기 요약 및 Refine 로직 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-9"><span class="nav-number">8.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-6"><span class="nav-number">8.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-6"><span class="nav-number">8.5.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RAG%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-Q-A-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84"><span class="nav-number">9.</span> <span class="nav-text">RAG를 이용한 Q&amp;A 기능 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-7"><span class="nav-number">9.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-RAG%EC%9D%98-%EA%B0%9C%EB%85%90%EA%B3%BC-%EC%9E%84%EB%B2%A0%EB%94%A9"><span class="nav-number">9.2.</span> <span class="nav-text">📝 1단계: RAG의 개념과 임베딩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%9E%84%EB%B2%A0%EB%94%A9-%EB%B0%8F-%EB%B2%A1%ED%84%B0-%EC%8A%A4%ED%86%A0%EC%96%B4-%EC%83%9D%EC%84%B1-embed-file-%ED%95%A8%EC%88%98"><span class="nav-number">9.3.</span> <span class="nav-text">📝 2단계: 임베딩 및 벡터 스토어 생성 (embed_file 함수)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-10"><span class="nav-number">9.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-Q-A-%ED%83%AD-%EA%B5%AC%ED%98%84"><span class="nav-number">9.4.</span> <span class="nav-text">📝 3단계: Q&amp;A 탭 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-11"><span class="nav-number">9.4.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-7"><span class="nav-number">9.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-7"><span class="nav-number">9.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%93-%EC%9A%94%EC%95%BD"><span class="nav-number">10.</span> <span class="nav-text">🎓 요약</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="9. MeetingGPT - 회의록 분석 및 요약 AI 만들기 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          9. MeetingGPT - 회의록 분석 및 요약 AI 만들기
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:19" itemprop="dateCreated datePublished" datetime="2025-10-06T00:19:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>안녕하세요! 이번 챕터에서는 회의나 강의 영상으로부터 자동으로 회의록을 만들고, 내용을 요약하고, 궁금한 점을 질문할 수 있는 “MeetingGPT” 애플리케이션을 만들어 보겠습니다. 비디오 파일 처리, 음성 인식, 그리고 LangChain을 이용한 자연어 처리까지 다양한 기술을 경험하게 될 것입니다.</p>
+<h2 id="🎯-이번-챕터에서-배울-것"><a href="#🎯-이번-챕터에서-배울-것" class="headerlink" title="🎯 이번 챕터에서 배울 것"></a>🎯 이번 챕터에서 배울 것</h2><ul>
+<li><strong>FFmpeg</strong>: 동영상에서 오디오를 추출하는 방법을 배웁니다.</li>
+<li><strong>Pydub</strong>: 긴 오디오 파일을 작은 조각으로 나누는 방법을 익힙니다.</li>
+<li><strong>OpenAI Whisper</strong>: 음성을 텍스트로 변환하는 STT(Speech-to-Text) 기술을 사용합니다.</li>
+<li><strong>Streamlit</strong>: 파일 업로드, 탭, 상태 메시지 등 다양한 UI 컴포넌트를 활용합니다.</li>
+<li><strong>LangChain</strong>: Refine Chain을 이용해 긴 문서를 요약하고, RAG(Retrieval-Augmented Generation) 기술로 문서 기반 Q&amp;A 챗봇을 구축합니다.</li>
+<li><strong>Caching</strong>: Streamlit의 캐싱 기능으로 앱의 성능을 최적화합니다.</li>
+</ul>
+<hr>
+<h2 id="비디오에서-오디오-추출하기"><a href="#비디오에서-오디오-추출하기" class="headerlink" title="비디오에서 오디오 추출하기"></a>비디오에서 오디오 추출하기</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>MeetingGPT</code> 앱의 기본 구조 설정하기</li>
+<li><code>ffmpeg</code>을 사용하여 비디오 파일에서 오디오를 추출하는 방법 배우기</li>
+<li><code>subprocess</code> 모듈을 사용하여 외부 커맨드 실행하기</li>
+</ul>
+<h3 id="📝-1단계-MeetingGPT-페이지-생성"><a href="#📝-1단계-MeetingGPT-페이지-생성" class="headerlink" title="📝 1단계: MeetingGPT 페이지 생성"></a>📝 1단계: MeetingGPT 페이지 생성</h3><p>가장 먼저, 새로운 Streamlit 페이지를 만듭니다. <code>pages</code> 폴더 안에 <code>05_MeetingGPT.py</code> 파일을 생성하고 기본적인 설정을 추가합니다.</p>
+<p><strong>전체 코드 (<code>pages/05_MeetingGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> streamlit <span class="keyword">as</span> st</span><br><span class="line"></span><br><span class="line">st.set_page_config(</span><br><span class="line">    page_title=<span class="string">&quot;MeetingGPT&quot;</span>,</span><br><span class="line">    page_icon=<span class="string">&quot;💼&quot;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><code>st.set_page_config</code>: Streamlit 앱의 제목과 아이콘을 설정합니다. 이 코드는 각 페이지 파일에서 가장 먼저 실행되는 것이 좋습니다.</li>
+</ul>
+<h3 id="📝-2단계-오디오-추출-기능-구현"><a href="#📝-2단계-오디오-추출-기능-구현" class="headerlink" title="📝 2단계: 오디오 추출 기능 구현"></a>📝 2단계: 오디오 추출 기능 구현</h3><p>Jupyter Notebook에서 비디오를 오디오로 변환하는 기능을 먼저 실험해 보겠습니다. 이 기능은 <code>ffmpeg</code>이라는 아주 강력하고 유명한 오픈소스 도구를 사용합니다.</p>
+<p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">extract_audio_from_video</span>(<span class="params">video_path, audio_path</span>):</span><br><span class="line">    command = [</span><br><span class="line">        <span class="string">&quot;ffmpeg&quot;</span>,</span><br><span class="line">        <span class="string">&quot;-i&quot;</span>,</span><br><span class="line">        video_path,</span><br><span class="line">        <span class="string">&quot;-vn&quot;</span>,</span><br><span class="line">        audio_path,</span><br><span class="line">    ]</span><br><span class="line">    subprocess.run(command)</span><br><span class="line"></span><br><span class="line">extract_audio_from_video(</span><br><span class="line">    <span class="string">&quot;./files/podcast.mp4&quot;</span>,</span><br><span class="line">    <span class="string">&quot;./files/podcast.mp3&quot;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-1"><a href="#🔍-코드-상세-설명-1" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>ffmpeg</code>이란?</strong></p>
+<ul>
+<li><code>ffmpeg</code>은 비디오와 오디오 파일을 처리하기 위한 무료 오픈소스 소프트웨어입니다. 변환, 스트리밍, 녹화 등 거의 모든 종류의 미디어 파일 처리가 가능합니다. 우리는 이것을 사용해 비디오 파일(<code>podcast.mp4</code>)에서 오디오 트랙만 추출하여 MP3 파일(<code>podcast.mp3</code>)로 저장할 것입니다.</li>
+<li><strong>-i</strong>: 입력(input) 파일 지정</li>
+<li><strong>-vn</strong>: 비디오(video)를 포함하지 않음 (오디오만 추출)</li>
+</ul>
+<p><strong>2. <code>subprocess.run()</code>이란?</strong></p>
+<ul>
+<li>Python 코드 내에서 외부 커맨드(명령어)를 실행하고 싶을 때 사용하는 모듈입니다. 우리는 <code>ffmpeg</code> 명령어를 Python을 통해 실행하기 위해 이 함수를 사용합니다.</li>
+</ul>
+<h3 id="📝-3단계-홈페이지-및-의존성-업데이트"><a href="#📝-3단계-홈페이지-및-의존성-업데이트" class="headerlink" title="📝 3단계: 홈페이지 및 의존성 업데이트"></a>📝 3단계: 홈페이지 및 의존성 업데이트</h3><p>마지막으로, 홈페이지에 <code>MeetingGPT</code> 링크를 활성화하고, 필요한 라이브러리를 <code>requirements.txt</code>에 추가합니다.</p>
+<p><strong>수정 코드 (<code>Home.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Before</span></span><br><span class="line"><span class="comment"># - [ ] [MeetingGPT](/MeetingGPT)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># After</span></span><br><span class="line"><span class="comment"># - [ ] [💼 MeetingGPT](/MeetingGPT)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>이모지를 추가하여 좀 더 보기 좋게 만들었습니다.</li>
+</ul>
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>pages/05_MeetingGPT.py</code> 파일을 생성하고 <code>set_page_config</code>를 추가했나요?</li>
+<li><input disabled="" type="checkbox"> <code>ffmpeg</code>이 무엇인지, 왜 사용하는지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>subprocess.run()</code>으로 Python에서 외부 명령어를 실행하는 방법을 이해했나요?</li>
+</ul>
+<h3 id="💡-연습-과제"><a href="#💡-연습-과제" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>다른 포맷으로 변환</strong>: <code>extract_audio_from_video</code> 함수를 수정하여 오디오를 <code>mp3</code>가 아닌 <code>wav</code> 포맷으로 저장해 보세요. (<code>ffmpeg</code> 명령어 옵션을 찾아보세요!)</li>
+<li><strong>에러 처리</strong>: <code>subprocess.run()</code>에 <code>check=True</code> 인자를 추가하면 명령어 실행 실패 시 에러를 발생시킵니다. 이것을 추가하고, 존재하지 않는 비디오 파일 경로를 입력하여 어떻게 동작하는지 확인해 보세요.</li>
+</ol>
+<hr>
+<h2 id="긴-오디오-파일-분할하기"><a href="#긴-오디오-파일-분할하기" class="headerlink" title="긴 오디오 파일 분할하기"></a>긴 오디오 파일 분할하기</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>pydub</code> 라이브러리를 사용하여 오디오 파일 로드 및 조작하기</li>
+<li>긴 오디오를 작은 조각(chunk)으로 나누는 방법 배우기</li>
+<li>오디오 분할을 위한 시간 계산 및 반복문 활용하기</li>
+</ul>
+<h3 id="📝-1단계-pydub-라이브러리-소개"><a href="#📝-1단계-pydub-라이브러리-소개" class="headerlink" title="📝 1단계: pydub 라이브러리 소개"></a>📝 1단계: <code>pydub</code> 라이브러리 소개</h3><p><code>pydub</code>은 Python으로 오디오를 조작할 수 있게 해주는 간단하고 편리한 라이브러리입니다. 자르기, 붙이기, 볼륨 조절 등 다양한 작업을 쉽게 할 수 있습니다. 우리는 이 라이브러리를 사용해 1시간이 넘는 긴 오디오 파일을 10분 단위의 작은 파일로 나눌 것입니다.</p>
+<p>왜 나눠야 할까요? OpenAI의 Whisper API 같은 음성 인식 API들은 한 번에 처리할 수 있는 파일 크기나 길이에 제한이 있는 경우가 많습니다. 따라서 큰 파일을 작은 조각으로 나눠서 처리하는 것은 매우 일반적인 전략입니다.</p>
+<h3 id="📝-2단계-오디오-파일-로드-및-분할-로직-구현"><a href="#📝-2단계-오디오-파일-로드-및-분할-로직-구현" class="headerlink" title="📝 2단계: 오디오 파일 로드 및 분할 로직 구현"></a>📝 2단계: 오디오 파일 로드 및 분할 로직 구현</h3><p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pydub <span class="keyword">import</span> AudioSegment</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="comment"># 이전 단계에서 추출한 오디오 파일을 로드합니다.</span></span><br><span class="line">track = AudioSegment.from_mp3(<span class="string">&quot;./files/podcast.mp3&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 10분을 밀리초(ms) 단위로 변환합니다. pydub은 시간을 ms로 다룹니다.</span></span><br><span class="line">ten_minutes = <span class="number">10</span> * <span class="number">60</span> * <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 전체 오디오 길이를 10분으로 나누어 몇 개의 조각이 필요한지 계산합니다.</span></span><br><span class="line"><span class="comment"># math.ceil은 소수점을 올림하여 정수로 만듭니다. (예: 7.3 -&gt; 8)</span></span><br><span class="line">chunks = math.ceil(<span class="built_in">len</span>(track) / ten_minutes)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 계산된 조각 수만큼 반복합니다.</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(chunks):</span><br><span class="line">    start_time = i * ten_minutes</span><br><span class="line">    end_time = (i + <span class="number">1</span>) * ten_minutes</span><br><span class="line"></span><br><span class="line">    <span class="comment"># track[start:end]와 같이 Python 리스트처럼 오디오를 자를 수 있습니다.</span></span><br><span class="line">    chunk = track[start_time:end_time]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 자른 오디오 조각을 별도의 파일로 저장합니다.</span></span><br><span class="line">    chunk.export(<span class="string">f&quot;./files/chunks/chunk_<span class="subst">&#123;i&#125;</span>.mp3&quot;</span>, <span class="built_in">format</span>=<span class="string">&quot;mp3&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-2"><a href="#🔍-코드-상세-설명-2" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>AudioSegment.from_mp3()</code></strong>: MP3 파일을 <code>pydub</code>이 다룰 수 있는 <code>AudioSegment</code> 객체로 불러옵니다.</li>
+<li><strong><code>len(track)</code></strong>: 오디오의 전체 길이를 밀리초(ms) 단위로 반환합니다.</li>
+<li><strong><code>track[start_time:end_time]</code></strong>: 파이썬 리스트를 슬라이싱하는 것과 똑같은 방식으로 오디오의 특정 구간을 잘라낼 수 있습니다. 매우 직관적이죠!</li>
+<li><strong><code>chunk.export()</code></strong>: <code>AudioSegment</code> 객체를 실제 오디오 파일로 저장합니다. <code>format</code> 인자로 포맷을 지정할 수 있습니다.</li>
+</ul>
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>pydub</code>을 왜 사용하는지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> 밀리초(ms) 단위로 시간을 계산하는 방법을 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>AudioSegment</code> 객체를 자르고(<code>slicing</code>) 저장하는(<code>export</code>) 방법을 익혔나요?</li>
+</ul>
+<h3 id="💡-연습-과제-1"><a href="#💡-연습-과제-1" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>다른 길이로 자르기</strong>: 코드를 수정하여 오디오를 10분 대신 5분 단위로 잘라보세요. 몇 개의 파일이 생성되나요?</li>
+<li><strong>마지막 조각 길이 확인</strong>: 마지막으로 생성된 오디오 조각의 길이를 확인하는 코드를 추가해 보세요. (힌트: <code>len(chunk)</code>) 다른 조각들과 길이가 다를 수 있습니다. 왜 그럴까요?</li>
+</ol>
+<hr>
+<h2 id="오디오를-텍스트로-변환하기-Whisper-API"><a href="#오디오를-텍스트로-변환하기-Whisper-API" class="headerlink" title="오디오를 텍스트로 변환하기 (Whisper API)"></a>오디오를 텍스트로 변환하기 (Whisper API)</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>OpenAI의 Whisper API를 사용하여 오디오를 텍스트로 변환하는 방법 배우기</li>
+<li><code>glob</code> 라이브러리를 사용하여 특정 패턴의 파일 목록을 가져오는 방법 익히기</li>
+<li>여러 개의 텍스트 조각을 하나로 합치고 파일로 저장하는 방법 배우기</li>
+<li>코드를 재사용 가능한 함수로 리팩토링하기</li>
+</ul>
+<h3 id="📝-1단계-코드-리팩토링"><a href="#📝-1단계-코드-리팩토링" class="headerlink" title="📝 1단계: 코드 리팩토링"></a>📝 1단계: 코드 리팩토링</h3><p>먼저, 이전 단계에서 작성한 오디오 분할 코드를 재사용하기 쉽도록 함수로 만들어 보겠습니다.</p>
+<p><strong>수정 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cut_audio_in_chunks</span>(<span class="params">audio_path, chunk_size, chunks_folder</span>):</span><br><span class="line">    track = AudioSegment.from_mp3(audio_path)</span><br><span class="line">    chunk_len = chunk_size * <span class="number">60</span> * <span class="number">1000</span></span><br><span class="line">    chunks = math.ceil(<span class="built_in">len</span>(track) / chunk_len)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(chunks):</span><br><span class="line">        start_time = i * chunk_len</span><br><span class="line">        end_time = (i + <span class="number">1</span>) * chunk_len</span><br><span class="line">        chunk = track[start_time:end_time]</span><br><span class="line">        chunk.export(<span class="string">f&quot;./<span class="subst">&#123;chunks_folder&#125;</span>/chunk_<span class="subst">&#123;i&#125;</span>.mp3&quot;</span>, <span class="built_in">format</span>=<span class="string">&quot;mp3&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-2단계-Whisper-API로-오디오-변환"><a href="#📝-2단계-Whisper-API로-오디오-변환" class="headerlink" title="📝 2단계: Whisper API로 오디오 변환"></a>📝 2단계: Whisper API로 오디오 변환</h3><p>이제 잘라진 오디오 조각들을 하나씩 Whisper API로 보내 텍스트로 변환하는 함수를 만들겠습니다.</p>
+<p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openai</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_chunks</span>(<span class="params">chunk_folder, destination</span>):</span><br><span class="line">    <span class="comment"># chunk_folder에 있는 모든 .mp3 파일의 목록을 가져옵니다.</span></span><br><span class="line">    files = glob.glob(<span class="string">f&quot;<span class="subst">&#123;chunk_folder&#125;</span>/*.mp3&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    final_transcript = <span class="string">&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 각 오디오 파일을 순서대로 처리합니다.</span></span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">        <span class="comment"># 파일을 &#x27;rb&#x27;(read binary) 모드로 엽니다. 오디오 파일은 바이너리 파일입니다.</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(file, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> audio_file:</span><br><span class="line">            <span class="comment"># openai.Audio.transcribe를 호출하여 음성을 텍스트로 변환합니다.</span></span><br><span class="line">            transcript = openai.Audio.transcribe(</span><br><span class="line">                <span class="string">&quot;whisper-1&quot;</span>,  <span class="comment"># 사용할 모델 이름</span></span><br><span class="line">                audio_file,</span><br><span class="line">            )</span><br><span class="line">            <span class="comment"># 변환된 텍스트를 final_transcript 변수에 계속 추가합니다.</span></span><br><span class="line">            final_transcript += transcript[<span class="string">&quot;text&quot;</span>]</span><br><span class="line">            </span><br><span class="line">    <span class="comment"># 합쳐진 전체 텍스트를 destination 파일에 씁니다.</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(destination, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">        file.write(final_transcript)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-3"><a href="#🔍-코드-상세-설명-3" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>glob.glob(&quot;*.mp3&quot;)</code></strong>: <code>glob</code>은 파일 경로를 찾을 때 와일드카드(<code>*</code>, <code>?</code> 등)를 사용할 수 있게 해주는 라이브러리입니다. <code>*.mp3</code>는 “이름이 무엇이든 상관없이 .mp3로 끝나는 모든 파일”이라는 뜻입니다.</li>
+<li><strong><code>with open(file, &quot;rb&quot;)</code></strong>: 파일을 열 때 사용하는 구문입니다. <code>with</code>를 사용하면 파일을 다 쓴 후에 자동으로 닫아주어 편리합니다. 오디오, 이미지 같은 미디어 파일은 텍스트가 아니므로 ‘바이너리(binary)’ 모드인 <code>&quot;rb&quot;</code>로 열어야 합니다.</li>
+<li><strong><code>openai.Audio.transcribe()</code></strong>: OpenAI 라이브러리에서 음성-텍스트 변환을 담당하는 함수입니다. 사용할 모델(<code>whisper-1</code>)과 바이너리 모드로 열린 오디오 파일을 넘겨주면, 변환된 텍스트가 담긴 객체를 반환합니다.</li>
+</ul>
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>glob</code>을 사용하여 여러 파일을 한 번에 선택하는 방법을 이해했나요?</li>
+<li><input disabled="" type="checkbox"> 오디오 파일을 열 때 왜 <code>&quot;rb&quot;</code> 모드를 사용해야 하는지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>openai.Audio.transcribe</code> 함수를 사용하여 음성을 텍스트로 변환할 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-2"><a href="#💡-연습-과제-2" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>개별 파일로 저장</strong>: <code>transcribe_chunks</code> 함수를 수정하여, 각 오디오 조각의 텍스트 변환 결과를 하나의 큰 파일이 아닌, 각자 별도의 <code>.txt</code> 파일(예: <code>chunk_0.txt</code>, <code>chunk_1.txt</code>)로 저장하도록 만들어 보세요.</li>
+<li><strong>처리 순서 정렬</strong>: <code>glob.glob</code>이 반환하는 파일 목록은 운영체제에 따라 순서가 보장되지 않을 수 있습니다. 파일 목록을 이름순으로 정렬(<code>files.sort()</code>)하는 코드를 추가하여 항상 <code>chunk_0</code>, <code>chunk_1</code>, <code>chunk_2</code>… 순서로 처리되도록 보장해 보세요.</li>
+</ol>
+<hr>
+<h2 id="메모리-효율적인-텍스트-변환"><a href="#메모리-효율적인-텍스트-변환" class="headerlink" title="메모리 효율적인 텍스트 변환"></a>메모리 효율적인 텍스트 변환</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>파일을 추가 모드(<code>append mode</code>)로 열어 내용을 이어 쓰는 방법 배우기</li>
+<li>대용량 데이터를 처리할 때 메모리를 효율적으로 사용하는 코드 작성법 익히기</li>
+<li><code>with</code> 구문을 사용하여 여러 파일을 동시에 안전하게 다루는 방법 배우기</li>
+</ul>
+<h3 id="📝-1단계-기존-코드의-문제점"><a href="#📝-1단계-기존-코드의-문제점" class="headerlink" title="📝 1단계: 기존 코드의 문제점"></a>📝 1단계: 기존 코드의 문제점</h3><p>이전 단계의 <code>transcribe_chunks</code> 함수는 잘 동작하지만, 한 가지 잠재적인 문제가 있습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">final_transcript = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    final_transcript += transcript[<span class="string">&quot;text&quot;</span>] <span class="comment"># 이 부분!</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(destination, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    file.write(final_transcript)</span><br></pre></td></tr></table></figure>
+<p>만약 오디오 파일이 매우 길어서 변환된 텍스트의 양이 엄청나게 크다면(수십~수백 MB), <code>final_transcript</code>라는 변수 하나가 모든 텍스트를 메모리에 저장하고 있어야 합니다. 이는 메모리를 비효율적으로 사용하는 방식이며, 시스템에 부담을 줄 수 있습니다.</p>
+<h3 id="📝-2단계-코드-개선"><a href="#📝-2단계-코드-개선" class="headerlink" title="📝 2단계: 코드 개선"></a>📝 2단계: 코드 개선</h3><p>이 문제를 해결하기 위해, 텍스트를 변수에 계속 쌓아두는 대신, 변환될 때마다 결과 파일에 바로바로 이어 쓰도록 코드를 개선해 보겠습니다.</p>
+<p><strong>비교 예시:</strong></p>
+<p><strong>Before:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_chunks</span>(<span class="params">chunk_folder, destination</span>):</span><br><span class="line">    files = glob.glob(<span class="string">f&quot;<span class="subst">&#123;chunk_folder&#125;</span>/*.mp3&quot;</span>)</span><br><span class="line">    final_transcript = <span class="string">&quot;&quot;</span> <span class="comment"># 텍스트를 저장할 변수</span></span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(file, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> audio_file:</span><br><span class="line">            transcript = openai.Audio.transcribe(</span><br><span class="line">                <span class="string">&quot;whisper-1&quot;</span>,</span><br><span class="line">                audio_file,</span><br><span class="line">            )</span><br><span class="line">            final_transcript += transcript[<span class="string">&quot;text&quot;</span>] <span class="comment"># 메모리에 계속 추가</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(destination, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> file: <span class="comment"># 마지막에 한 번에 쓰기</span></span><br><span class="line">        file.write(final_transcript)</span><br></pre></td></tr></table></figure>
+
+<p><strong>After:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_chunks</span>(<span class="params">chunk_folder, destination</span>):</span><br><span class="line">    files = glob.glob(<span class="string">f&quot;<span class="subst">&#123;chunk_folder&#125;</span>/*.mp3&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">        <span class="comment"># 오디오 파일과 텍스트 파일을 동시에 엽니다.</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(file, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> audio_file, <span class="built_in">open</span>(destination, <span class="string">&quot;a&quot;</span>) <span class="keyword">as</span> text_file:</span><br><span class="line">            transcript = openai.Audio.transcribe(</span><br><span class="line">                <span class="string">&quot;whisper-1&quot;</span>,</span><br><span class="line">                audio_file,</span><br><span class="line">            )</span><br><span class="line">            <span class="comment"># 변환된 텍스트를 바로 파일에 이어 씁니다.</span></span><br><span class="line">            text_file.write(transcript[<span class="string">&quot;text&quot;</span>])</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-4"><a href="#🔍-코드-상세-설명-4" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>open(destination, &quot;a&quot;)</code></strong>: 파일을 열 때 두 번째 인자로 <code>&quot;a&quot;</code>를 주면 ‘추가(append) 모드’가 됩니다.<ul>
+<li><code>&quot;w&quot;</code> (write): 파일 전체를 새로 씀 (기존 내용 삭제)</li>
+<li><code>&quot;a&quot;</code> (append): 파일의 맨 끝에 내용을 이어 씀 (기존 내용 유지)</li>
+</ul>
+</li>
+<li><strong><code>with open(...) as f1, open(...) as f2:</code></strong>: <code>with</code> 구문은 콤마(<code>,</code>)를 사용하여 여러 파일을 동시에 열고 안전하게 관리할 수 있습니다.</li>
+<li>이 방식은 변환된 텍스트를 메모리에 저장하지 않고 바로 파일에 쓰기 때문에, 아무리 큰 파일이라도 메모리 사용량이 거의 늘어나지 않는다는 큰 장점이 있습니다.</li>
+</ul>
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 파일 열기 모드 <code>&quot;w&quot;</code>와 <code>&quot;a&quot;</code>의 차이점을 설명할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> 왜 추가(append) 모드를 사용하는 것이 메모리 효율적인지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>with</code> 구문으로 여러 파일을 동시에 여는 방법을 알고 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-3"><a href="#💡-연습-과제-3" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>로그 파일 만들기</strong>: <code>transcribe_chunks</code> 함수를 수정하여, 텍스트 전문 파일 외에 별도의 <code>log.txt</code> 파일을 만들어 보세요. 이 로그 파일에는 “Transcribing chunk_0.mp3…”, “Transcribing chunk_1.mp3…” 와 같이 현재 어떤 파일이 처리되고 있는지 기록되도록 해보세요. (힌트: <code>log.txt</code>는 추가 모드로 열어야 합니다.)</li>
+</ol>
+<hr>
+<h2 id="사용자-인터페이스-UI-및-캐싱-구현"><a href="#사용자-인터페이스-UI-및-캐싱-구현" class="headerlink" title="사용자 인터페이스(UI) 및 캐싱 구현"></a>사용자 인터페이스(UI) 및 캐싱 구현</h2><h3 id="🎯-이번-단계에서-배울-것-4"><a href="#🎯-이번-단계에서-배울-것-4" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>Streamlit의 <code>st.file_uploader</code>를 사용하여 파일 업로드 UI 만들기</li>
+<li><code>st.status</code>를 사용하여 오래 걸리는 작업의 진행 상태를 사용자에게 보여주기</li>
+<li><code>@st.cache_data</code> 데코레이터를 사용하여 함수의 결과를 캐싱하고 앱 성능 최적화하기</li>
+<li>Jupyter Notebook의 실험 코드를 실제 웹 애플리케이션으로 통합하기</li>
+</ul>
+<h3 id="📝-1단계-함수를-앱으로-이동-및-캐싱-적용"><a href="#📝-1단계-함수를-앱으로-이동-및-캐싱-적용" class="headerlink" title="📝 1단계: 함수를 앱으로 이동 및 캐싱 적용"></a>📝 1단계: 함수를 앱으로 이동 및 캐싱 적용</h3><p>Jupyter Notebook에서 만들었던 <code>extract_audio_from_video</code>, <code>cut_audio_in_chunks</code>, <code>transcribe_chunks</code> 함수들을 <code>05_MeetingGPT.py</code> 파일로 옮겨옵니다. 그리고 아주 중요한 최적화 작업을 추가합니다: 바로 <strong>캐싱(Caching)</strong> 입니다.</p>
+<p><strong>전체 코드 (<code>pages/05_MeetingGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># .cache 폴더에 최종 결과물인 팟캐스트 텍스트 파일이 있는지 확인</span></span><br><span class="line">has_transcript = os.path.exists(<span class="string">&quot;./.cache/podcast.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@st.cache_data()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_chunks</span>(<span class="params">chunk_folder, destination</span>):</span><br><span class="line">    <span class="keyword">if</span> has_transcript:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="comment"># ... (기존 함수 내용) ...</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@st.cache_data()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">extract_audio_from_video</span>(<span class="params">video_path</span>):</span><br><span class="line">    <span class="keyword">if</span> has_transcript:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="comment"># ... (기존 함수 내용) ...</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@st.cache_data()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cut_audio_in_chunks</span>(<span class="params">audio_path, chunk_size, chunks_folder</span>):</span><br><span class="line">    <span class="keyword">if</span> has_transcript:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="comment"># ... (기존 함수 내용) ...</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-5"><a href="#🔍-코드-상세-설명-5" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>@st.cache_data()</code></strong>: Streamlit의 마법 같은 기능인 ‘캐싱 데코레이터’입니다. 함수 위에 이 코드를 붙여주면, Streamlit은 <strong>함수를 어떤 인자(argument)로 호출했는지, 그리고 그 결과가 무엇이었는지</strong>를 기억합니다. 만약 다음에 똑같은 인자로 함수가 다시 호출되면, 함수를 또 실행하는 대신 기억해 둔 결과를 즉시 반환합니다.</li>
+<li>오디오 추출, 분할, 변환 작업은 매우 오래 걸리고 비용(API 사용료)이 발생할 수 있습니다. 캐싱을 사용하면 사용자가 페이지를 새로고침하거나 다른 행동을 해도 이미 완료된 작업은 다시 실행하지 않으므로, 앱의 반응성이 엄청나게 향상되고 비용도 절약됩니다.</li>
+<li><code>if has_transcript: return</code> 코드를 추가하여, 최종 결과물이 이미 존재하면 이 비싼 함수들이 즉시 종료되도록 한번 더 방어해 줍니다.</li>
+</ul>
+<h3 id="📝-2단계-파일-업로드-UI-및-처리-파이프라인-구축"><a href="#📝-2단계-파일-업로드-UI-및-처리-파이프라인-구축" class="headerlink" title="📝 2단계: 파일 업로드 UI 및 처리 파이프라인 구축"></a>📝 2단계: 파일 업로드 UI 및 처리 파이프라인 구축</h3><p>이제 사용자가 직접 비디오 파일을 올릴 수 있는 UI를 만들고, 파일이 업로드되면 우리가 만든 함수들을 순서대로 실행하는 파이프라인을 구축합니다.</p>
+<p><strong>전체 코드 (<code>pages/05_MeetingGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">st.markdown(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string"># MeetingGPT</span></span><br><span class="line"><span class="string">Welcome to MeetingGPT...</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> st.sidebar:</span><br><span class="line">    video = st.file_uploader(</span><br><span class="line">        <span class="string">&quot;Video&quot;</span>,</span><br><span class="line">        <span class="built_in">type</span>=[<span class="string">&quot;mp4&quot;</span>, <span class="string">&quot;avi&quot;</span>, <span class="string">&quot;mkv&quot;</span>, <span class="string">&quot;mov&quot;</span>],</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> video:</span><br><span class="line">    chunks_folder = <span class="string">&quot;./.cache/chunks&quot;</span></span><br><span class="line">    <span class="keyword">with</span> st.status(<span class="string">&quot;Loading video...&quot;</span>) <span class="keyword">as</span> status:</span><br><span class="line">        video_content = video.read()</span><br><span class="line">        video_path = <span class="string">f&quot;./.cache/<span class="subst">&#123;video.name&#125;</span>&quot;</span></span><br><span class="line">        audio_path = video_path.replace(<span class="string">&quot;mp4&quot;</span>, <span class="string">&quot;mp3&quot;</span>)</span><br><span class="line">        transcript_path = video_path.replace(<span class="string">&quot;mp4&quot;</span>, <span class="string">&quot;txt&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(video_path, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(video_content)</span><br><span class="line">            </span><br><span class="line">        status.update(label=<span class="string">&quot;Extracting audio...&quot;</span>)</span><br><span class="line">        extract_audio_from_video(video_path)</span><br><span class="line">        </span><br><span class="line">        status.update(label=<span class="string">&quot;Cutting audio segments...&quot;</span>)</span><br><span class="line">        cut_audio_in_chunks(audio_path, <span class="number">10</span>, chunks_folder)</span><br><span class="line">        </span><br><span class="line">        status.update(label=<span class="string">&quot;Transcribing audio...&quot;</span>)</span><br><span class="line">        transcribe_chunks(chunks_folder, transcript_path)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-6"><a href="#🔍-코드-상세-설명-6" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>st.sidebar</code></strong>: <code>with st.sidebar:</code> 블록 안에 있는 모든 UI 요소는 화면 왼쪽의 사이드바에 나타납니다.</li>
+<li><strong><code>st.file_uploader</code></strong>: 파일을 업로드할 수 있는 위젯을 만듭니다. <code>type</code> 인자로 허용할 파일 확장자를 지정할 수 있습니다.</li>
+<li><strong><code>if video:</code></strong>: <code>file_uploader</code>는 파일이 업로드되면 <code>UploadedFile</code> 객체를, 아니면 <code>None</code>을 반환합니다. 이 <code>if</code>문은 사용자가 파일을 업로드했을 때만 아래 코드가 실행되도록 합니다.</li>
+<li><strong><code>st.status(&quot;...&quot;)</code></strong>: 오래 걸리는 작업의 진행 상태를 사용자에게 보여주는 위젯입니다. <code>with</code> 블록이 끝나면 자동으로 “Completed” 메시지로 바뀝니다.</li>
+<li><strong><code>status.update(label=&quot;...&quot;)</code></strong>: <code>st.status</code>의 메시지를 동적으로 변경합니다. 이를 통해 사용자에게 현재 어떤 단계가 진행 중인지 명확하게 알려줄 수 있습니다.</li>
+</ul>
+<h3 id="✅-체크리스트-4"><a href="#✅-체크리스트-4" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>@st.cache_data</code>가 무엇이고 왜 사용해야 하는지 설명할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> <code>st.file_uploader</code>를 사용해 파일 업로드 기능을 만들 수 있나요?</li>
+<li><input disabled="" type="checkbox"> <code>st.status</code>와 <code>status.update</code>를 사용해 사용자에게 진행 상황을 알려줄 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-4"><a href="#💡-연습-과제-4" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>업로드 파일 정보 표시</strong>: <code>video</code> 객체는 <code>name</code>, <code>size</code>, <code>type</code> 같은 유용한 속성들을 가지고 있습니다. 파일이 업로드되면 사이드바에 이 정보들을 <code>st.write</code>로 표시해 보세요.</li>
+<li><strong>캐시 지우기 버튼</strong>: Streamlit에는 캐시를 수동으로 지우는 기능이 없습니다. 하지만 <code>st.button</code>을 만들고, 버튼이 클릭되면 <code>.cache</code> 폴더 안의 파일들을 <code>os.remove</code>나 <code>shutil.rmtree</code>를 사용해 직접 삭제하는 기능을 구현해 보세요. (주의: 파일 시스템을 직접 조작하는 것은 위험할 수 있으니, 어떤 파일&#x2F;폴더를 지우는지 명확히 확인하고 실행하세요!)</li>
+</ol>
+<hr>
+<h2 id="결과-표시를-위한-UI-개선"><a href="#결과-표시를-위한-UI-개선" class="headerlink" title="결과 표시를 위한 UI 개선"></a>결과 표시를 위한 UI 개선</h2><h3 id="🎯-이번-단계에서-배울-것-5"><a href="#🎯-이번-단계에서-배울-것-5" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>Streamlit의 <code>st.tabs</code>를 사용하여 콘텐츠를 탭으로 구성하는 방법 배우기</li>
+<li><code>st.status</code>의 <code>update</code> 메서드를 사용하여 동적으로 상태 메시지를 변경하는 방법 익히기 (복습)</li>
+<li>파일을 읽고 그 내용을 화면에 표시하는 방법 배우기</li>
+</ul>
+<h3 id="📝-1단계-동적인-상태-업데이트-개선"><a href="#📝-1단계-동적인-상태-업데이트-개선" class="headerlink" title="📝 1단계: 동적인 상태 업데이트 (개선)"></a>📝 1단계: 동적인 상태 업데이트 (개선)</h3><p>이전 단계에서는 <code>st.status</code>를 여러 번 사용하여 각 단계를 표시했습니다. 이것을 하나의 <code>st.status</code> 블록 안에서 <code>status.update</code>를 사용하는 방식으로 개선하여 사용자 경험을 더 좋게 만들 수 있습니다. (이 내용은 9.5 단계에서 이미 <code>After</code> 코드로 반영되었습니다. 여기서는 개념을 다시 한번 명확히 짚고 넘어갑니다.)</p>
+<p><strong>비교 예시:</strong></p>
+<p><strong>Before:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> st.status(<span class="string">&quot;Extracting audio...&quot;</span>):</span><br><span class="line">    extract_audio_from_video(video_path)</span><br><span class="line"><span class="keyword">with</span> st.status(<span class="string">&quot;Cutting audio segments...&quot;</span>):</span><br><span class="line">    cut_audio_in_chunks(audio_path, <span class="number">10</span>, chunks_folder)</span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>After:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> st.status(<span class="string">&quot;Loading video...&quot;</span>) <span class="keyword">as</span> status:</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    status.update(label=<span class="string">&quot;Extracting audio...&quot;</span>)</span><br><span class="line">    extract_audio_from_video(video_path)</span><br><span class="line">    </span><br><span class="line">    status.update(label=<span class="string">&quot;Cutting audio segments...&quot;</span>)</span><br><span class="line">    cut_audio_in_chunks(audio_path, <span class="number">10</span>, chunks_folder)</span><br><span class="line">    <span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+<p><code>After</code> 방식은 사용자에게 하나의 진행 표시줄 안에서 상태 메시지만 바뀌는 것처럼 보여 훨씬 깔끔합니다.</p>
+<h3 id="📝-2단계-탭-Tab-으로-결과-구성하기"><a href="#📝-2단계-탭-Tab-으로-결과-구성하기" class="headerlink" title="📝 2단계: 탭(Tab)으로 결과 구성하기"></a>📝 2단계: 탭(Tab)으로 결과 구성하기</h3><p>이제 모든 처리가 끝나고 생성된 결과물(텍스트 전문, 요약, Q&amp;A)을 보여줄 공간을 만들겠습니다. <code>st.tabs</code>를 사용하면 여러 콘텐츠를 깔끔한 탭 인터페이스로 정리할 수 있습니다.</p>
+<p><strong>전체 코드 (<code>pages/05_MeetingGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> video:</span><br><span class="line">    <span class="comment"># ... (파일 처리 파이프라인) ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 탭을 생성합니다. 탭 이름이 담긴 리스트를 전달합니다.</span></span><br><span class="line">    transcript_tab, summary_tab, qa_tab = st.tabs(</span><br><span class="line">        [</span><br><span class="line">            <span class="string">&quot;Transcript&quot;</span>,</span><br><span class="line">            <span class="string">&quot;Summary&quot;</span>,</span><br><span class="line">            <span class="string">&quot;Q&amp;A&quot;</span>,</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># &quot;Transcript&quot; 탭에 들어갈 내용을 정의합니다.</span></span><br><span class="line">    <span class="keyword">with</span> transcript_tab:</span><br><span class="line">        <span class="comment"># 생성된 텍스트 파일을 &#x27;r&#x27;(read) 모드로 엽니다.</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(transcript_path, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">            <span class="comment"># 파일 내용을 읽어서 화면에 표시합니다.</span></span><br><span class="line">            st.write(file.read())</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-7"><a href="#🔍-코드-상세-설명-7" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>st.tabs([...])</code></strong>: 탭 위젯을 생성합니다. 인자로 전달된 리스트의 각 문자열이 탭의 이름이 됩니다. 이 함수는 각 탭에 해당하는 객체들을 튜플 형태로 반환합니다.</li>
+<li><strong><code>with transcript_tab:</code></strong>: <code>st.tabs</code>가 반환한 탭 객체를 <code>with</code> 구문과 함께 사용하면, 해당 <code>with</code> 블록 안에 있는 내용이 그 탭 안에 표시됩니다.</li>
+<li><strong><code>open(transcript_path, &quot;r&quot;)</code></strong>: 텍스트 파일을 읽기 위해 ‘읽기(read) 모드’인 <code>&quot;r&quot;</code>로 엽니다.</li>
+<li><strong><code>st.write(file.read())</code></strong>: <code>file.read()</code>로 파일의 전체 내용을 문자열로 읽어온 뒤, <code>st.write</code>를 사용해 화면에 보여줍니다. <code>st.write</code>는 텍스트, 데이터프레임, 마크다운 등 다양한 것을 “알아서 잘” 표시해주는 편리한 함수입니다.</li>
+</ul>
+<h3 id="✅-체크리스트-5"><a href="#✅-체크리스트-5" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>st.tabs</code>를 사용하여 탭 UI를 만들 수 있나요?</li>
+<li><input disabled="" type="checkbox"> <code>with</code> 구문을 사용하여 특정 탭에 콘텐츠를 추가하는 방법을 이해했나요?</li>
+<li><input disabled="" type="checkbox"> 텍스트 파일을 읽어서 <code>st.write</code>로 화면에 표시할 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-5"><a href="#💡-연습-과제-5" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>탭 이름과 아이콘 변경</strong>: <code>st.tabs</code>는 탭 이름에 이모지를 추가하는 것을 지원합니다. 탭 이름들을 <code>[&quot;📜 Transcript&quot;, &quot;📝 Summary&quot;, &quot;❓ Q&amp;A&quot;]</code> 와 같이 변경해 보세요.</li>
+<li><strong>마크다운 사용</strong>: <code>st.write</code> 대신 <code>st.markdown</code>을 사용하여 텍스트 전문을 표시해 보세요. 어떤 차이가 있나요? (힌트: <code>st.markdown</code>은 텍스트를 마크다운으로 해석합니다.)</li>
+</ol>
+<hr>
+<h2 id="Refine-Chain을-이용한-텍스트-요약"><a href="#Refine-Chain을-이용한-텍스트-요약" class="headerlink" title="Refine Chain을 이용한 텍스트 요약"></a>Refine Chain을 이용한 텍스트 요약</h2><h3 id="🎯-이번-단계에서-배울-것-6"><a href="#🎯-이번-단계에서-배울-것-6" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>LangChain의 <code>Refine Chain</code> 패턴을 이해하고 구현하는 방법 배우기</li>
+<li><code>TextLoader</code>와 <code>RecursiveCharacterTextSplitter</code>를 사용하여 긴 텍스트를 처리 가능한 조각으로 나누기</li>
+<li>점진적으로 요약을 개선해나가는 프롬프트 엔지니어링 기법 배우기</li>
+<li><code>st.button</code>을 사용하여 사용자 액션을 트리거하는 방법 익히기</li>
+</ul>
+<h3 id="📝-1단계-LangChain-설정-및-문서-분할"><a href="#📝-1단계-LangChain-설정-및-문서-분할" class="headerlink" title="📝 1단계: LangChain 설정 및 문서 분할"></a>📝 1단계: LangChain 설정 및 문서 분할</h3><p>요약 기능을 구현하기 위해 필요한 LangChain 모듈들을 가져오고, 긴 텍스트 전문을 작은 조각으로 나누는 준비를 합니다.</p>
+<p><strong>추가된 코드 (<code>pages/05_MeetingGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> TextLoader</span><br><span class="line"><span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter</span><br><span class="line"><span class="keyword">from</span> langchain.schema <span class="keyword">import</span> StrOutputParser</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> summary_tab:</span><br><span class="line">    start = st.button(<span class="string">&quot;Generate summary&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> start:</span><br><span class="line">        <span class="comment"># 1. 문서 로드</span></span><br><span class="line">        loader = TextLoader(transcript_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 2. 문서 분할</span></span><br><span class="line">        splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(</span><br><span class="line">            chunk_size=<span class="number">800</span>,</span><br><span class="line">            chunk_overlap=<span class="number">100</span>,</span><br><span class="line">        )</span><br><span class="line">        docs = loader.load_and_split(text_splitter=splitter)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-8"><a href="#🔍-코드-상세-설명-8" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>TextLoader</code></strong>: 텍스트 파일을 LangChain이 다룰 수 있는 <code>Document</code> 형식으로 불러옵니다.</li>
+<li><strong><code>RecursiveCharacterTextSplitter</code></strong>: LLM이 한 번에 처리할 수 있는 토큰 양(Context Window)에는 한계가 있습니다. 이 스플리터는 긴 텍스트를 지정된 <code>chunk_size</code>에 맞춰 의미적으로 최대한 연결되는 작은 조각(<code>Document</code> 객체들의 리스트)으로 나누어 줍니다. <code>chunk_overlap</code>은 조각 간에 겹치는 부분을 만들어 문맥이 끊어지는 것을 방지합니다.</li>
+</ul>
+<h3 id="📝-2단계-초기-요약-및-Refine-로직-구현"><a href="#📝-2단계-초기-요약-및-Refine-로직-구현" class="headerlink" title="📝 2단계: 초기 요약 및 Refine 로직 구현"></a>📝 2단계: 초기 요약 및 Refine 로직 구현</h3><p>이제 “Refine Chain” 패턴을 구현합니다. 이 패턴의 핵심 아이디어는 다음과 같습니다.</p>
+<ol>
+<li>첫 번째 문서 조각으로 <strong>초기 요약</strong>을 만든다.</li>
+<li>다음 문서 조각과 <strong>기존 요약</strong>을 함께 LLM에게 주면서, “이 새로운 내용을 참고해서 기존 요약을 더 좋게 다듬어줘” 라고 요청한다.</li>
+<li>모든 문서 조각에 대해 2번 과정을 반복한다.</li>
+</ol>
+<p><strong>추가된 코드 (<code>pages/05_MeetingGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 3. 초기 요약 생성</span></span><br><span class="line">first_summary_prompt = ChatPromptTemplate.from_template(</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Write a concise summary of the following:</span></span><br><span class="line"><span class="string">    &quot;&#123;text&#125;&quot;</span></span><br><span class="line"><span class="string">    CONCISE SUMMARY:&quot;&quot;&quot;</span></span><br><span class="line">)</span><br><span class="line">first_summary_chain = first_summary_prompt | llm | StrOutputParser()</span><br><span class="line">summary = first_summary_chain.invoke(&#123;<span class="string">&quot;text&quot;</span>: docs[<span class="number">0</span>].page_content&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 점진적 요약 개선 (Refine)</span></span><br><span class="line">refine_prompt = ChatPromptTemplate.from_template(</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Your job is to produce a final summary.</span></span><br><span class="line"><span class="string">    We have provided an existing summary up to a certain point: &#123;existing_summary&#125;</span></span><br><span class="line"><span class="string">    We have the opportunity to refine the existing summary (only if needed) with some more context below.</span></span><br><span class="line"><span class="string">    ------------</span></span><br><span class="line"><span class="string">    &#123;context&#125;</span></span><br><span class="line"><span class="string">    ------------</span></span><br><span class="line"><span class="string">    Given the new context, refine the original summary.</span></span><br><span class="line"><span class="string">    If the context isn&#x27;t useful, RETURN the original summary.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">)</span><br><span class="line">refine_chain = refine_prompt | llm | StrOutputParser()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> st.status(<span class="string">&quot;Summarizing...&quot;</span>) <span class="keyword">as</span> status:</span><br><span class="line">    <span class="keyword">for</span> i, doc <span class="keyword">in</span> <span class="built_in">enumerate</span>(docs[<span class="number">1</span>:]):</span><br><span class="line">        status.update(label=<span class="string">f&quot;Processing document <span class="subst">&#123;i+<span class="number">1</span>&#125;</span>/<span class="subst">&#123;<span class="built_in">len</span>(docs)-<span class="number">1</span>&#125;</span> &quot;</span>)</span><br><span class="line">        summary = refine_chain.invoke(&#123;</span><br><span class="line">            <span class="string">&quot;existing_summary&quot;</span>: summary,</span><br><span class="line">            <span class="string">&quot;context&quot;</span>: doc.page_content,</span><br><span class="line">        &#125;)</span><br><span class="line">st.write(summary)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-9"><a href="#🔍-코드-상세-설명-9" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>st.button(&quot;...&quot;)</code></strong>: 클릭할 수 있는 버튼을 만듭니다. 버튼이 클릭되면 <code>True</code>를, 아니면 <code>False</code>를 반환합니다. <code>if start:</code> 구문을 통해 버튼이 클릭되었을 때만 요약 프로세스가 시작되도록 합니다.</li>
+<li><strong><code>first_summary_prompt</code></strong>: 첫 번째 문서 조각(<code>docs[0]</code>)을 요약하기 위한 간단한 프롬프트입니다.</li>
+<li><strong><code>refine_prompt</code></strong>: Refine Chain의 핵심입니다. <code>{existing_summary}</code>와 <code>{context}</code>라는 두 개의 변수를 받아, 기존 요약을 새로운 문맥으로 개선하도록 LLM에게 지시합니다.</li>
+<li><strong><code>for i, doc in enumerate(docs[1:]):</code></strong>: 두 번째 문서 조각부터 마지막까지 순회하면서 <code>refine_chain</code>을 반복적으로 호출합니다. 매번 <code>summary</code> 변수가 더 정교한 내용으로 업데이트됩니다.</li>
+</ul>
+<h3 id="✅-체크리스트-6"><a href="#✅-체크리스트-6" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 긴 문서를 처리하기 위해 왜 <code>TextSplitter</code>가 필요한지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> “Refine Chain”이 어떤 원리로 동작하는지 설명할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> <code>st.button</code>을 사용하여 특정 기능을 실행시키는 방법을 알고 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-6"><a href="#💡-연습-과제-6" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>프롬프트 수정</strong>: <code>refine_prompt</code>를 수정하여 요약의 스타일을 바꿔보세요. 예를 들어, “Summarize in bullet points.” (불렛 포인트로 요약해줘) 또는 “Focus on action items and decisions made.” (결정된 사항과 해야 할 일 위주로 요약해줘) 같은 지시사항을 추가해 보세요.</li>
+<li><strong>진행 상황 표시</strong>: <code>st.status</code> 블록 안에서 <code>st.write(summary)</code>를 호출하여, 각 단계를 거칠 때마다 요약이 어떻게 변해가는지 실시간으로 화면에 표시해 보세요.</li>
+</ol>
+<hr>
+<h2 id="RAG를-이용한-Q-A-기능-구현"><a href="#RAG를-이용한-Q-A-기능-구현" class="headerlink" title="RAG를 이용한 Q&amp;A 기능 구현"></a>RAG를 이용한 Q&amp;A 기능 구현</h2><h3 id="🎯-이번-단계에서-배울-것-7"><a href="#🎯-이번-단계에서-배울-것-7" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>RAG(Retrieval-Augmented Generation)의 기본 개념 이해하기</li>
+<li><code>FAISS</code>를 사용하여 텍스트 문서로부터 벡터 스토어(vector store)를 구축하는 방법 배우기</li>
+<li><code>OpenAIEmbeddings</code>와 <code>CacheBackedEmbeddings</code>를 사용하여 임베딩을 생성하고 캐시하는 방법 익히기</li>
+<li><code>retriever</code>를 사용하여 질문과 관련된 문서를 검색하는 방법 배우기</li>
+</ul>
+<h3 id="📝-1단계-RAG의-개념과-임베딩"><a href="#📝-1단계-RAG의-개념과-임베딩" class="headerlink" title="📝 1단계: RAG의 개념과 임베딩"></a>📝 1단계: RAG의 개념과 임베딩</h3><p>**RAG(Retrieval-Augmented Generation, 검색 증강 생성)**는 LLM이 질문에 답변할 때, 관련된 정보를 외부 문서에서 ‘검색(Retrieval)’하여 그 내용을 ‘참고(Augmented)’해서 답변을 ‘생성(Generation)’하는 기술입니다. 이를 통해 LLM이 알지 못하는 최신 정보나 특정 문서의 내용에 대해서도 정확한 답변을 할 수 있게 됩니다.</p>
+<p>이 과정의 핵심은 <strong>임베딩(Embedding)</strong> 입니다. 임베딩은 텍스트(단어, 문장, 문서)를 의미를 담은 숫자들의 벡터(vector)로 변환하는 과정입니다. 이렇게 변환하면 컴퓨터가 “의미적으로 비슷한” 텍스트들을 수학적으로 계산(벡터 간의 거리 측정)하여 찾을 수 있게 됩니다.</p>
+<h3 id="📝-2단계-임베딩-및-벡터-스토어-생성-embed-file-함수"><a href="#📝-2단계-임베딩-및-벡터-스토어-생성-embed-file-함수" class="headerlink" title="📝 2단계: 임베딩 및 벡터 스토어 생성 (embed_file 함수)"></a>📝 2단계: 임베딩 및 벡터 스토어 생성 (<code>embed_file</code> 함수)</h3><p>이제 텍스트 전문을 임베딩하고, 검색이 가능하도록 벡터 스토어(Vector Store)에 저장하는 함수를 만들어 보겠습니다.</p>
+<p><strong>추가된 코드 (<code>pages/05_MeetingGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.storage <span class="keyword">import</span> LocalFileStore</span><br><span class="line"><span class="keyword">from</span> langchain.vectorstores.faiss <span class="keyword">import</span> FAISS</span><br><span class="line"><span class="keyword">from</span> langchain.embeddings <span class="keyword">import</span> CacheBackedEmbeddings, OpenAIEmbeddings</span><br><span class="line"></span><br><span class="line"><span class="meta">@st.cache_data()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">embed_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    <span class="comment"># 임베딩을 저장할 캐시 디렉토리를 설정합니다.</span></span><br><span class="line">    cache_dir = LocalFileStore(<span class="string">f&quot;./.cache/embeddings/<span class="subst">&#123;os.path.basename(file_path)&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    loader = TextLoader(file_path)</span><br><span class="line">    docs = loader.load_and_split(text_splitter=splitter)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># OpenAI 임베딩 모델을 정의합니다.</span></span><br><span class="line">    embeddings = OpenAIEmbeddings()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 디스크에 임베딩을 캐싱하는 기능을 추가합니다.</span></span><br><span class="line">    cached_embeddings = CacheBackedEmbeddings.from_bytes_store(embeddings, cache_dir)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 문서들을 임베딩하고 FAISS 벡터 스토어에 저장합니다.</span></span><br><span class="line">    vectorstore = FAISS.from_documents(docs, cached_embeddings)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 벡터 스토어를 retriever로 변환하여 반환합니다.</span></span><br><span class="line">    retriever = vectorstore.as_retriever()</span><br><span class="line">    <span class="keyword">return</span> retriever</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-10"><a href="#🔍-코드-상세-설명-10" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>OpenAIEmbeddings</code></strong>: OpenAI의 임베딩 모델(예: <code>text-embedding-ada-002</code>)을 사용하여 텍스트를 벡터로 변환합니다.</li>
+<li><strong><code>LocalFileStore</code></strong>: 지정된 경로의 로컬 디스크에 데이터를 저장하는 간단한 저장소입니다.</li>
+<li><strong><code>CacheBackedEmbeddings</code></strong>: 아주 유용한 기능입니다. <code>embeddings</code> 모델을 <code>cache_dir</code> 저장소로 감싸줍니다. 어떤 텍스트에 대한 임베딩을 요청받으면, 먼저 캐시에 해당 임베딩이 있는지 확인합니다. 있으면 API를 호출하지 않고 캐시에서 바로 가져오고, 없으면 API를 호출하여 임베딩을 생성한 뒤 캐시에 저장합니다. API 호출 비용과 시간을 크게 절약해 줍니다.</li>
+<li><strong><code>FAISS</code></strong>: Facebook AI에서 만든, 매우 빠른 유사도 검색 라이브러리입니다. <code>FAISS.from_documents</code>는 문서들과 임베딩을 받아 FAISS 벡터 스토어를 구축합니다.</li>
+<li><strong><code>vectorstore.as_retriever()</code></strong>: 벡터 스토어를 ‘검색기(retriever)’ 객체로 변환합니다. 이 retriever는 “질문(query)을 받으면 가장 관련성 높은 문서들을 찾아주는” 역할을 합니다.</li>
+</ul>
+<h3 id="📝-3단계-Q-A-탭-구현"><a href="#📝-3단계-Q-A-탭-구현" class="headerlink" title="📝 3단계: Q&amp;A 탭 구현"></a>📝 3단계: Q&amp;A 탭 구현</h3><p>이제 Q&amp;A 탭에서 retriever를 사용하여 질문과 관련된 문서 조각을 검색하는 기능을 구현합니다.</p>
+<p><strong>추가된 코드 (<code>pages/05_MeetingGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> qa_tab:</span><br><span class="line">    <span class="comment"># 1. 벡터 스토어/retriever 생성</span></span><br><span class="line">    retriever = embed_file(transcript_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. retriever를 사용하여 문서 검색 (테스트)</span></span><br><span class="line">    docs = retriever.invoke(<span class="string">&quot;do they talk about marcus aurelius?&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 검색된 결과 표시</span></span><br><span class="line">    st.write(docs)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-11"><a href="#🔍-코드-상세-설명-11" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>retriever = embed_file(...)</code></strong>: 위에서 만든 함수를 호출하여 retriever를 가져옵니다. <code>@st.cache_data</code> 덕분에 이 비싼 과정은 파일 당 한 번만 실행됩니다.</li>
+<li><strong><code>retriever.invoke(&quot;...&quot;)</code></strong>: retriever의 가장 중요한 기능입니다. 여기에 질문을 던지면, 벡터 스토어에서 질문과 의미적으로 가장 유사한(관련성이 높은) 문서 조각들을 찾아 리스트 형태로 반환합니다.</li>
+<li><code>st.write(docs)</code>는 현재 검색된 문서 조각들을 그대로 보여줍니다. 실제 챗봇을 만들려면 이 <code>docs</code>와 사용자의 질문을 함께 LLM에게 보내 “이 문서들을 참고해서 질문에 답해줘” 라는 프롬프트를 구성해야 합니다. (이 부분은 다음 챕터에서 더 자세히 다룹니다.)</li>
+</ul>
+<h3 id="✅-체크리스트-7"><a href="#✅-체크리스트-7" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> RAG가 무엇인지, 왜 필요한지 설명할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> 임베딩과 벡터 스토어의 역할을 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>CacheBackedEmbeddings</code>가 어떻게 시간과 비용을 절약해 주는지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>retriever</code>가 어떤 역할을 하는지 알고 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-7"><a href="#💡-연습-과제-7" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>질문 입력 UI 만들기</strong>: 현재는 질문이 하드코딩되어 있습니다. <code>st.text_input</code>을 사용하여 사용자가 직접 질문을 입력할 수 있는 UI를 만들고, 사용자가 입력한 질문으로 문서를 검색하도록 코드를 수정해 보세요.</li>
+<li><strong>검색 결과 개수 조절</strong>: <code>vectorstore.as_retriever()</code>를 호출할 때 <code>search_kwargs={&quot;k&quot;: 5}</code> 와 같은 인자를 추가하면 검색 결과의 개수를 조절할 수 있습니다. <code>k</code> 값을 1, 3, 5로 바꿔보면서 결과가 어떻게 달라지는지 확인해 보세요.</li>
+</ol>
+<hr>
+<h2 id="🎓-요약"><a href="#🎓-요약" class="headerlink" title="🎓 요약"></a>🎓 요약</h2><p>축하합니다! MeetingGPT를 완성하며 정말 많은 것을 배웠습니다.</p>
+<ul>
+<li>비디오에서 오디오를 추출하고(<code>ffmpeg</code>), 작은 조각으로 나누고(<code>pydub</code>), 텍스트로 변환하는(<code>Whisper</code>) <strong>미디어 처리 파이프라인</strong>을 구축했습니다.</li>
+<li>사용자가 파일을 업로드하고(<code>st.file_uploader</code>), 처리 과정을 지켜보고(<code>st.status</code>), 결과를 탭으로(<code>st.tabs</code>) 확인할 수 있는 <strong>Streamlit 웹 애플리케이션</strong>을 만들었습니다.</li>
+<li>비싼 계산 결과를 저장하여 재사용하는 <strong>캐싱</strong>(<code>@st.cache_data</code>, <code>CacheBackedEmbeddings</code>)의 중요성을 배웠습니다.</li>
+<li>LangChain을 사용하여 긴 문서를 점진적으로 요약하는 <strong>Refine Chain</strong>과, 문서 기반 Q&amp;A를 가능하게 하는 <strong>RAG</strong> 아키텍처를 직접 구현해 보았습니다.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/langchain/" rel="tag"><i class="fa fa-tag"></i> langchain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_8/" rel="prev" title="8. 웹사이트 전체를 아는 챗봇, SiteGPT">
+                  <i class="fa fa-angle-left"></i> 8. 웹사이트 전체를 아는 챗봇, SiteGPT
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chatper_10/" rel="next" title="10. InvestorGPT - 자율적으로 조사하고 분석하는 AI 에이전트 만들기">
+                  10. InvestorGPT - 자율적으로 조사하고 분석하는 AI 에이전트 만들기 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

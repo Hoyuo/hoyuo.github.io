@@ -110,7 +110,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">10</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">13</span></a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
         </a>
@@ -173,7 +173,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">포스트</span>
         </a>
       </div>
@@ -196,6 +196,256 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chatper_12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/10/06/langchain/lecture_chatper_12/" class="post-title-link" itemprop="url">12. OpenAI Assistants API로 AI 비서 만들기</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:22" itemprop="dateCreated datePublished" datetime="2025-10-06T00:22:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>이 장에서는 OpenAI의 강력한 Assistants API를 사용하여 한 단계 더 발전된 AI 애플리케이션을 구축합니다. 단순한 일회성 질의응답을 넘어, 대화의 맥락을 기억하고, 외부 도구를 사용하여 정보를 가져오거나 작업을 수행하며, 심지어 사용자가 제공한 파일을 읽고 그 내용을 기반으로 답변하는 ‘AI 비서’를 만드는 전체 과정을 학습합니다.</p>
+<h2 id="이-장에서-배울-내용"><a href="#이-장에서-배울-내용" class="headerlink" title="이 장에서 배울 내용"></a>이 장에서 배울 내용</h2><ul>
+<li><strong>Assistants API의 핵심 개념</strong>: Assistant, Thread, Message, Run 등 Assistants API를 구성하는 핵심 객체들의 역할과 관계를 이해합니다.</li>
+<li><strong>Tool-Using Assistant</strong>: AI 비서가 웹 검색, 데이터베이스 조회 등 외부 세계와 상호작용할 수 있도록 ‘도구(Tool)’를 정의하고 연결하는 방법을 배웁니다.</li>
+<li><strong>상태 관리(Stateful Conversation)</strong>: <code>Thread</code>를 사용하여 여러 차례의 질문과 답변에 걸쳐 대화의 맥락을 유지하는 방법을 익힙니다.</li>
+<li><strong>비동기 처리 및 Function Calling</strong>: AI가 도구 사용을 요청할 때(<code>requires_action</code>), 해당 함수를 실행하고 그 결과를 다시 AI에게 전달하는 비동기 상호작용 루프를 구현합니다.</li>
+<li><strong>RAG (검색 증강 생성)</strong>: AI 비서에게 파일을 업로드하여 그 내용을 학습시키고, 파일 기반의 질문에 대해 출처를 인용하며 답변하는 RAG(Retrieval-Augmented Generation) 기능을 구현합니다.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/06/langchain/lecture_chatper_12/#more" rel="contents">
+                더 읽어보기 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chatper_10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/10/06/langchain/lecture_chatper_10/" class="post-title-link" itemprop="url">10. InvestorGPT - 자율적으로 조사하고 분석하는 AI 에이전트 만들기</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:20" itemprop="dateCreated datePublished" datetime="2025-10-06T00:20:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>이번 챕터에서는 지금까지 배운 모든 기술을 집약하여, 스스로 생각하고, 도구를 사용하며, 심지어 페르소나(개성)까지 가진 자율적인 AI, **에이전트(Agent)**를 만들어 보겠습니다. LangChain의 가장 강력하고 흥미로운 기능인 에이전트를 통해 “InvestorGPT”를 구축하는 과정을 함께 하겠습니다.</p>
+<h2 id="🎯-이번-챕터에서-배울-것"><a href="#🎯-이번-챕터에서-배울-것" class="headerlink" title="🎯 이번 챕터에서 배울 것"></a>🎯 이번 챕터에서 배울 것</h2><ul>
+<li><strong>LangChain Agent</strong>: LLM이 외부 도구와 상호작용하며 스스로 문제를 해결하는 에이전트의 개념을 이해합니다.</li>
+<li><strong>Tools</strong>: 에이전트가 사용할 수 있는 ‘도구’를 직접 만들고, <code>DuckDuckGo</code> 검색, <code>Alpha Vantage</code> 금융 API, <code>SQL Database</code> 등 다양한 외부 세계와 연결하는 방법을 배웁니다.</li>
+<li><strong>Agent Types</strong>: <code>ReAct</code>와 <code>OpenAI Functions</code> 등 다양한 에이전트 타입의 차이점과 사용법을 익힙니다.</li>
+<li><strong>System Prompt</strong>: 에이전트에게 “당신은 헤지펀드 매니저입니다”와 같은 역할과 페르소나를 부여하는 방법을 배웁니다.</li>
+<li><strong>Chain of Thought</strong>: 에이전트가 어떤 ‘생각’의 흐름으로 문제를 해결해 나가는지 그 과정을 상세히 분석합니다.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/06/langchain/lecture_chatper_10/#more" rel="contents">
+                더 읽어보기 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/10/06/langchain/lecture_chapter_9/" class="post-title-link" itemprop="url">9. MeetingGPT - 회의록 분석 및 요약 AI 만들기</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:19" itemprop="dateCreated datePublished" datetime="2025-10-06T00:19:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>안녕하세요! 이번 챕터에서는 회의나 강의 영상으로부터 자동으로 회의록을 만들고, 내용을 요약하고, 궁금한 점을 질문할 수 있는 “MeetingGPT” 애플리케이션을 만들어 보겠습니다. 비디오 파일 처리, 음성 인식, 그리고 LangChain을 이용한 자연어 처리까지 다양한 기술을 경험하게 될 것입니다.</p>
+<h2 id="🎯-이번-챕터에서-배울-것"><a href="#🎯-이번-챕터에서-배울-것" class="headerlink" title="🎯 이번 챕터에서 배울 것"></a>🎯 이번 챕터에서 배울 것</h2><ul>
+<li><strong>FFmpeg</strong>: 동영상에서 오디오를 추출하는 방법을 배웁니다.</li>
+<li><strong>Pydub</strong>: 긴 오디오 파일을 작은 조각으로 나누는 방법을 익힙니다.</li>
+<li><strong>OpenAI Whisper</strong>: 음성을 텍스트로 변환하는 STT(Speech-to-Text) 기술을 사용합니다.</li>
+<li><strong>Streamlit</strong>: 파일 업로드, 탭, 상태 메시지 등 다양한 UI 컴포넌트를 활용합니다.</li>
+<li><strong>LangChain</strong>: Refine Chain을 이용해 긴 문서를 요약하고, RAG(Retrieval-Augmented Generation) 기술로 문서 기반 Q&amp;A 챗봇을 구축합니다.</li>
+<li><strong>Caching</strong>: Streamlit의 캐싱 기능으로 앱의 성능을 최적화합니다.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/06/langchain/lecture_chapter_9/#more" rel="contents">
+                더 읽어보기 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -784,251 +1034,9 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chapter_1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoyuo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/06/langchain/lecture_chapter_1/" class="post-title-link" itemprop="url">1. LangChain의 첫걸음</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">작성일</span>
-
-      <time title="Post created: 2025-10-06 00:11" itemprop="dateCreated datePublished" datetime="2025-10-06T00:11:00+09:00">2025-10-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="🎯-이-챕터에서-배울-것"><a href="#🎯-이-챕터에서-배울-것" class="headerlink" title="🎯 이 챕터에서 배울 것"></a>🎯 이 챕터에서 배울 것</h2><ul>
-<li>LangChain을 사용하여 언어 모델(LLM)과 챗 모델을 초기화하는 방법</li>
-<li><code>predict</code>와 <code>predict_messages</code>의 차이점 이해하기</li>
-<li><code>PromptTemplate</code>을 사용하여 동적으로 프롬프트를 생성하는 방법</li>
-<li><code>OutputParser</code>를 사용하여 모델의 출력을 원하는 형식으로 변환하는 방법</li>
-<li>LangChain Expression Language (LCEL)을 사용하여 여러 구성 요소를 연결(chain)하는 방법</li>
-</ul>
-<hr>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/06/langchain/lecture_chapter_1/#more" rel="contents">
-                더 읽어보기 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/04/flutter/flutter-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoyuo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/04/flutter/flutter-1/" class="post-title-link" itemprop="url">1. Flutter TikTok Clone - 인증(Authentication)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">작성일</span>
-
-      <time title="Post created: 2025-10-04 12:10" itemprop="dateCreated datePublished" datetime="2025-10-04T12:10:00+09:00">2025-10-04</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="SignUp-Login-Screen-기본-화면-만들기"><a href="#SignUp-Login-Screen-기본-화면-만들기" class="headerlink" title="SignUp &amp; Login Screen 기본 화면 만들기"></a>SignUp &amp; Login Screen 기본 화면 만들기</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
-<li>Flutter 앱의 첫 화면 만들기</li>
-<li>회원가입과 로그인 화면의 기본 구조</li>
-<li>화면 간 이동(Navigation)하기</li>
-<li>재사용 가능한 위젯 만들기</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/04/flutter/flutter-1/#more" rel="contents">
-                더 읽어보기 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/04/flutter/flutter-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoyuo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoyuo's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/04/flutter/flutter-0/" class="post-title-link" itemprop="url">0. Flutter TikTok Clone - 초기 프로젝트 세팅</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">작성일</span>
-
-      <time title="Post created: 2025-10-04 12:00" itemprop="dateCreated datePublished" datetime="2025-10-04T12:00:00+09:00">2025-10-04</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Flutter-프로젝트-생성"><a href="#Flutter-프로젝트-생성" class="headerlink" title="Flutter 프로젝트 생성"></a>Flutter 프로젝트 생성</h2><h3 id="📌-학습-목표"><a href="#📌-학습-목표" class="headerlink" title="📌 학습 목표"></a>📌 학습 목표</h3><ul>
-<li>Flutter 프로젝트의 기본 구조를 이해합니다</li>
-<li>MaterialApp의 기본 설정 방법을 배웁니다</li>
-<li>프로젝트 초기 파일 구조를 파악합니다</li>
-<li>테마 색상 설정 방법을 이해합니다</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/04/flutter/flutter-0/#more" rel="contents">
-                더 읽어보기 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="다음 페이지" aria-label="다음 페이지" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
 
 </div>
   </main>

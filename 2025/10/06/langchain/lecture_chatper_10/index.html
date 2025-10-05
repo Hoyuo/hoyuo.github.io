@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="이번 챕터에서는 지금까지 배운 모든 기술을 집약하여, 스스로 생각하고, 도구를 사용하며, 심지어 페르소나(개성)까지 가진 자율적인 AI, **에이전트(Agent)**를 만들어 보겠습니다. LangChain의 가장 강력하고 흥미로운 기능인 에이전트를 통해 “InvestorGPT”를 구축하는 과정을 함께 하겠습니다. 🎯 이번 챕터에서 배울 것 LangChai">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10. InvestorGPT - 자율적으로 조사하고 분석하는 AI 에이전트 만들기">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/06/langchain/lecture_chatper_10/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="이번 챕터에서는 지금까지 배운 모든 기술을 집약하여, 스스로 생각하고, 도구를 사용하며, 심지어 페르소나(개성)까지 가진 자율적인 AI, **에이전트(Agent)**를 만들어 보겠습니다. LangChain의 가장 강력하고 흥미로운 기능인 에이전트를 통해 “InvestorGPT”를 구축하는 과정을 함께 하겠습니다. 🎯 이번 챕터에서 배울 것 LangChai">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-05T15:20:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="langchain">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chatper_10/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/06/langchain/lecture_chatper_10/","path":"2025/10/06/langchain/lecture_chatper_10/","title":"10. InvestorGPT - 자율적으로 조사하고 분석하는 AI 에이전트 만들기"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>10. InvestorGPT - 자율적으로 조사하고 분석하는 AI 에이전트 만들기 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">13</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EC%B1%95%ED%84%B0%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.</span> <span class="nav-text">🎯 이번 챕터에서 배울 것</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%B2%AB-%EB%B2%88%EC%A7%B8-LangChain-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">2.</span> <span class="nav-text">첫 번째 LangChain 에이전트 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-Agent-%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80"><span class="nav-number">2.2.</span> <span class="nav-text">📝 1단계: 에이전트(Agent)란 무엇인가?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EB%8F%84%EA%B5%AC-Tool-%EC%A0%95%EC%9D%98%ED%95%98%EA%B8%B0"><span class="nav-number">2.3.</span> <span class="nav-text">📝 2단계: 도구(Tool) 정의하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">2.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EC%83%9D%EC%84%B1-%EB%B0%8F-%EC%8B%A4%ED%96%89"><span class="nav-number">2.4.</span> <span class="nav-text">📝 3단계: 에이전트 생성 및 실행</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">2.4.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-4%EB%8B%A8%EA%B3%84-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%EC%9D%98-%EC%82%AC%EA%B3%A0-%EA%B3%BC%EC%A0%95-%EB%B6%84%EC%84%9D"><span class="nav-number">2.5.</span> <span class="nav-text">📝 4단계: 에이전트의 사고 과정 분석</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">2.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C"><span class="nav-number">2.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EA%B8%B0%EB%B3%B8-ReAct-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0"><span class="nav-number">3.</span> <span class="nav-text">기본 ReAct 에이전트 이해하기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%ED%83%80%EC%9E%85-%EB%B0%8F-%EB%8F%84%EA%B5%AC-%ED%98%95%EC%8B%9D-%EB%B3%80%EA%B2%BD"><span class="nav-number">3.2.</span> <span class="nav-text">📝 1단계: 에이전트 타입 및 도구 형식 변경</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">3.3.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-1"><span class="nav-number">3.4.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenAI-Functions-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B8%B0"><span class="nav-number">4.</span> <span class="nav-text">OpenAI Functions 에이전트 활용하기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Function-Calling%EC%9D%B4%EB%9E%80"><span class="nav-number">4.2.</span> <span class="nav-text">📝 1단계: Function Calling이란?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-Pydantic%EC%9C%BC%EB%A1%9C-%EC%9D%B8%EC%9E%90-%EC%8A%A4%ED%82%A4%EB%A7%88-%EC%A0%95%EC%9D%98-%EB%B0%8F-%EC%BB%A4%EC%8A%A4%ED%85%80-%EB%8F%84%EA%B5%AC-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">4.3.</span> <span class="nav-text">📝 2단계: Pydantic으로 인자 스키마 정의 및 커스텀 도구 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">4.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-OPENAI-FUNCTIONS-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EC%83%9D%EC%84%B1"><span class="nav-number">4.4.</span> <span class="nav-text">📝 3단계: OPENAI_FUNCTIONS 에이전트 생성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">4.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-2"><span class="nav-number">4.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%EC%97%90%EA%B2%8C-%EA%B2%80%EC%83%89-%EB%8A%A5%EB%A0%A5-%EB%B6%80%EC%97%AC%ED%95%98%EA%B8%B0"><span class="nav-number">5.</span> <span class="nav-text">에이전트에게 검색 능력 부여하기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">5.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EA%B2%80%EC%83%89-%EB%8F%84%EA%B5%AC-Search-Tool-%EC%9D%98-%ED%95%84%EC%9A%94%EC%84%B1"><span class="nav-number">5.2.</span> <span class="nav-text">📝 1단계: 검색 도구(Search Tool)의 필요성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EA%B2%80%EC%83%89-%EB%8F%84%EA%B5%AC-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">5.3.</span> <span class="nav-text">📝 2단계: 검색 도구 만들기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-%EA%B2%80%EC%83%89-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EC%8B%A4%ED%96%89-%EB%B0%8F-%EB%B6%84%EC%84%9D"><span class="nav-number">5.4.</span> <span class="nav-text">📝 3단계: 검색 에이전트 실행 및 분석</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">5.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-3"><span class="nav-number">5.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%A0%84%EB%AC%B8%EC%A0%81%EC%9D%B8-%EA%B8%88%EC%9C%B5-%EB%8F%84%EA%B5%AC-%EC%84%B8%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">6.</span> <span class="nav-text">전문적인 금융 도구 세트 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-4"><span class="nav-number">6.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%A0%84%EB%AC%B8-%EB%8F%84%EA%B5%AC%EC%9D%98-%ED%95%84%EC%9A%94%EC%84%B1"><span class="nav-number">6.2.</span> <span class="nav-text">📝 1단계: 전문 도구의 필요성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-Alpha-Vantage-API-%EB%B0%8F-%EA%B8%88%EC%9C%B5-%EB%8F%84%EA%B5%AC-%EA%B5%AC%ED%98%84"><span class="nav-number">6.3.</span> <span class="nav-text">📝 2단계: Alpha Vantage API 및 금융 도구 구현</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%EC%9D%98-%EB%8F%84%EA%B5%AC-%EC%83%81%EC%9E%90-%ED%99%95%EC%9E%A5-%EB%B0%8F-%EB%8B%A4%EB%8B%A8%EA%B3%84-%EC%B6%94%EB%A1%A0-%EB%B6%84%EC%84%9D"><span class="nav-number">6.4.</span> <span class="nav-text">📝 3단계: 에이전트의 도구 상자 확장 및 다단계 추론 분석</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-4"><span class="nav-number">6.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-4"><span class="nav-number">6.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%EC%97%90%EA%B2%8C-%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98-%EB%B6%80%EC%97%AC%ED%95%98%EA%B8%B0-%EC%8B%9C%EC%8A%A4%ED%85%9C-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8"><span class="nav-number">7.</span> <span class="nav-text">에이전트에게 페르소나 부여하기 (시스템 프롬프트)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-5"><span class="nav-number">7.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%8B%9C%EC%8A%A4%ED%85%9C-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-System-Prompt-%EB%9E%80"><span class="nav-number">7.2.</span> <span class="nav-text">📝 1단계: 시스템 프롬프트(System Prompt)란?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%EC%97%90-%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98-%EC%A3%BC%EC%9E%85%ED%95%98%EA%B8%B0"><span class="nav-number">7.3.</span> <span class="nav-text">📝 2단계: 에이전트에 페르소나 주입하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-4"><span class="nav-number">7.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-InvestorGPT-%EC%95%B1-%EA%B5%AC%ED%98%84"><span class="nav-number">7.4.</span> <span class="nav-text">📝 3단계: InvestorGPT 앱 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-5"><span class="nav-number">7.4.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-5"><span class="nav-number">7.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-5"><span class="nav-number">7.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4%EC%99%80-%EB%8C%80%ED%99%94%ED%95%98%EB%8A%94-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8"><span class="nav-number">8.</span> <span class="nav-text">SQL 데이터베이스와 대화하는 에이전트</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-6"><span class="nav-number">8.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Text-to-SQL%EA%B3%BC-SQL-%ED%88%B4%ED%82%B7"><span class="nav-number">8.2.</span> <span class="nav-text">📝 1단계: Text-to-SQL과 SQL 툴킷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-SQL-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EC%83%9D%EC%84%B1"><span class="nav-number">8.3.</span> <span class="nav-text">📝 2단계: SQL 에이전트 생성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%ED%83%90%EC%83%89-%EB%B0%8F-%EC%BF%BC%EB%A6%AC-%EC%83%9D%EC%84%B1-%EA%B3%BC%EC%A0%95-%EB%B6%84%EC%84%9D"><span class="nav-number">8.4.</span> <span class="nav-text">📝 3단계: 데이터베이스 탐색 및 쿼리 생성 과정 분석</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-6"><span class="nav-number">8.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-6"><span class="nav-number">8.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%B1%95%ED%84%B0-%EA%B2%B0%EB%A1%A0-%EB%B0%8F-%EC%9A%94%EC%95%BD"><span class="nav-number">9.</span> <span class="nav-text">챕터 결론 및 요약</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-7"><span class="nav-number">9.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-InvestorGPT-%EC%95%B1-%EC%99%84%EC%84%B1"><span class="nav-number">9.2.</span> <span class="nav-text">📝 1단계: InvestorGPT 앱 완성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EC%B1%95%ED%84%B0-%EC%B4%9D%EC%A0%95%EB%A6%AC"><span class="nav-number">9.3.</span> <span class="nav-text">📝 2단계: 에이전트 챕터 총정리</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%EC%9D%98-%EB%AC%B4%ED%95%9C%ED%95%9C-%EA%B0%80%EB%8A%A5%EC%84%B1"><span class="nav-number">9.4.</span> <span class="nav-text">📝 3단계: 에이전트의 무한한 가능성</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/06/langchain/lecture_chatper_10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="10. InvestorGPT - 자율적으로 조사하고 분석하는 AI 에이전트 만들기 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          10. InvestorGPT - 자율적으로 조사하고 분석하는 AI 에이전트 만들기
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-06 00:20" itemprop="dateCreated datePublished" datetime="2025-10-06T00:20:00+09:00">2025-10-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>이번 챕터에서는 지금까지 배운 모든 기술을 집약하여, 스스로 생각하고, 도구를 사용하며, 심지어 페르소나(개성)까지 가진 자율적인 AI, **에이전트(Agent)**를 만들어 보겠습니다. LangChain의 가장 강력하고 흥미로운 기능인 에이전트를 통해 “InvestorGPT”를 구축하는 과정을 함께 하겠습니다.</p>
+<h2 id="🎯-이번-챕터에서-배울-것"><a href="#🎯-이번-챕터에서-배울-것" class="headerlink" title="🎯 이번 챕터에서 배울 것"></a>🎯 이번 챕터에서 배울 것</h2><ul>
+<li><strong>LangChain Agent</strong>: LLM이 외부 도구와 상호작용하며 스스로 문제를 해결하는 에이전트의 개념을 이해합니다.</li>
+<li><strong>Tools</strong>: 에이전트가 사용할 수 있는 ‘도구’를 직접 만들고, <code>DuckDuckGo</code> 검색, <code>Alpha Vantage</code> 금융 API, <code>SQL Database</code> 등 다양한 외부 세계와 연결하는 방법을 배웁니다.</li>
+<li><strong>Agent Types</strong>: <code>ReAct</code>와 <code>OpenAI Functions</code> 등 다양한 에이전트 타입의 차이점과 사용법을 익힙니다.</li>
+<li><strong>System Prompt</strong>: 에이전트에게 “당신은 헤지펀드 매니저입니다”와 같은 역할과 페르소나를 부여하는 방법을 배웁니다.</li>
+<li><strong>Chain of Thought</strong>: 에이전트가 어떤 ‘생각’의 흐름으로 문제를 해결해 나가는지 그 과정을 상세히 분석합니다.</li>
+</ul>
+<hr>
+<h2 id="첫-번째-LangChain-에이전트-만들기"><a href="#첫-번째-LangChain-에이전트-만들기" class="headerlink" title="첫 번째 LangChain 에이전트 만들기"></a>첫 번째 LangChain 에이전트 만들기</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>LangChain 에이전트(Agent)의 기본 개념 이해하기</li>
+<li>에이전트가 사용할 도구(Tool)를 정의하는 방법 배우기</li>
+<li><code>initialize_agent</code>를 사용하여 에이전트를 생성하고 실행하는 방법 익히기</li>
+<li>에이전트의 “사고 과정(Thought Process)”을 분석하고 이해하기 (ReAct 프레임워크)</li>
+</ul>
+<h3 id="📝-1단계-에이전트-Agent-란-무엇인가"><a href="#📝-1단계-에이전트-Agent-란-무엇인가" class="headerlink" title="📝 1단계: 에이전트(Agent)란 무엇인가?"></a>📝 1단계: 에이전트(Agent)란 무엇인가?</h3><p>에이전트는 LLM을 한 단계 더 발전시킨 개념입니다. 단순히 주어진 텍스트에 이어 답변을 생성하는 것을 넘어, <strong>목표를 달성하기 위해 스스로 생각하고, 계획을 세우고, 필요에 따라 도구를 사용하는</strong> 자율적인 행위자입니다.</p>
+<ul>
+<li><strong>두뇌 (Brain)</strong>: LLM (예: GPT-4)이 추론과 계획을 담당합니다.</li>
+<li><strong>손과 발 (Hands &amp; Feet)</strong>: ‘도구(Tools)’를 사용하여 LLM이 할 수 없는 일(계산, 웹 검색, API 호출 등)을 수행합니다.</li>
+</ul>
+<p>에이전트는 이 두뇌와 손발을 연결하여, 복잡한 문제도 여러 단계를 거쳐 해결할 수 있습니다.</p>
+<h3 id="📝-2단계-도구-Tool-정의하기"><a href="#📝-2단계-도구-Tool-정의하기" class="headerlink" title="📝 2단계: 도구(Tool) 정의하기"></a>📝 2단계: 도구(Tool) 정의하기</h3><p>에이전트에게 가장 먼저 필요한 것은 바로 ‘도구’입니다. LLM은 수학 계산에 매우 취약하기 때문에, 간단한 덧셈을 수행하는 도구를 만들어 보겠습니다.</p>
+<p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.tools <span class="keyword">import</span> StructuredTool</span><br><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> initialize_agent, AgentType</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 도구로 사용할 일반 파이썬 함수를 정의합니다.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plus</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 함수를 StructuredTool로 감싸줍니다.</span></span><br><span class="line">tools = [</span><br><span class="line">    StructuredTool.from_function(</span><br><span class="line">        func=plus,</span><br><span class="line">        name=<span class="string">&quot;Sum Calculator&quot;</span>,</span><br><span class="line">        description=<span class="string">&quot;Use this to perform sums of two numbers. This tool take two arguments, both should be numbers.&quot;</span>,</span><br><span class="line">    ),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>StructuredTool.from_function</code></strong>: 일반 파이썬 함수를 LangChain 에이전트가 사용할 수 있는 도구로 만들어 줍니다.</li>
+<li><strong><code>name</code></strong>: 도구의 이름입니다. 에이전트가 어떤 도구를 호출할지 결정할 때 사용됩니다.</li>
+<li><strong><code>description</code></strong>: <strong>매우 중요합니다.</strong> 에이전트는 이 설명을 보고 “이 도구가 어떤 상황에 필요한지”, “어떻게 사용해야 하는지”를 판단합니다. 설명이 명확하고 상세할수록 에이전트가 더 똑똑하게 행동합니다.</li>
+</ul>
+<h3 id="📝-3단계-에이전트-생성-및-실행"><a href="#📝-3단계-에이전트-생성-및-실행" class="headerlink" title="📝 3단계: 에이전트 생성 및 실행"></a>📝 3단계: 에이전트 생성 및 실행</h3><p>이제 도구를 사용할 에이전트를 만듭니다.</p>
+<p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">agent = initialize_agent(</span><br><span class="line">    llm=llm,</span><br><span class="line">    verbose=<span class="literal">True</span>, <span class="comment"># 에이전트의 생각 과정을 모두 출력합니다.</span></span><br><span class="line">    agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,</span><br><span class="line">    tools=tools,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">prompt = <span class="string">&quot;Cost of $355.39 + $924.87 + $721.2 + $1940.29 + $573.63 + $65.72 + $35.00 + $552.00 + $76.16 + $29.12&quot;</span></span><br><span class="line"></span><br><span class="line">agent.invoke(prompt)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-1"><a href="#🔍-코드-상세-설명-1" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>initialize_agent</code></strong>: LLM, 도구, 에이전트 타입을 조합하여 에이전트를 생성합니다.</li>
+<li><strong><code>verbose=True</code></strong>: 에이전트의 내부 “생각”을 모두 보여주는 설정입니다. 디버깅과 학습에 매우 유용합니다.</li>
+<li><strong><code>agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION</code></strong>: 에이전트의 행동 방식을 결정하는 타입입니다.<ul>
+<li><strong>ReAct</strong>: <strong>Re</strong>ason(추론)과 <strong>Act</strong>(행동)의 약자입니다. 에이전트가 생각하고, 행동(도구 사용)하고, 관찰하고, 다시 생각하는 과정을 반복합니다.</li>
+<li><strong>STRUCTURED_CHAT</strong>: <code>plus(a, b)</code>처럼 여러 인자를 가진 구조화된 도구에 특화된 타입입니다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="📝-4단계-에이전트의-사고-과정-분석"><a href="#📝-4단계-에이전트의-사고-과정-분석" class="headerlink" title="📝 4단계: 에이전트의 사고 과정 분석"></a>📝 4단계: 에이전트의 사고 과정 분석</h3><p><code>verbose=True</code> 덕분에 우리는 에이전트의 머릿속을 들여다볼 수 있습니다. 출력된 로그는 다음과 같은 <strong>“Thought -&gt; Action -&gt; Observation”</strong> 루프를 보여줍니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&gt; Entering new AgentExecutor chain...</span><br><span class="line"></span><br><span class="line">Thought: To calculate the sum of these numbers, I will use the Sum Calculator tool.</span><br><span class="line">Action:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;action&quot;: &quot;Sum Calculator&quot;,</span><br><span class="line">  &quot;action_input&quot;: &#123;&quot;a&quot;: 355.39, &quot;b&quot;: 924.87&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Observation: 1280.26</span><br><span class="line"></span><br><span class="line">Thought: Now that I have the sum of the first two numbers, I can continue calculating the sum of the remaining numbers.</span><br><span class="line">Action:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;action&quot;: &quot;Sum Calculator&quot;,</span><br><span class="line">  &quot;action_input&quot;: &#123;&quot;a&quot;: 1280.26, &quot;b&quot;: 721.2&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Observation: 2001.46</span><br><span class="line"></span><br><span class="line">... (이 과정을 계속 반복) ...</span><br><span class="line"></span><br><span class="line">Thought: Now that I have the sum of all the numbers, I can provide the final answer.</span><br><span class="line">Final Answer: The sum of ... is $5273.38.</span><br><span class="line"></span><br><span class="line">&gt; Finished chain.</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Thought</strong>: 에이전트는 먼저 무엇을 해야 할지 생각합니다. “이 숫자들을 더하려면 Sum Calculator 도구를 써야겠다.”</li>
+<li><strong>Action</strong>: 생각에 따라 <code>Sum Calculator</code> 도구를 호출하고, 필요한 인자 <code>a</code>와 <code>b</code>를 전달합니다.</li>
+<li><strong>Observation</strong>: 도구 실행 결과를 관찰합니다. <code>1280.26</code>이라는 결과를 얻었습니다.</li>
+<li><strong>Repeat</strong>: 에이전트는 이 관찰 결과를 바탕으로 다음 생각을 합니다. “이제 첫 두 숫자의 합을 구했으니, 여기에 다음 숫자를 더해야겠다.” 그리고 다시 Action을 수행합니다.</li>
+<li>이 과정을 모든 숫자를 더할 때까지 반복한 뒤, 최종 답변을 생성합니다.</li>
+</ul>
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 에이전트가 LLM과 어떻게 다른지 설명할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> 도구를 만들 때 <code>description</code>이 왜 중요한지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> ReAct 프레임워크의 “Thought -&gt; Action -&gt; Observation” 순환 과정을 이해했나요?</li>
+</ul>
+<h3 id="💡-연습-과제"><a href="#💡-연습-과제" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>곱셈 도구 추가</strong>: <code>plus</code> 함수와 <code>StructuredTool</code>을 참고하여, 두 숫자를 곱하는 <code>multiply</code> 함수와 <code>Multiply Calculator</code> 도구를 만들어 보세요. 그리고 <code>tools</code> 리스트에 추가한 뒤, 덧셈과 곱셈이 섞인 질문(예: “(123 * 4) + 56”)을 던져보세요. 에이전트가 두 도구를 잘 구분해서 사용하나요?</li>
+</ol>
+<hr>
+<h2 id="기본-ReAct-에이전트-이해하기"><a href="#기본-ReAct-에이전트-이해하기" class="headerlink" title="기본 ReAct 에이전트 이해하기"></a>기본 ReAct 에이전트 이해하기</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>ZERO_SHOT_REACT_DESCRIPTION</code> 에이전트 타입의 특징 이해하기</li>
+<li>단일 문자열 입력을 받는 간단한 <code>Tool</code>을 정의하는 방법 배우기</li>
+<li><code>StructuredTool</code>과 <code>Tool</code>의 차이점 비교하기</li>
+<li><code>handle_parsing_errors</code>의 역할과 중요성 이해하기</li>
+</ul>
+<h3 id="📝-1단계-에이전트-타입-및-도구-형식-변경"><a href="#📝-1단계-에이전트-타입-및-도구-형식-변경" class="headerlink" title="📝 1단계: 에이전트 타입 및 도구 형식 변경"></a>📝 1단계: 에이전트 타입 및 도구 형식 변경</h3><p>이전 단계에서 사용한 <code>STRUCTURED_CHAT_...</code> 에이전트는 여러 인자를 받는 복잡한 도구에 특화되어 있습니다. 이번에는 더 기본적이고 일반적인 <code>ZERO_SHOT_REACT_DESCRIPTION</code> 에이전트와, 이 에이전트가 사용하는 간단한 <code>Tool</code> 형식을 알아보겠습니다.</p>
+<p><strong>비교 예시:</strong></p>
+<p><strong>Before (10.1):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 함수가 여러 인자를 직접 받음</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plus</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line">StructuredTool.from_function(</span><br><span class="line">    func=plus,</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">agent = initialize_agent(</span><br><span class="line">    agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>After (10.3):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.tools <span class="keyword">import</span> Tool</span><br><span class="line"></span><br><span class="line"><span class="comment"># 함수가 하나의 문자열 인자만 받음</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plus</span>(<span class="params">inputs</span>):</span><br><span class="line">    <span class="comment"># 함수 내부에서 문자열을 직접 파싱(parsing)해야 함</span></span><br><span class="line">    a, b = inputs.split(<span class="string">&quot;,&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">float</span>(a) + <span class="built_in">float</span>(b)</span><br><span class="line"></span><br><span class="line">Tool.from_function(</span><br><span class="line">    func=plus,</span><br><span class="line">    name=<span class="string">&quot;Sum Calculator&quot;</span>,</span><br><span class="line">    <span class="comment"># 도구 설명에 입력 형식 예시를 명확히 알려줘야 함</span></span><br><span class="line">    description=<span class="string">&quot;Use this to perform sums of two numbers. Use this tool by sending a pair of number separated by a comma.\nExample:1,2&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">agent = initialize_agent(</span><br><span class="line">    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,</span><br><span class="line">    handle_parsing_errors=<span class="literal">True</span>, <span class="comment"># 에러 처리 기능 추가</span></span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-2"><a href="#🔍-코드-상세-설명-2" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>Tool</code> vs <code>StructuredTool</code></strong>: <code>StructuredTool</code>이 함수 시그니처(<code>def plus(a, b)</code>)를 보고 알아서 인자를 처리해준 반면, 기본 <code>Tool</code>은 함수에 <strong>무조건 하나의 문자열</strong>만 전달합니다. 따라서 개발자가 <code>inputs.split(&quot;,&quot;)</code>처럼 직접 문자열을 해석(parsing)하는 로직을 함수 안에 만들어야 합니다.</li>
+<li><strong><code>description</code>의 중요성 증가</strong>: 에이전트가 <code>1,2</code>와 같은 형식의 문자열을 만들도록 <code>description</code>에 <code>Example:1,2</code> 처럼 매우 구체적인 가이드를 제공해야 합니다. <code>StructuredTool</code>을 쓸 때보다 더 명시적으로 알려줘야 합니다.</li>
+<li><strong><code>AgentType.ZERO_SHOT_REACT_DESCRIPTION</code></strong>: 여러 인자를 받는 복잡한 도구 대신, 단일 문자열 입력을 받는 간단한 도구들과 함께 사용되는 가장 일반적인 ReAct 에이전트입니다.</li>
+<li><strong><code>handle_parsing_errors=True</code></strong>: 에이전트가 <code>Action Input</code>을 잘못된 형식으로 만들었을 때(예: <code>1, 2, 3</code> 처럼 인자를 3개 보낼 때) 에러로 멈추는 대신, “네가 만든 형식을 파싱할 수 없어. 다시 시도해줘.” 라고 스스로에게 알려주어 에이전트가 실수를 바로잡을 기회를 줍니다. 에이전트의 안정성을 높여주는 중요한 옵션입니다.</li>
+</ul>
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>StructuredTool</code>과 <code>Tool</code>의 가장 큰 차이점(인자 처리 방식)을 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>ZERO_SHOT_REACT_DESCRIPTION</code> 에이전트를 사용할 때 왜 <code>description</code>에 입력 형식 예시를 적어주는 것이 좋은지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>handle_parsing_errors</code>가 왜 필요한지 설명할 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-1"><a href="#💡-연습-과제-1" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>문자열 도구 만들기</strong>: 두 개의 문자열을 입력받아 하나로 합쳐주는 <code>concatenate</code> 함수와 <code>Concatenator</code> 도구를 <code>Tool.from_function</code>을 사용하여 만들어 보세요. (예: 입력: <code>&quot;hello,world&quot;</code>, 출력: <code>&quot;helloworld&quot;</code>)</li>
+</ol>
+<hr>
+<h2 id="OpenAI-Functions-에이전트-활용하기"><a href="#OpenAI-Functions-에이전트-활용하기" class="headerlink" title="OpenAI Functions 에이전트 활용하기"></a>OpenAI Functions 에이전트 활용하기</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>OpenAI의 “Function Calling” 기능과 그 장점 이해하기</li>
+<li><code>Pydantic</code>을 사용하여 도구의 인자(argument) 스키마를 명확하게 정의하는 방법 배우기</li>
+<li><code>BaseTool</code>을 상속받아 직접 커스텀 도구를 만드는 방법 익히기</li>
+<li><code>OPENAI_FUNCTIONS</code> 에이전트 타입의 작동 원리 이해하기</li>
+</ul>
+<h3 id="📝-1단계-Function-Calling이란"><a href="#📝-1단계-Function-Calling이란" class="headerlink" title="📝 1단계: Function Calling이란?"></a>📝 1단계: Function Calling이란?</h3><p>최신 OpenAI 모델(gpt-3.5-turbo-1106, gpt-4 등)들은 <strong>Function Calling</strong>이라는 특별한 기능을 내장하고 있습니다. 이는 LLM이 단순히 텍스트를 생성하는 것을 넘어, 개발자가 정의한 함수(도구)의 이름과 인자들을 <strong>구조화된 JSON 형식으로 출력</strong>하는 기능입니다.</p>
+<ul>
+<li><strong>ReAct 에이전트</strong>: LLM이 <code>Action: Sum Calculator\nAction Input: 1,2</code> 와 같은 <strong>텍스트</strong>를 생성하면, LangChain이 이 텍스트를 파싱하여 도구를 실행합니다. 텍스트 기반이라 실수가 잦을 수 있습니다.</li>
+<li><strong>Functions 에이전트</strong>: LLM이 <code>{&quot;name&quot;: &quot;Sum Calculator&quot;, &quot;arguments&quot;: {&quot;a&quot;: 1, &quot;b&quot;: 2}}</code> 와 같은 <strong>JSON</strong>을 직접 출력합니다. 훨씬 안정적이고 명확합니다.</li>
+</ul>
+<h3 id="📝-2단계-Pydantic으로-인자-스키마-정의-및-커스텀-도구-만들기"><a href="#📝-2단계-Pydantic으로-인자-스키마-정의-및-커스텀-도구-만들기" class="headerlink" title="📝 2단계: Pydantic으로 인자 스키마 정의 및 커스텀 도구 만들기"></a>📝 2단계: Pydantic으로 인자 스키마 정의 및 커스텀 도구 만들기</h3><p>Function Calling을 사용하려면, 도구와 그 인자들을 좀 더 엄격한 형식으로 정의해야 합니다. 이때 <code>Pydantic</code> 라이브러리가 사용됩니다.</p>
+<p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Type</span></span><br><span class="line"><span class="keyword">from</span> langchain.tools <span class="keyword">import</span> BaseTool</span><br><span class="line"><span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel, Field</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. Pydantic으로 도구에 전달될 인자의 형태(Schema)를 정의합니다.</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CalculatorToolArgsSchema</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    a: <span class="built_in">float</span> = Field(description=<span class="string">&quot;The first number&quot;</span>)</span><br><span class="line">    b: <span class="built_in">float</span> = Field(description=<span class="string">&quot;The second number&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. BaseTool을 상속받아 커스텀 도구 클래스를 만듭니다.</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CalculatorTool</span>(<span class="title class_ inherited__">BaseTool</span>):</span><br><span class="line">    name = <span class="string">&quot;CalculatorTool&quot;</span></span><br><span class="line">    description = <span class="string">&quot;Use this to perform sums of two numbers.&quot;</span></span><br><span class="line">    <span class="comment"># 이 도구가 어떤 인자 스키마를 사용하는지 알려줍니다.</span></span><br><span class="line">    args_schema: <span class="type">Type</span>[CalculatorToolArgsSchema] = CalculatorToolArgsSchema</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 실제 로직은 _run 메소드에 구현합니다.</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_run</span>(<span class="params">self, a, b</span>):</span><br><span class="line">        <span class="keyword">return</span> a + b</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-3"><a href="#🔍-코드-상세-설명-3" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>pydantic.BaseModel</code></strong>: 데이터의 형태, 타입, 설명을 강제하는 모델을 만들 때 사용합니다. <code>a: float</code> 처럼 각 인자의 타입과 <code>description</code>을 명확히 정의할 수 있습니다.</li>
+<li><strong><code>langchain.tools.BaseTool</code></strong>: <code>Tool.from_function</code> 보다 더 상세하게 도구를 커스터마이징할 때 사용하는 기반 클래스입니다.</li>
+<li><strong><code>args_schema</code></strong>: 이 도구가 어떤 인자 구조를 사용하는지 <code>Pydantic</code> 모델로 지정합니다. LangChain은 이 정보를 OpenAI API에 전달하여 Function Calling을 가능하게 합니다.</li>
+<li><strong><code>_run(self, a, b)</code></strong>: 도구의 실제 실행 로직입니다. <code>args_schema</code>에 정의된 <code>a</code>와 <code>b</code>가 인자로 직접 전달됩니다.</li>
+</ul>
+<h3 id="📝-3단계-OPENAI-FUNCTIONS-에이전트-생성"><a href="#📝-3단계-OPENAI-FUNCTIONS-에이전트-생성" class="headerlink" title="📝 3단계: OPENAI_FUNCTIONS 에이전트 생성"></a>📝 3단계: OPENAI_FUNCTIONS 에이전트 생성</h3><p>이제 새로 만든 커스텀 도구를 <code>OPENAI_FUNCTIONS</code> 타입의 에이전트와 함께 사용합니다.</p>
+<p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">agent = initialize_agent(</span><br><span class="line">    llm=llm,</span><br><span class="line">    verbose=<span class="literal">True</span>,</span><br><span class="line">    agent=AgentType.OPENAI_FUNCTIONS, <span class="comment"># 에이전트 타입을 변경합니다.</span></span><br><span class="line">    handle_parsing_errors=<span class="literal">True</span>,</span><br><span class="line">    tools=[</span><br><span class="line">        CalculatorTool(), <span class="comment"># 직접 만든 도구 클래스의 인스턴스를 전달합니다.</span></span><br><span class="line">    ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>이 방식은 ReAct처럼 텍스트를 파싱할 필요 없이 모델의 내장 기능을 사용하므로, 현재 LangChain에서 OpenAI 모델과 함께 에이전트를 만드는 가장 안정적이고 권장되는 방법입니다.</p>
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> ReAct 에이전트와 Functions 에이전트의 차이점을 설명할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> <code>Pydantic</code>을 사용하여 도구의 인자 스키마를 정의할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> <code>BaseTool</code>을 상속받아 나만의 커스텀 도구를 만들 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-2"><a href="#💡-연습-과제-2" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>커스텀 곱셈 도구</strong>: <code>CalculatorTool</code>을 참고하여, <code>Pydantic</code> 스키마와 <code>BaseTool</code>을 사용하는 <code>MultiplierTool</code>을 직접 만들어 보세요. 그리고 에이전트의 <code>tools</code> 리스트에 추가하여 테스트해 보세요.</li>
+</ol>
+<hr>
+<h2 id="에이전트에게-검색-능력-부여하기"><a href="#에이전트에게-검색-능력-부여하기" class="headerlink" title="에이전트에게 검색 능력 부여하기"></a>에이전트에게 검색 능력 부여하기</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>LangChain의 <code>DuckDuckGoSearchAPIWrapper</code>를 사용하여 웹 검색 기능을 도구로 만드는 방법 배우기</li>
+<li>에이전트가 외부 정보에 접근하여 질문에 답변하도록 하는 방법 이해하기</li>
+<li>에이전트가 검색 결과를 단순히 보여주는 것이 아니라, 내용을 이해하고 종합하여 답변을 생성하는 과정 살펴보기</li>
+</ul>
+<h3 id="📝-1단계-검색-도구-Search-Tool-의-필요성"><a href="#📝-1단계-검색-도구-Search-Tool-의-필요성" class="headerlink" title="📝 1단계: 검색 도구(Search Tool)의 필요성"></a>📝 1단계: 검색 도구(Search Tool)의 필요성</h3><p>지금까지의 에이전트는 계산기처럼 주어진 기능만 수행할 수 있었습니다. 만약 에이전트에게 “Cloudflare 주식 심볼이 뭐야?” 라고 묻는다면 어떨까요? LLM은 훈련 데이터에 있는 오래된 정보는 알지 몰라도, 최신 정보나 특정 정보는 알지 못합니다. 에이전트에게 <strong>인터넷 검색 능력</strong>을 부여하면, 이 한계를 뛰어넘어 거의 모든 질문에 답변할 수 있는 강력한 비서가 될 수 있습니다.</p>
+<h3 id="📝-2단계-검색-도구-만들기"><a href="#📝-2단계-검색-도구-만들기" class="headerlink" title="📝 2단계: 검색 도구 만들기"></a>📝 2단계: 검색 도구 만들기</h3><p>LangChain은 웹 검색을 쉽게 구현할 수 있도록 <code>DuckDuckGoSearchAPIWrapper</code>라는 유틸리티를 제공합니다. 이것을 사용하여 검색 도구를 만들어 보겠습니다.</p>
+<p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.utilities <span class="keyword">import</span> DuckDuckGoSearchAPIWrapper</span><br><span class="line"></span><br><span class="line"><span class="comment"># 검색어(query)를 인자로 받는 Pydantic 스키마</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StockMarketSymbolSearchToolArgsSchema</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    query: <span class="built_in">str</span> = Field(description=<span class="string">&quot;The query you will search for...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 검색 도구 클래스</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StockMarketSymbolSearchTool</span>(<span class="title class_ inherited__">BaseTool</span>):</span><br><span class="line">    name = <span class="string">&quot;StockMarketSymbolSearchTool&quot;</span></span><br><span class="line">    description = <span class="string">&quot;Use this tool to find the stock market symbol for a company.&quot;</span></span><br><span class="line">    args_schema: <span class="type">Type</span>[StockMarketSymbolSearchToolArgsSchema] = StockMarketSymbolSearchToolArgsSchema</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_run</span>(<span class="params">self, query</span>):</span><br><span class="line">        <span class="comment"># _run 메소드 안에서 검색 API를 호출합니다.</span></span><br><span class="line">        ddg = DuckDuckGoSearchAPIWrapper()</span><br><span class="line">        <span class="keyword">return</span> ddg.run(query)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 에이전트의 tools 리스트에 검색 도구를 추가합니다.</span></span><br><span class="line">tools = [StockMarketSymbolSearchTool()]</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-3단계-검색-에이전트-실행-및-분석"><a href="#📝-3단계-검색-에이전트-실행-및-분석" class="headerlink" title="📝 3단계: 검색 에이전트 실행 및 분석"></a>📝 3단계: 검색 에이전트 실행 및 분석</h3><p>이제 에이전트는 검색 능력을 갖췄습니다. 더 복잡한 질문을 던져 보겠습니다.</p>
+<p><strong>실행 코드:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prompt = <span class="string">&quot;Give me information on Cloudflare&#x27;s stock and help me analyze if it&#x27;s a potential good investment. Also tell me what symbol does the stock have.&quot;</span></span><br><span class="line"></span><br><span class="line">agent.invoke(prompt)</span><br></pre></td></tr></table></figure>
+
+<p><strong>사고 과정 분석:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt; Entering new AgentExecutor chain...</span><br><span class="line"></span><br><span class="line">Invoking: `StockMarketSymbolSearchTool` with `&#123;&#x27;query&#x27;: &#x27;Stock Market Symbol for Cloudflare&#x27;&#125;`</span><br><span class="line"></span><br><span class="line">Observation: Stocks Cloudflare Inc Cloudflare Inc NET Morningstar Rating ...</span><br><span class="line"></span><br><span class="line">Final Answer: The stock market symbol for Cloudflare is NET. </span><br><span class="line"></span><br><span class="line">As for analyzing if Cloudflare is a potential good investment, here are some key points to consider:</span><br><span class="line"></span><br><span class="line">1. Financial Performance: Cloudflare has shown strong revenue growth...</span><br><span class="line">2. Stock Performance: Cloudflare&#x27;s stock has performed well in 2023...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Invoking</strong>: 에이전트는 질문을 받고, 주식 심볼을 모른다는 것을 인지합니다. 그래서 스스로 <code>StockMarketSymbolSearchTool</code>을 사용해야겠다고 결정하고, <code>Stock Market Symbol for Cloudflare</code>라는 검색어를 만들어 도구를 호출합니다.</li>
+<li><strong>Observation</strong>: DuckDuckGo 검색 결과(긴 텍스트)를 받습니다.</li>
+<li><strong>Final Answer</strong>: 에이전트는 검색 결과를 <strong>이해하고 종합</strong>하여, 단순히 텍스트를 뱉어내는 것이 아니라 사용자의 질문에 맞춰 답변을 생성합니다.<ul>
+<li>“주식 심볼은 NET입니다.”</li>
+<li>“투자에 대한 분석은 다음과 같습니다: 1. 재무 성과… 2. 주가 성과…”</li>
+</ul>
+</li>
+</ul>
+<p>이것이 바로 에이전트의 강력함입니다. 스스로 필요한 정보를 찾고, 그 정보를 바탕으로 사용자의 최종 목표에 맞는 답변을 생성합니다.</p>
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 에이전트에게 인터넷 검색 기능이 왜 필요한지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>DuckDuckGoSearchAPIWrapper</code>를 사용하여 검색 도구를 만들 수 있나요?</li>
+<li><input disabled="" type="checkbox"> 에이전트가 검색 결과를 어떻게 이해하고 답변 생성에 활용하는지 그 과정을 설명할 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-3"><a href="#💡-연습-과제-3" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>다른 질문하기</strong>: 에이전트에게 “오늘 한국 날씨 어때?” 또는 “최신 아이폰 모델에 대한 정보 알려줘” 와 같이 다양한 질문을 던져보고, 에이전트가 어떻게 검색어를 만들고 답변하는지 관찰해 보세요.</li>
+</ol>
+<hr>
+<h2 id="전문적인-금융-도구-세트-만들기"><a href="#전문적인-금융-도구-세트-만들기" class="headerlink" title="전문적인 금융 도구 세트 만들기"></a>전문적인 금융 도구 세트 만들기</h2><h3 id="🎯-이번-단계에서-배울-것-4"><a href="#🎯-이번-단계에서-배울-것-4" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>여러 개의 전문적인 도구를 에이전트에게 제공하는 것의 이점 이해하기</li>
+<li>외부 API(Alpha Vantage)를 호출하여 특정 데이터를 가져오는 커스텀 도구 만들기</li>
+<li>에이전트가 복잡한 요청을 해결하기 위해 여러 도구를 순차적으로 사용하는 과정 분석하기</li>
+<li>환경 변수에서 API 키를 안전하게 로드하는 방법 배우기</li>
+</ul>
+<h3 id="📝-1단계-전문-도구의-필요성"><a href="#📝-1단계-전문-도구의-필요성" class="headerlink" title="📝 1단계: 전문 도구의 필요성"></a>📝 1단계: 전문 도구의 필요성</h3><p>범용 검색 도구는 편리하지만, 특정 분야의 질문에는 부족할 수 있습니다. “Cloudflare의 작년 매출은?” 이라는 질문에 웹 검색 결과는 여러 뉴스 기사나 블로그 글을 뒤섞어 보여줄 수 있습니다. 하지만 금융 정보를 제공하는 전문 API를 사용하면 정확한 데이터를 즉시 얻을 수 있습니다.</p>
+<p>에이전트에게 <strong>여러 개의 전문적인 도구</strong>를 주면, 에이전트는 질문의 의도를 파악하고 가장 적합한 도구를 선택하여 더 효율적이고 정확하게 임무를 수행할 수 있습니다.</p>
+<h3 id="📝-2단계-Alpha-Vantage-API-및-금융-도구-구현"><a href="#📝-2단계-Alpha-Vantage-API-및-금융-도구-구현" class="headerlink" title="📝 2단계: Alpha Vantage API 및 금융 도구 구현"></a>📝 2단계: Alpha Vantage API 및 금융 도구 구현</h3><p>이번에는 주식 데이터를 제공하는 <a target="_blank" rel="noopener" href="https://www.alphavantage.co/">Alpha Vantage</a> API를 사용하여 3개의 전문 금융 도구를 만들어 보겠습니다.</p>
+<p><strong>추가된 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># .env 파일 등에서 API 키를 로드합니다.</span></span><br><span class="line">alpha_vantage_api_key = os.environ.get(<span class="string">&quot;ALPHA_VANTAGE_API_KEY&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 도구 1: 회사 개요 정보</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CompanyOverviewTool</span>(<span class="title class_ inherited__">BaseTool</span>):</span><br><span class="line">    name = <span class="string">&quot;CompanyOverview&quot;</span></span><br><span class="line">    description = <span class="string">&quot;Use this to get an overview of the financials of the company...&quot;</span></span><br><span class="line">    <span class="comment"># ... (Pydantic 스키마 정의) ...</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_run</span>(<span class="params">self, symbol</span>):</span><br><span class="line">        r = requests.get(<span class="string">f&quot;https://www.alphavantage.co/query?function=OVERVIEW&amp;symbol=<span class="subst">&#123;symbol&#125;</span>&amp;apikey=<span class="subst">&#123;alpha_vantage_api_key&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> r.json()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 도구 2: 손익 계산서</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CompanyIncomeStatementTool</span>(<span class="title class_ inherited__">BaseTool</span>):</span><br><span class="line">    name = <span class="string">&quot;CompanyIncomeStatement&quot;</span></span><br><span class="line">    description = <span class="string">&quot;Use this to get the income statement of a company...&quot;</span></span><br><span class="line">    <span class="comment"># ... (Pydantic 스키마 정의) ...</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_run</span>(<span class="params">self, symbol</span>):</span><br><span class="line">        r = requests.get(<span class="string">f&quot;https://www.alphavantage.co/query?function=INCOME_STATEMENT&amp;symbol=<span class="subst">&#123;symbol&#125;</span>&amp;apikey=<span class="subst">&#123;alpha_vantage_api_key&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> r.json()[<span class="string">&quot;annualReports&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 도구 3: 주가 정보</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CompanyStockPerformanceTool</span>(<span class="title class_ inherited__">BaseTool</span>):</span><br><span class="line">    name = <span class="string">&quot;CompanyStockPerformance&quot;</span></span><br><span class="line">    description = <span class="string">&quot;Use this to get the weekly performance of a company stock...&quot;</span></span><br><span class="line">    <span class="comment"># ... (Pydantic 스키마 정의) ...</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_run</span>(<span class="params">self, symbol</span>):</span><br><span class="line">        r = requests.get(<span class="string">f&quot;https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&amp;symbol=<span class="subst">&#123;symbol&#125;</span>&amp;apikey=<span class="subst">&#123;alpha_vantage_api_key&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> r.json()</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-3단계-에이전트의-도구-상자-확장-및-다단계-추론-분석"><a href="#📝-3단계-에이전트의-도구-상자-확장-및-다단계-추론-분석" class="headerlink" title="📝 3단계: 에이전트의 도구 상자 확장 및 다단계 추론 분석"></a>📝 3단계: 에이전트의 도구 상자 확장 및 다단계 추론 분석</h3><p>이제 에이전트의 <code>tools</code> 리스트에 기존의 검색 도구와 함께 새로운 금융 도구 3개를 모두 추가합니다.</p>
+<p><strong>실행 코드:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prompt = <span class="string">&quot;Give me financial information on Cloudflare&#x27;s stock, considering its financials, income statements and stock performance help me analyze if it&#x27;s a potential good investment.&quot;</span></span><br><span class="line"></span><br><span class="line">agent.invoke(prompt)</span><br></pre></td></tr></table></figure>
+
+<p><strong>사고 과정 분석:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt; Entering new AgentExecutor chain...</span><br><span class="line"></span><br><span class="line">Invoking: `StockMarketSymbolSearchTool` with `&#123;&#x27;query&#x27;: &#x27;Cloudflare stock market symbol&#x27;&#125;`</span><br><span class="line">Observation: Ticker Symbol NET ...</span><br><span class="line"></span><br><span class="line">Invoking: `CompanyOverview` with `&#123;&#x27;symbol&#x27;: &#x27;NET&#x27;&#125;`</span><br><span class="line">Observation: &#123;&#x27;Symbol&#x27;: &#x27;NET&#x27;, &#x27;AssetType&#x27;: &#x27;Common Stock&#x27;, ...&#125;</span><br><span class="line"></span><br><span class="line">Invoking: `CompanyIncomeStatement` with `&#123;&#x27;symbol&#x27;: &#x27;NET&#x27;&#125;`</span><br><span class="line">Observation: [&#123;&#x27;fiscalDateEnding&#x27;: &#x27;2022-12-31&#x27;, ...&#125;]</span><br><span class="line"></span><br><span class="line">Invoking: `CompanyStockPerformance` with `&#123;&#x27;symbol&#x27;: &#x27;NET&#x27;&#125;`</span><br><span class="line">Observation: &#123;&#x27;Meta Data&#x27;: ..., &#x27;Weekly Time Series&#x27;: ...&#125;</span><br><span class="line"></span><br><span class="line">Final Answer: Here&#x27;s the financial information for Cloudflare Inc. (NYSE: NET): ...</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>1단계 (검색)</strong>: 에이전트는 “Cloudflare”의 주식 심볼을 모르기 때문에, 가장 먼저 <code>StockMarketSymbolSearchTool</code>을 사용하여 “NET”이라는 심볼을 찾아냅니다.</li>
+<li><strong>2단계 (개요 파악)</strong>: 알아낸 심볼 “NET”을 사용하여 <code>CompanyOverviewTool</code>을 호출하여 회사의 전반적인 재무 정보를 얻습니다.</li>
+<li><strong>3단계 (상세 분석)</strong>: <code>CompanyIncomeStatementTool</code>을 호출하여 구체적인 손익 계산서 데이터를 가져옵니다.</li>
+<li><strong>4단계 (주가 확인)</strong>: <code>CompanyStockPerformanceTool</code>을 호출하여 최근 주가 동향을 파악합니다.</li>
+<li><strong>최종 답변</strong>: 에이전트는 <strong>4개 도구에서 얻은 모든 정보</strong>를 종합하여, 마치 전문 애널리스트처럼 체계적인 투자 분석 보고서를 생성합니다.</li>
+</ul>
+<h3 id="✅-체크리스트-4"><a href="#✅-체크리스트-4" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 하나의 범용 도구 대신 여러 개의 전문 도구를 사용하는 것의 장점을 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>requests</code> 라이브러리를 사용하여 외부 API를 호출하는 도구를 만들 수 있나요?</li>
+<li><input disabled="" type="checkbox"> 에이전트가 목표를 달성하기 위해 여러 도구를 순차적으로, 지능적으로 사용하는 과정을 분석할 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-4"><a href="#💡-연습-과제-4" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>새로운 금융 도구 추가</strong>: Alpha Vantage API 문서(<a target="_blank" rel="noopener" href="https://www.alphavantage.co/documentation/">링크</a>)를 보고, <code>BALANCE_SHEET</code>(대차대조표)나 <code>CASH_FLOW</code>(현금흐름표)를 가져오는 새로운 도구를 만들어 에이전트에 추가해 보세요. 그리고 “Cloudflare의 현금 흐름은 어때?”라고 질문해 보세요.</li>
+</ol>
+<hr>
+<h2 id="에이전트에게-페르소나-부여하기-시스템-프롬프트"><a href="#에이전트에게-페르소나-부여하기-시스템-프롬프트" class="headerlink" title="에이전트에게 페르소나 부여하기 (시스템 프롬프트)"></a>에이전트에게 페르소나 부여하기 (시스템 프롬프트)</h2><h3 id="🎯-이번-단계에서-배울-것-5"><a href="#🎯-이번-단계에서-배울-것-5" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>에이전트의 행동과 역할을 정의하는 시스템 프롬프트(System Prompt)의 중요성 이해하기</li>
+<li><code>initialize_agent</code>의 <code>agent_kwargs</code>를 사용하여 시스템 프롬프트를 설정하는 방법 배우기</li>
+<li>Jupyter Notebook의 에이전트 코드를 실제 Streamlit 애플리케이션으로 전환하는 과정 살펴보기</li>
+<li><code>st.text_input</code>으로 사용자 입력을 받아 에이전트를 실행하는 방법 익히기</li>
+</ul>
+<h3 id="📝-1단계-시스템-프롬프트-System-Prompt-란"><a href="#📝-1단계-시스템-프롬프트-System-Prompt-란" class="headerlink" title="📝 1단계: 시스템 프롬프트(System Prompt)란?"></a>📝 1단계: 시스템 프롬프트(System Prompt)란?</h3><p>시스템 프롬프트는 에이전트의 “영혼”을 불어넣는 작업입니다. 이것은 에이전트의 모든 행동에 앞서 가장 먼저 주어지는 최상위 지시사항으로, 에이전트의 <strong>역할, 개성, 목표, 따라야 할 규칙</strong> 등을 정의합니다. 잘 만들어진 시스템 프롬프트는 에이전트의 답변 스타일과 품질을 극적으로 향상시킬 수 있습니다.</p>
+<h3 id="📝-2단계-에이전트에-페르소나-주입하기"><a href="#📝-2단계-에이전트에-페르소나-주입하기" class="headerlink" title="📝 2단계: 에이전트에 페르소나 주입하기"></a>📝 2단계: 에이전트에 페르소나 주입하기</h3><p><code>initialize_agent</code> 함수의 <code>agent_kwargs</code> 인자를 사용하면 이 시스템 프롬프트를 주입할 수 있습니다.</p>
+<p><strong>전체 코드 (<code>pages/06_InvestorGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.schema <span class="keyword">import</span> SystemMessage</span><br><span class="line"></span><br><span class="line">agent = initialize_agent(</span><br><span class="line">    <span class="comment"># ... (llm, tools 등 기존 인자) ...</span></span><br><span class="line">    agent_kwargs=&#123;</span><br><span class="line">        <span class="string">&quot;system_message&quot;</span>: SystemMessage(</span><br><span class="line">            content=<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            You are a hedge fund manager.</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">            You evaluate a company and provide your opinion and reasons why the stock is a buy or not.</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">            Consider the performance of a stock, the company overview and the income statement.</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">            Be assertive in your judgement and recommend the stock or advise the user against it.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        )</span><br><span class="line">    &#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-4"><a href="#🔍-코드-상세-설명-4" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>agent_kwargs</code></strong>: 에이전트의 프롬프트에 추가적인 인자를 전달할 때 사용하는 딕셔너리입니다.</li>
+<li><strong><code>system_message</code></strong>: 이 키를 사용하여 시스템 메시지를 설정합니다.</li>
+<li><strong><code>SystemMessage(content=...)</code></strong>: LangChain에서 시스템 메시지를 나타내는 객체입니다.</li>
+<li><strong>페르소나 정의</strong>: 이제 에이전트는 더 이상 중립적인 정보 전달자가 아닙니다. 시스템 프롬프트에 따라, 그는 <strong>단호한 판단</strong>을 내리는 <strong>헤지펀드 매니저</strong>로서 행동하게 됩니다. “~인 것 같습니다”가 아니라 “이 주식은 매수해야 합니다. 왜냐하면…” 과 같은 assertive한 답변을 생성할 것입니다.</li>
+</ul>
+<h3 id="📝-3단계-InvestorGPT-앱-구현"><a href="#📝-3단계-InvestorGPT-앱-구현" class="headerlink" title="📝 3단계: InvestorGPT 앱 구현"></a>📝 3단계: InvestorGPT 앱 구현</h3><p>이제 Jupyter Notebook에서 만들었던 모든 에이전트 로직을 <code>pages/06_InvestorGPT.py</code> 파일로 옮겨와 완전한 Streamlit 앱으로 만듭니다.</p>
+<p><strong>전체 코드 (<code>pages/06_InvestorGPT.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ... (모든 Tool 클래스 및 agent 정의) ...</span></span><br><span class="line"></span><br><span class="line">st.set_page_config(</span><br><span class="line">    page_title=<span class="string">&quot;InvestorGPT&quot;</span>,</span><br><span class="line">    page_icon=<span class="string">&quot;💼&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">st.markdown(<span class="string">&quot;&quot;&quot; # InvestorGPT ... &quot;&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 사용자가 회사 이름을 입력할 수 있는 텍스트 상자</span></span><br><span class="line">company = st.text_input(<span class="string">&quot;Write the name of the company you are interested on.&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 사용자가 회사 이름을 입력하면</span></span><br><span class="line"><span class="keyword">if</span> company:</span><br><span class="line">    <span class="comment"># 에이전트를 실행합니다.</span></span><br><span class="line">    result = agent.invoke(company)</span><br><span class="line">    <span class="comment"># 결과를 화면에 표시합니다. (달러 기호 이스케이프 처리)</span></span><br><span class="line">    st.write(result[<span class="string">&quot;output&quot;</span>].replace(<span class="string">&quot;$&quot;</span>, <span class="string">&quot;\$&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-5"><a href="#🔍-코드-상세-설명-5" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong><code>st.text_input</code></strong>: 사용자가 텍스트를 입력할 수 있는 상자를 만듭니다.</li>
+<li><strong><code>if company:</code></strong>: 사용자가 무언가를 입력하고 Enter를 치면, <code>company</code> 변수에 그 값이 할당되고 이 <code>if</code> 블록이 실행됩니다.</li>
+<li><strong><code>result[&quot;output&quot;].replace(&quot;$&quot;, &quot;\$&quot;)</code></strong>: Streamlit은 <code>$</code> 기호를 수학 공식(LaTeX)의 시작으로 인식하는 경우가 있어 에러가 날 수 있습니다. <code>\$</code>로 바꿔주면 이 문제를 방지하고 문자 그대로의 달러 기호를 표시할 수 있습니다.</li>
+</ul>
+<h3 id="✅-체크리스트-5"><a href="#✅-체크리스트-5" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 시스템 프롬프트가 에이전트의 행동에 어떤 영향을 미치는지 이해했나요?</li>
+<li><input disabled="" type="checkbox"> <code>agent_kwargs</code>를 사용하여 에이전트에게 페르소나를 부여할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> <code>st.text_input</code>을 사용하여 사용자 입력을 받을 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-5"><a href="#💡-연습-과제-5" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>페르소나 변경</strong>: 시스템 프롬프트를 수정하여 에이전트의 페르소나를 바꿔보세요. 예를 들어, “당신은 매우 신중하고 보수적인 투자 분석가입니다. 항상 최악의 시나리오를 먼저 경고하세요.” 또는 “당신은 환경(ESG)을 매우 중시하는 사회적 책임 투자자입니다. 재무 정보와 함께 회사의 환경 관련 활동도 언급하세요.” 와 같이 변경하고 결과가 어떻게 달라지는지 확인해 보세요.</li>
+</ol>
+<hr>
+<h2 id="SQL-데이터베이스와-대화하는-에이전트"><a href="#SQL-데이터베이스와-대화하는-에이전트" class="headerlink" title="SQL 데이터베이스와 대화하는 에이전트"></a>SQL 데이터베이스와 대화하는 에이전트</h2><h3 id="🎯-이번-단계에서-배울-것-6"><a href="#🎯-이번-단계에서-배울-것-6" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>SQLDatabaseToolkit</code>을 사용하여 에이전트에게 데이터베이스와 상호작용하는 능력 부여하기</li>
+<li><code>create_sql_agent</code>를 사용하여 Text-to-SQL 에이전트를 쉽게 생성하는 방법 배우기</li>
+<li>에이전트가 데이터베이스 스키마를 탐색하고, SQL 쿼리를 작성하고, 실행하고, 결과를 해석하는 전체 과정 분석하기</li>
+<li>에이전트가 에러를 만나고 스스로 복구하는 과정 살펴보기</li>
+</ul>
+<h3 id="📝-1단계-Text-to-SQL과-SQL-툴킷"><a href="#📝-1단계-Text-to-SQL과-SQL-툴킷" class="headerlink" title="📝 1단계: Text-to-SQL과 SQL 툴킷"></a>📝 1단계: Text-to-SQL과 SQL 툴킷</h3><p><strong>Text-to-SQL</strong>은 사람이 쓰는 자연어(예: “가장 인기 있는 영화 10개 보여줘”)를 컴퓨터가 이해하는 SQL 쿼리문(<code>SELECT * FROM movies ORDER BY popularity DESC LIMIT 10</code>)으로 자동 변환하는 기술입니다. 에이전트에게 이 능력을 부여하면, 사용자는 복잡한 SQL을 몰라도 데이터베이스와 자유롭게 대화할 수 있게 됩니다.</p>
+<p>LangChain은 이를 쉽게 구현할 수 있도록 <code>SQLDatabaseToolkit</code>을 제공합니다. 이 툴킷에는 데이터베이스와 상호작용하는 데 필요한 필수 도구들이 미리 패키징되어 있습니다.</p>
+<ul>
+<li><strong><code>sql_db_list_tables</code></strong>: 데이터베이스에 어떤 테이블이 있는지 목록을 봅니다.</li>
+<li><strong><code>sql_db_schema</code></strong>: 특정 테이블의 구조(컬럼, 데이터 타입 등)를 봅니다.</li>
+<li><strong><code>sql_db_query</code></strong>: SQL 쿼리를 실행합니다.</li>
+<li><strong><code>sql_db_query_checker</code></strong>: 쿼리를 실행하기 전에 문법 오류가 없는지 확인합니다.</li>
+</ul>
+<h3 id="📝-2단계-SQL-에이전트-생성"><a href="#📝-2단계-SQL-에이전트-생성" class="headerlink" title="📝 2단계: SQL 에이전트 생성"></a>📝 2단계: SQL 에이전트 생성</h3><p><code>create_sql_agent</code> 헬퍼 함수를 사용하면 단 몇 줄의 코드로 SQL 에이전트를 만들 수 있습니다.</p>
+<p><strong>전체 코드 (<code>notebook.ipynb</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_sql_agent, AgentType</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.agents.agent_toolkits <span class="keyword">import</span> SQLDatabaseToolkit</span><br><span class="line"><span class="keyword">from</span> langchain.sql_database <span class="keyword">import</span> SQLDatabase</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0.1</span>, model_name=<span class="string">&quot;gpt-4-1106-preview&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 데이터베이스에 연결합니다.</span></span><br><span class="line">db = SQLDatabase.from_uri(<span class="string">&quot;sqlite:///movies.sqlite&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. LLM과 DB를 사용하여 SQL 툴킷을 만듭니다.</span></span><br><span class="line">toolkit = SQLDatabaseToolkit(db=db, llm=llm)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. SQL 에이전트를 생성합니다.</span></span><br><span class="line">agent = create_sql_agent(</span><br><span class="line">    llm=llm,</span><br><span class="line">    toolkit=toolkit,</span><br><span class="line">    agent_type=AgentType.OPENAI_FUNCTIONS,</span><br><span class="line">    verbose=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">agent.invoke(</span><br><span class="line">    <span class="string">&quot;Give me the movies that have the highest votes but the lowest budgets and give me the name of their directors also include their gross revenue.&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-3단계-데이터베이스-탐색-및-쿼리-생성-과정-분석"><a href="#📝-3단계-데이터베이스-탐색-및-쿼리-생성-과정-분석" class="headerlink" title="📝 3단계: 데이터베이스 탐색 및 쿼리 생성 과정 분석"></a>📝 3단계: 데이터베이스 탐색 및 쿼리 생성 과정 분석</h3><p><code>verbose=True</code>로 실행된 에이전트의 사고 과정은 경이롭습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&gt; Entering new AgentExecutor chain...</span><br><span class="line"></span><br><span class="line">Invoking: `sql_db_list_tables` with ``</span><br><span class="line">Observation: directors, movies</span><br><span class="line"></span><br><span class="line">Invoking: `sql_db_schema` with `movies,directors`</span><br><span class="line">Observation: Error: table_names &#123;&#x27;movies,directors&#x27;&#125; not found in database</span><br><span class="line"></span><br><span class="line">Invoking: `sql_db_schema` with `movies`</span><br><span class="line">Observation: CREATE TABLE movies (id INTEGER, ...)</span><br><span class="line"></span><br><span class="line">Invoking: `sql_db_schema` with `directors`</span><br><span class="line">Observation: CREATE TABLE directors (name TEXT, ...)</span><br><span class="line"></span><br><span class="line">Invoking: `sql_db_query_checker` with `SELECT ... FROM movies m JOIN directors d ...`</span><br><span class="line">Observation: The provided SQLite query does not appear to contain any of the common mistakes...</span><br><span class="line"></span><br><span class="line">Invoking: `sql_db_query` with `SELECT ... FROM movies m JOIN directors d ...`</span><br><span class="line">Observation: [(&#x27;Stiff Upper Lips&#x27;, &#x27;Gary Sinyor&#x27;, 0, 10.0, 0), ...]</span><br><span class="line"></span><br><span class="line">Final Answer: Here are movies that have the highest votes but the lowest budgets...</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>1. 테이블 목록 확인</strong>: 에이전트는 질문을 받고, 먼저 어떤 테이블이 있는지 확인하기 위해 <code>sql_db_list_tables</code>를 호출합니다.</li>
+<li><strong>2. 스키마 확인 (과 에러 복구)</strong>: <code>directors</code>와 <code>movies</code> 테이블이 있다는 것을 알고, 두 테이블의 구조를 한 번에 보려고 시도하다가 에러를 만납니다. 하지만 에이전트는 멈추지 않고, <strong>스스로 문제를 해결</strong>하기 위해 각 테이블의 스키마를 하나씩 따로따로 요청합니다.</li>
+<li><strong>3. 쿼리 작성 및 검증</strong>: 두 테이블의 구조를 완벽히 파악한 뒤, <code>JOIN</code>, <code>ORDER BY</code>, <code>LIMIT</code>이 포함된 복잡한 SQL 쿼리를 작성합니다. 그리고 쿼리를 실행하기 전에 <code>sql_db_query_checker</code>로 문법을 검사하는 신중함까지 보여줍니다.</li>
+<li><strong>4. 쿼리 실행 및 최종 답변</strong>: 검증된 쿼리를 <code>sql_db_query</code>로 실행하여 데이터를 가져온 뒤, 사용자가 이해하기 쉬운 자연어 문장으로 최종 답변을 가공하여 보여줍니다.</li>
+</ul>
+<h3 id="✅-체크리스트-6"><a href="#✅-체크리스트-6" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> Text-to-SQL이 무엇인지, 왜 유용한지 설명할 수 있나요?</li>
+<li><input disabled="" type="checkbox"> <code>SQLDatabaseToolkit</code>에 어떤 도구들이 포함되어 있는지 알고 있나요?</li>
+<li><input disabled="" type="checkbox"> 에이전트가 자연어 질문을 SQL 쿼리로 바꾸기 위해 어떤 단계를 거치는지 설명할 수 있나요?</li>
+</ul>
+<h3 id="💡-연습-과제-6"><a href="#💡-연습-과제-6" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><strong>다른 질문하기</strong>: <code>movies.sqlite</code> 데이터베이스를 사용하여 에이전트에게 다른 질문을 해보세요. 예를 들어, “가장 많은 영화를 감독한 감독은 누구야?”, “2015년에 개봉한 영화 중 수익이 가장 높은 영화는 뭐야?” 와 같은 질문을 하고 에이전트의 사고 과정을 분석해 보세요.</li>
+</ol>
+<hr>
+<h2 id="챕터-결론-및-요약"><a href="#챕터-결론-및-요약" class="headerlink" title="챕터 결론 및 요약"></a>챕터 결론 및 요약</h2><h3 id="🎯-이번-단계에서-배울-것-7"><a href="#🎯-이번-단계에서-배울-것-7" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>LangChain 에이전트의 핵심 구성 요소(LLM, Tools, AgentType, Prompt) 복습하기</li>
+<li>다양한 에이전트 타입과 도구의 종류를 되짚어보기</li>
+<li>에이전트 구축의 전체적인 흐름 정리하기</li>
+</ul>
+<h3 id="📝-1단계-InvestorGPT-앱-완성"><a href="#📝-1단계-InvestorGPT-앱-완성" class="headerlink" title="📝 1단계: InvestorGPT 앱 완성"></a>📝 1단계: InvestorGPT 앱 완성</h3><p>마지막으로, <code>Home.py</code> 파일을 수정하여 InvestorGPT 프로젝트가 완료되었음을 표시합니다. 이로써 우리의 포트폴리오에 또 하나의 멋진 AI 앱이 추가되었습니다.</p>
+<p><strong>수정 코드 (<code>Home.py</code>):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Before</span></span><br><span class="line"><span class="comment"># - [ ] [📈 InvestorGPT](/InvestorGPT)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># After</span></span><br><span class="line"><span class="comment"># - [x] [📈 InvestorGPT](/InvestorGPT)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-2단계-에이전트-챕터-총정리"><a href="#📝-2단계-에이전트-챕터-총정리" class="headerlink" title="📝 2단계: 에이전트 챕터 총정리"></a>📝 2단계: 에이전트 챕터 총정리</h3><p>축하합니다! 10장을 통해 우리는 LangChain 에이전트의 핵심적인 모든 것을 배웠습니다. 내용을 다시 한번 정리해 봅시다.</p>
+<ul>
+<li><p><strong>두뇌 (The Brain) - <code>LLM</code></strong>: 에이전트의 모든 추론과 계획을 담당하는 핵심 엔진입니다. 우리는 주로 <code>ChatOpenAI</code> 모델을 사용했습니다.</p>
+</li>
+<li><p><strong>손과 발 (The Hands) - <code>Tools</code></strong>: 에이전트가 외부 세계와 상호작용하게 해주는 능력입니다. 우리는 직접 함수를 만들어 <code>Tool</code>, <code>StructuredTool</code>, <code>BaseTool</code>로 도구를 만들었고, <code>DuckDuckGoSearchAPIWrapper</code>나 <code>SQLDatabaseToolkit</code>처럼 미리 만들어진 강력한 도구 세트도 사용해 보았습니다.</p>
+</li>
+<li><p><strong>규칙과 지침 (The Rulebook) - <code>AgentType</code> &amp; <code>Prompt</code></strong>: 에이전트가 두뇌와 손발을 어떻게 연결하고 사용할지를 결정하는 규칙입니다.</p>
+<ul>
+<li><strong><code>AgentType</code></strong>: <code>ZERO_SHOT_REACT_DESCRIPTION</code>(범용), <code>STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION</code>(복잡한 도구용), 그리고 가장 강력한 <code>OPENAI_FUNCTIONS</code>(함수 호출용)까지 다양한 타입을 경험했습니다.</li>
+<li><strong><code>Prompt</code></strong>: 도구의 <code>description</code>을 명확하게 작성하는 것이 얼마나 중요한지 배웠고, <code>SystemMessage</code>를 통해 에이전트에게 “헤지펀드 매니저”와 같은 페르소나를 부여하여 답변의 수준을 한 차원 높이는 방법도 배웠습니다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="📝-3단계-에이전트의-무한한-가능성"><a href="#📝-3단계-에이전트의-무한한-가능성" class="headerlink" title="📝 3단계: 에이전트의 무한한 가능성"></a>📝 3단계: 에이전트의 무한한 가능성</h3><p>이제 여러분은 LangChain 에이전트를 만드는 데 필요한 모든 기본 지식을 갖추었습니다. 가능성은 무한합니다. 여러분의 이메일을 읽고 답장을 써주는 에이전트, 여러 API를 조합하여 여행 계획을 짜주는 에이전트, 코드 저장소를 분석하고 버그를 찾아주는 에이전트 등 상상하는 모든 것을 만들 수 있습니다. 다양한 도구를 직접 만들고 조합하며 여러분만의 강력한 AI 비서를 만들어 보세요!</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/langchain/" rel="tag"><i class="fa fa-tag"></i> langchain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_9/" rel="prev" title="9. MeetingGPT - 회의록 분석 및 요약 AI 만들기">
+                  <i class="fa fa-angle-left"></i> 9. MeetingGPT - 회의록 분석 및 요약 AI 만들기
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chatper_12/" rel="next" title="12. OpenAI Assistants API로 AI 비서 만들기">
+                  12. OpenAI Assistants API로 AI 비서 만들기 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
