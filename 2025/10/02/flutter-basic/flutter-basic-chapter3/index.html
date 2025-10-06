@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="StatefulWidget으로 상태 저장하기🎯 이번 단계에서 배울 것 StatefulWidget과 State 클래스 구조 이해하기 위젯이 가진 상태값(counter)을 변수로 선언하는 방법 익히기 버튼 탭 시 상태를 변경하는 로직을 작성하기 setState를 호출하지 않으면 UI가 갱신되지 않는다는 문제 인식하기">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter3/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="StatefulWidget으로 상태 저장하기🎯 이번 단계에서 배울 것 StatefulWidget과 State 클래스 구조 이해하기 위젯이 가진 상태값(counter)을 변수로 선언하는 방법 익히기 버튼 탭 시 상태를 변경하는 로직을 작성하기 setState를 호출하지 않으면 UI가 갱신되지 않는다는 문제 인식하기">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-02T03:03:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="basic">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="toonflix">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter3/","path":"2025/10/02/flutter-basic/flutter-basic-chapter3/","title":"Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">21</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#StatefulWidget%EC%9C%BC%EB%A1%9C-%EC%83%81%ED%83%9C-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0"><span class="nav-number">1.</span> <span class="nav-text">StatefulWidget으로 상태 저장하기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0"><span class="nav-number">1.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-StatefulWidget-%EA%B3%A8%EA%B2%A9-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">1.3.</span> <span class="nav-text">📝 1단계: StatefulWidget 골격 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84"><span class="nav-number">1.4.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C"><span class="nav-number">1.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setState%EB%A1%9C-%ED%99%94%EB%A9%B4-%EB%8B%A4%EC%8B%9C-%EA%B7%B8%EB%A6%AC%EA%B8%B0"><span class="nav-number">2.</span> <span class="nav-text">setState로 화면 다시 그리기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-1"><span class="nav-number">2.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-onClicked%EC%97%90-setState-%EC%B6%94%EA%B0%80%ED%95%98%EA%B8%B0"><span class="nav-number">2.3.</span> <span class="nav-text">📝 1단계: onClicked에 setState 추가하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-1"><span class="nav-number">2.4.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">2.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-1"><span class="nav-number">2.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List%EC%99%80-%EC%BB%AC%EB%A0%89%EC%85%98-for%EB%A1%9C-%EC%97%AC%EB%9F%AC-%EC%9C%84%EC%A0%AF-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">3.</span> <span class="nav-text">List와 컬렉션 for로 여러 위젯 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-2"><span class="nav-number">3.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%83%81%ED%83%9C%EB%A1%9C-%EC%A0%84%ED%99%98"><span class="nav-number">3.3.</span> <span class="nav-text">📝 1단계: 리스트 상태로 전환</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-2"><span class="nav-number">3.4.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">3.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-2"><span class="nav-number">3.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BuildContext%EC%99%80-Theme-%ED%99%9C%EC%9A%A9"><span class="nav-number">4.</span> <span class="nav-text">BuildContext와 Theme 활용</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-3"><span class="nav-number">4.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-ThemeData-%EC%84%A4%EC%A0%95-%EB%B0%8F-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%9C%84%EC%A0%AF-%EB%B6%84%EB%A6%AC"><span class="nav-number">4.3.</span> <span class="nav-text">📝 1단계: ThemeData 설정 및 커스텀 위젯 분리</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">4.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-3"><span class="nav-number">4.4.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">4.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-3"><span class="nav-number">4.6.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%EC%A0%84%EC%B2%B4-%ED%9D%90%EB%A6%84-%EC%A0%95%EB%A6%AC"><span class="nav-number">5.</span> <span class="nav-text">📚 전체 흐름 정리</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9C%85-%EC%B5%9C%EC%A2%85-%EC%A0%90%EA%B2%80-%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">6.</span> <span class="nav-text">✅ 최종 점검 리스트</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-02 12:03" itemprop="dateCreated datePublished" datetime="2025-10-02T12:03:00+09:00">2025-10-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="StatefulWidget으로-상태-저장하기"><a href="#StatefulWidget으로-상태-저장하기" class="headerlink" title="StatefulWidget으로 상태 저장하기"></a>StatefulWidget으로 상태 저장하기</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>StatefulWidget</code>과 <code>State</code> 클래스 구조 이해하기</li>
+<li>위젯이 가진 상태값(<code>counter</code>)을 변수로 선언하는 방법 익히기</li>
+<li>버튼 탭 시 상태를 변경하는 로직을 작성하기</li>
+<li>setState를 호출하지 않으면 UI가 갱신되지 않는다는 문제 인식하기</li>
+</ul>
+<h3 id="📂-파일-구조"><a href="#📂-파일-구조" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (앱을 StatefulWidget으로 전환)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-StatefulWidget-골격-만들기"><a href="#📝-1단계-StatefulWidget-골격-만들기" class="headerlink" title="📝 1단계: StatefulWidget 골격 만들기"></a>📝 1단계: StatefulWidget 골격 만들기</h3><p><strong>전체 코드 (lib&#x2F;main.dart @ 3.0):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  runApp(App());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  State&lt;App&gt; createState() =&gt; _AppState();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_AppState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">App</span>&gt; </span>&#123;</span><br><span class="line">  <span class="built_in">int</span> counter = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> onClicked() &#123;</span><br><span class="line">    counter = counter + <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      home: Scaffold(</span><br><span class="line">        backgroundColor: <span class="keyword">const</span> Color(<span class="number">0xFFF4EDDB</span>),</span><br><span class="line">        body: Center(</span><br><span class="line">          child: Column(</span><br><span class="line">            mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">            children: [</span><br><span class="line">              <span class="keyword">const</span> Text(</span><br><span class="line">                <span class="string">&#x27;Click Count&#x27;</span>,</span><br><span class="line">                style: TextStyle(fontSize: <span class="number">30</span>),</span><br><span class="line">              ),</span><br><span class="line">              Text(</span><br><span class="line">                <span class="string">&#x27;<span class="subst">$counter</span>&#x27;</span>,</span><br><span class="line">                style: <span class="keyword">const</span> TextStyle(fontSize: <span class="number">30</span>),</span><br><span class="line">              ),</span><br><span class="line">              IconButton(</span><br><span class="line">                iconSize: <span class="number">40</span>,</span><br><span class="line">                onPressed: onClicked,</span><br><span class="line">                icon: <span class="keyword">const</span> Icon(</span><br><span class="line">                  Icons.add_box_rounded,</span><br><span class="line">                ),</span><br><span class="line">              ),</span><br><span class="line">            ],</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. StatefulWidget 선언</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  State&lt;App&gt; createState() =&gt; _AppState();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>StatefulWidget</code>은 화면이 다시 그려질 때 상태를 유지합니다.</li>
+<li><code>createState</code>에서 상태 전용 클래스인 <code>_AppState</code>를 반환합니다.</li>
+</ul>
+<p><strong>2. 상태 보관 변수를 State 클래스에 선언</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_AppState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">App</span>&gt; </span>&#123;</span><br><span class="line">  <span class="built_in">int</span> counter = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>_AppState</code>는 <code>App</code>과 짝을 이루는 상태 관리 클래스입니다.</li>
+<li><code>counter</code>는 버튼을 누른 횟수를 저장하는 필드입니다.</li>
+</ul>
+<p><strong>3. 상태 변경 메서드 작성</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> onClicked() &#123;</span><br><span class="line">  counter = counter + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>버튼이 눌렸을 때 호출되며, 숫자를 1 증가시킵니다.</li>
+<li>아직 <code>setState</code>를 호출하지 않아 UI는 바로 갱신되지 않습니다.</li>
+</ul>
+<p><strong>4. 상태값을 UI에 노출</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Text(<span class="string">&#x27;<span class="subst">$counter</span>&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>문자열 보간을 이용해 현재 카운터 값을 화면에 보여줍니다.</li>
+</ul>
+<p><strong>비교 예시:</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// StatelessWidget 시절</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// StatefulWidget 전환 후</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123; ... &#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_AppState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">App</span>&gt; </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>시각화:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌───────────────┐</span><br><span class="line">│ Click Count   │</span><br><span class="line">│ 0             │  ← counter</span><br><span class="line">│ [  + button ] │</span><br><span class="line">└───────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름"><a href="#📊-동작-흐름" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 사용자가 + 버튼을 누르면 onClicked 실행</span><br><span class="line">2. counter 변수가 1 증가하지만</span><br><span class="line">3. setState가 없어 build()가 다시 호출되지 않음</span><br><span class="line">4. 화면에는 여전히 마지막으로 그린 값이 남음</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>App</code>이 <code>StatefulWidget</code>으로 정의됐는가?</li>
+<li><input disabled="" type="checkbox"> <code>_AppState</code>에서 <code>counter</code> 변수를 선언했는가?</li>
+<li><input disabled="" type="checkbox"> 버튼이 <code>onClicked</code>를 호출하도록 연결됐는가?</li>
+<li><input disabled="" type="checkbox"> 버튼을 눌러도 화면 숫자가 바뀌지 않는 문제를 확인했는가?</li>
+</ul>
+<h3 id="💡-연습-과제"><a href="#💡-연습-과제" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>counter = counter * 2;</code>로 바꿔보고 어떤 값이 저장되는지 확인하세요 (UI는 여전히 갱신되지 않습니다).</li>
+<li><code>IconButton</code> 대신 <code>ElevatedButton</code>으로 바꾸고 <code>onPressed</code>에 같은 함수를 연결해보세요.</li>
+<li><code>counter</code>를 <code>double</code>로 선언하면 어떤 변화가 생기는지 테스트하세요.</li>
+</ol>
+<hr>
+<h2 id="setState로-화면-다시-그리기"><a href="#setState로-화면-다시-그리기" class="headerlink" title="setState로 화면 다시 그리기"></a>setState로 화면 다시 그리기</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>setState</code>의 역할과 사용법 이해하기</li>
+<li>상태 변경과 UI 갱신을 하나의 블록으로 묶기</li>
+<li>Closure 안에서 상태 변수를 안전하게 업데이트하기</li>
+</ul>
+<h3 id="📂-파일-구조-1"><a href="#📂-파일-구조-1" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (setState 적용)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-onClicked에-setState-추가하기"><a href="#📝-1단계-onClicked에-setState-추가하기" class="headerlink" title="📝 1단계: onClicked에 setState 추가하기"></a>📝 1단계: onClicked에 setState 추가하기</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> onClicked() &#123;</span><br><span class="line">  setState(() &#123;</span><br><span class="line">    counter = counter + <span class="number">1</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-1"><a href="#🔍-코드-상세-설명-1" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. setState 호출 시점</strong></p>
+<ul>
+<li><code>setState</code>는 상태가 바뀌었다고 Flutter 프레임워크에 알려주는 메서드입니다.</li>
+<li>전달한 콜백 실행이 끝나면 Flutter가 <code>build()</code>를 다시 호출합니다.</li>
+</ul>
+<p><strong>2. 콜백 안에서 상태 수정</strong></p>
+<ul>
+<li><code>counter = counter + 1;</code>을 콜백 안에 넣어 상태 변경 범위를 명확히 합니다.</li>
+<li>콜백 밖에서 상태를 바꾸면 프레임워크가 변화를 감지하지 못할 수 있습니다.</li>
+</ul>
+<p><strong>3. UI 갱신 확인</strong></p>
+<ul>
+<li>이제 버튼을 누를 때마다 <code>Text(&#39;$counter&#39;)</code>가 최신 값으로 다시 렌더링됩니다.</li>
+<li>핫리로드 없이도 실시간으로 숫자가 증가하는 것을 확인할 수 있습니다.</li>
+</ul>
+<p><strong>시각화:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">before: counter = 0 → setState 실행 → rebuild → 화면에 1 표시</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-1"><a href="#📊-동작-흐름-1" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. onClicked → setState 시작</span><br><span class="line">2. counter 값 증가</span><br><span class="line">3. setState 콜백 종료</span><br><span class="line">4. Flutter가 build() 호출, 새 counter 값을 Text에 반영</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> setState가 onClicked 안에 존재하는가?</li>
+<li><input disabled="" type="checkbox"> 버튼 클릭 시 숫자가 즉시 증가하는가?</li>
+<li><input disabled="" type="checkbox"> counter 관련 코드는 setState 내부로 이동했는가?</li>
+</ul>
+<h3 id="💡-연습-과제-1"><a href="#💡-연습-과제-1" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>setState(() =&gt; counter += 2);</code>처럼 축약 문법을 사용해보세요.</li>
+<li>counter가 10 이상이면 0으로 초기화하도록 조건문을 추가해보세요.</li>
+<li>setState 호출 전후에 <code>print(counter)</code>를 찍어 값 변화를 콘솔에서 확인하세요.</li>
+</ol>
+<hr>
+<h2 id="List와-컬렉션-for로-여러-위젯-만들기"><a href="#List와-컬렉션-for로-여러-위젯-만들기" class="headerlink" title="List와 컬렉션 for로 여러 위젯 만들기"></a>List와 컬렉션 for로 여러 위젯 만들기</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>리스트 상태(<code>List&lt;int&gt; numbers</code>)를 관리하는 방법 익히기</li>
+<li><code>numbers.add(numbers.length)</code>로 연속 증가 값을 생성하기</li>
+<li>컬렉션 <code>for</code> 문법을 사용해 <code>Column</code> 안에서 동적으로 위젯 생성하기</li>
+</ul>
+<h3 id="📂-파일-구조-2"><a href="#📂-파일-구조-2" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (카운터 → 리스트 누적 방식으로 전환)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-리스트-상태로-전환"><a href="#📝-1단계-리스트-상태로-전환" class="headerlink" title="📝 1단계: 리스트 상태로 전환"></a>📝 1단계: 리스트 상태로 전환</h3><p><strong>전체 코드 (lib&#x2F;main.dart @ 3.2):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_AppState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">App</span>&gt; </span>&#123;</span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; numbers = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> onClicked() &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      numbers.add(numbers.length);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      home: Scaffold(</span><br><span class="line">        backgroundColor: <span class="keyword">const</span> Color(<span class="number">0xFFF4EDDB</span>),</span><br><span class="line">        body: Center(</span><br><span class="line">          child: Column(</span><br><span class="line">            mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">            children: [</span><br><span class="line">              <span class="keyword">const</span> Text(</span><br><span class="line">                <span class="string">&#x27;Click Count&#x27;</span>,</span><br><span class="line">                style: TextStyle(fontSize: <span class="number">30</span>),</span><br><span class="line">              ),</span><br><span class="line">              <span class="keyword">for</span> (<span class="keyword">var</span> n <span class="keyword">in</span> numbers) Text(<span class="string">&#x27;<span class="subst">$n</span>&#x27;</span>),</span><br><span class="line">              IconButton(</span><br><span class="line">                iconSize: <span class="number">40</span>,</span><br><span class="line">                onPressed: onClicked,</span><br><span class="line">                icon: <span class="keyword">const</span> Icon(</span><br><span class="line">                  Icons.add_box_rounded,</span><br><span class="line">                ),</span><br><span class="line">              ),</span><br><span class="line">            ],</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-2"><a href="#🔍-코드-상세-설명-2" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. 리스트 상태 선언</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; numbers = [];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>버튼을 누를 때마다 새 숫자를 리스트에 저장합니다.</li>
+<li><code>numbers.length</code>를 추가하여 0,1,2,… 순서로 값이 쌓입니다.</li>
+</ul>
+<p><strong>2. setState에서 리스트 갱신</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">numbers.add(numbers.length);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>리스트의 길이를 그대로 추가하면 자연스럽게 증가하는 시퀀스를 만들 수 있습니다.</li>
+<li>setState가 리스트에 새 항목이 추가된 사실을 반영하게 합니다.</li>
+</ul>
+<p><strong>3. 컬렉션 for 문법</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> n <span class="keyword">in</span> numbers) Text(<span class="string">&#x27;<span class="subst">$n</span>&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Dart 컬렉션 literal 안에서 <code>for</code> 문법을 사용할 수 있습니다.</li>
+<li>리스트 길이에 따라 <code>Text</code> 위젯이 동적으로 늘어납니다.</li>
+</ul>
+<p><strong>비교 예시:</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before: 단일 Text(&#x27;$counter&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// After: 리스트를 순회하며 Text 위젯 여러 개 생성</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> n <span class="keyword">in</span> numbers) Text(<span class="string">&#x27;<span class="subst">$n</span>&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>시각화:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Click Count</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">[ + ]</span><br></pre></td></tr></table></figure>
+<p>(버튼을 누를수록 숫자 줄이 계속 추가됩니다.)</p>
+<h3 id="📊-동작-흐름-2"><a href="#📊-동작-흐름-2" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 버튼 클릭 → setState 실행</span><br><span class="line">2. numbers에 현재 길이 값 추가</span><br><span class="line">3. build()가 다시 호출되어 for 루프가 새로운 숫자를 포함한 Text 리스트 렌더링</span><br><span class="line">4. 화면에 누적된 숫자가 순서대로 표시됨</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>numbers</code> 리스트가 빈 배열로 초기화되어 있는가?</li>
+<li><input disabled="" type="checkbox"> <code>numbers.add(numbers.length)</code> 로직이 setState 안에 있는가?</li>
+<li><input disabled="" type="checkbox"> UI에 숫자가 여러 줄로 쌓이는가?</li>
+</ul>
+<h3 id="💡-연습-과제-2"><a href="#💡-연습-과제-2" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>numbers.add(numbers.length * 2);</code>로 바꿔 짝수만 쌓아보세요.</li>
+<li><code>ListView</code>로 교체해 스크롤 가능한 숫자 리스트를 만들어보세요.</li>
+<li>리스트 길이가 5 이상이면 가장 오래된 값을 제거하도록 조건을 추가해보세요.</li>
+</ol>
+<hr>
+<h2 id="BuildContext와-Theme-활용"><a href="#BuildContext와-Theme-활용" class="headerlink" title="BuildContext와 Theme 활용"></a>BuildContext와 Theme 활용</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>ThemeData</code>와 <code>TextTheme</code>으로 전역 스타일 정의하기</li>
+<li>별도 위젯(<code>MyLargeTitle</code>)에서 <code>Theme.of(context)</code>로 상위 테마 가져오기</li>
+<li><code>BuildContext</code>가 위젯 트리를 탐색하는 열쇠라는 점 이해하기</li>
+</ul>
+<h3 id="📂-파일-구조-3"><a href="#📂-파일-구조-3" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (Theme 적용 + 커스텀 위젯 분리)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-ThemeData-설정-및-커스텀-위젯-분리"><a href="#📝-1단계-ThemeData-설정-및-커스텀-위젯-분리" class="headerlink" title="📝 1단계: ThemeData 설정 및 커스텀 위젯 분리"></a>📝 1단계: ThemeData 설정 및 커스텀 위젯 분리</h3><p><strong>전체 코드 (lib&#x2F;main.dart @ 3.3):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_AppState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">App</span>&gt; </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      theme: ThemeData(</span><br><span class="line">        textTheme: <span class="keyword">const</span> TextTheme(</span><br><span class="line">          titleLarge: TextStyle(</span><br><span class="line">            color: Colors.red,</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">      home: Scaffold(</span><br><span class="line">        backgroundColor: <span class="keyword">const</span> Color(<span class="number">0xFFF4EDDB</span>),</span><br><span class="line">        body: Center(</span><br><span class="line">          child: Column(</span><br><span class="line">            mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">            children: <span class="keyword">const</span> [</span><br><span class="line">              MyLargeTitle(),</span><br><span class="line">            ],</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyLargeTitle</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> MyLargeTitle(&#123;</span><br><span class="line">    Key? key,</span><br><span class="line">  &#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Text(</span><br><span class="line">      <span class="string">&#x27;My Large Title&#x27;</span>,</span><br><span class="line">      style: TextStyle(</span><br><span class="line">        fontSize: <span class="number">30</span>,</span><br><span class="line">        color: Theme.of(context).textTheme.titleLarge?.color,</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-3"><a href="#🔍-코드-상세-설명-3" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. MaterialApp에 Theme 적용</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">theme: ThemeData(</span><br><span class="line">  textTheme: <span class="keyword">const</span> TextTheme(</span><br><span class="line">    titleLarge: TextStyle(color: Colors.red),</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>ThemeData</code>는 앱 전반에 사용할 색상·폰트 등을 정의합니다.</li>
+<li><code>TextTheme.titleLarge</code>를 빨간색으로 지정해 커다란 제목 스타일을 통일합니다.</li>
+</ul>
+<p><strong>2. 커스텀 위젯 분리</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyLargeTitle</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>제목 전용 위젯을 별도로 만들어 재사용성과 가독성을 높였습니다.</li>
+<li><code>children: const [MyLargeTitle()],</code>로 const 생성자를 사용해 불필요한 리빌드를 막습니다.</li>
+</ul>
+<p><strong>3. BuildContext로 상위 테마 접근</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Theme.of(context).textTheme.titleLarge?.color</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>BuildContext</code>는 현재 위젯이 트리에서 어디 위치했는지 알려주는 객체입니다.</li>
+<li><code>Theme.of(context)</code>를 통해 가장 가까운 <code>Theme</code> 위젯을 찾아옵니다.</li>
+<li><code>?.</code>는 널 안전 연산자로, <code>titleLarge</code>가 null이어도 에러 없이 처리합니다.</li>
+</ul>
+<p><strong>비교 예시:</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before: 직접 색상 지정</span></span><br><span class="line">Text(<span class="string">&#x27;<span class="subst">$counter</span>&#x27;</span>, style: TextStyle(color: Colors.black))</span><br><span class="line"></span><br><span class="line"><span class="comment">// After: Theme에서 색상 가져오기</span></span><br><span class="line">color: Theme.of(context).textTheme.titleLarge?.color</span><br></pre></td></tr></table></figure>
+
+<p><strong>시각화:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MaterialApp (ThemeData)</span><br><span class="line">└─ Scaffold</span><br><span class="line">   └─ Column</span><br><span class="line">      └─ MyLargeTitle → Theme.of(context) → TextTheme.titleLarge</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-3"><a href="#📊-동작-흐름-3" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. MaterialApp이 ThemeData를 자식 위젯에 제공합니다.</span><br><span class="line">2. Column이 MyLargeTitle 위젯을 렌더링합니다.</span><br><span class="line">3. MyLargeTitle.build()가 전달받은 context로 Theme.of(context)를 호출합니다.</span><br><span class="line">4. Theme에서 titleLarge 스타일을 읽어 Text에 반영합니다.</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>ThemeData</code>가 MaterialApp의 <code>theme</code> 속성에 설정되었는가?</li>
+<li><input disabled="" type="checkbox"> <code>MyLargeTitle</code> 위젯이 const 생성자로 추가되었는가?</li>
+<li><input disabled="" type="checkbox"> <code>Theme.of(context)</code>로 색상을 읽어오는가?</li>
+<li><input disabled="" type="checkbox"> <code>titleLarge</code> 색상을 바꾸면 텍스트 색도 함께 변하는가?</li>
+</ul>
+<h3 id="💡-연습-과제-3"><a href="#💡-연습-과제-3" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>ThemeData</code>에 <code>primaryColor</code>나 <code>appBarTheme</code>를 추가해 전역 스타일을 더 만들어보세요.</li>
+<li><code>MyLargeTitle</code> 안에서 <code>Theme.of(context).textTheme.headlineMedium</code> 등을 사용해 다른 스타일을 테스트하세요.</li>
+<li><code>MediaQuery.of(context).size</code>를 출력해 BuildContext로 가져올 수 있는 다른 정보도 살펴보세요.</li>
+</ol>
+<hr>
+<h2 id="📚-전체-흐름-정리"><a href="#📚-전체-흐름-정리" class="headerlink" title="📚 전체 흐름 정리"></a>📚 전체 흐름 정리</h2><ul>
+<li>앱을 <code>StatefulWidget</code>으로 전환해 상태를 저장할 수 있게 했습니다.</li>
+<li><code>setState</code>를 도입해 상태 변경이 즉시 UI에 반영되도록 수정했습니다.</li>
+<li>숫자를 리스트로 누적하고 컬렉션 <code>for</code> 문법을 써서 동적 위젯 생성을 경험했습니다.</li>
+<li><code>BuildContext</code>와 <code>ThemeData</code>를 활용해 상위 위젯의 스타일을 하위 위젯에서 재사용했습니다.</li>
+</ul>
+<h2 id="✅-최종-점검-리스트"><a href="#✅-최종-점검-리스트" class="headerlink" title="✅ 최종 점검 리스트"></a>✅ 최종 점검 리스트</h2><ul>
+<li><input disabled="" type="checkbox"> StatefulWidget과 State 클래스를 구분해서 작성할 수 있는가?</li>
+<li><input disabled="" type="checkbox"> setState를 호출해야만 UI가 다시 그려진다는 사실을 이해했는가?</li>
+<li><input disabled="" type="checkbox"> 리스트 상태를 관리하고 컬렉션 for 문법으로 위젯을 만들 수 있는가?</li>
+<li><input disabled="" type="checkbox"> BuildContext를 통해 Theme 혹은 다른 상위 데이터에 접근할 수 있는가?</li>
+</ul>
+<hr>
+<p>출처 : <a target="_blank" rel="noopener" href="https://nomadcoders.co/flutter-for-beginners">https://nomadcoders.co/flutter-for-beginners</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/flutter/" rel="tag"><i class="fa fa-tag"></i> flutter</a>
+              <a href="/tags/basic/" rel="tag"><i class="fa fa-tag"></i> basic</a>
+              <a href="/tags/toonflix/" rel="tag"><i class="fa fa-tag"></i> toonflix</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/02/flutter-basic/flutter-basic-chapter2/" rel="prev" title="Flutter Basic Chapter 2 - 다크 테마 월렛 대시보드">
+                  <i class="fa fa-angle-left"></i> Flutter Basic Chapter 2 - 다크 테마 월렛 대시보드
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/02/flutter-basic/flutter-basic-chapter4/" rel="next" title="Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기">
+                  Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

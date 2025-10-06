@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="UI 레이아웃과 화면 분리🎯 이번 단계에서 배울 것 MaterialApp에 테마를 적용하고 화면을 별도 위젯으로 분리하는 방법 이해 Scaffold + Flexible + Expanded 조합으로 세로 레이아웃 설계 테마 색상(backgroundColor, cardColor, textTheme)을 통해 일관된 스타일 적용 새로운 화면 파일(lib&#x2F;scre">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter4/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="UI 레이아웃과 화면 분리🎯 이번 단계에서 배울 것 MaterialApp에 테마를 적용하고 화면을 별도 위젯으로 분리하는 방법 이해 Scaffold + Flexible + Expanded 조합으로 세로 레이아웃 설계 테마 색상(backgroundColor, cardColor, textTheme)을 통해 일관된 스타일 적용 새로운 화면 파일(lib&#x2F;scre">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-02T03:04:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="basic">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="toonflix">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter4/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter4/","path":"2025/10/02/flutter-basic/flutter-basic-chapter4/","title":"Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">21</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UI-%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83%EA%B3%BC-%ED%99%94%EB%A9%B4-%EB%B6%84%EB%A6%AC"><span class="nav-number">1.</span> <span class="nav-text">UI 레이아웃과 화면 분리</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0"><span class="nav-number">1.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%ED%85%8C%EB%A7%88-%EC%A0%95%EC%9D%98%EC%99%80-%ED%99%94%EB%A9%B4-%EB%B6%84%EB%A6%AC"><span class="nav-number">1.3.</span> <span class="nav-text">📝 1단계: 테마 정의와 화면 분리</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-HomeScreen-UI-%EB%BC%88%EB%8C%80-%EC%9E%91%EC%84%B1"><span class="nav-number">1.4.</span> <span class="nav-text">📝 2단계: HomeScreen UI 뼈대 작성</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.4.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84"><span class="nav-number">1.5.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C"><span class="nav-number">1.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Timer-periodic%EC%9C%BC%EB%A1%9C-%EC%B9%B4%EC%9A%B4%ED%8A%B8%EB%8B%A4%EC%9A%B4-%EA%B5%AC%ED%98%84"><span class="nav-number">2.</span> <span class="nav-text">Timer.periodic으로 카운트다운 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-1"><span class="nav-number">2.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%ED%83%80%EC%9D%B4%EB%A8%B8-%EC%83%81%ED%83%9C%EC%99%80-%EC%BD%9C%EB%B0%B1-%EC%B6%94%EA%B0%80"><span class="nav-number">2.3.</span> <span class="nav-text">📝 1단계: 타이머 상태와 콜백 추가</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-UI%EC%97%90%EC%84%9C-%EB%82%A8%EC%9D%80-%EC%8B%9C%EA%B0%84-%EC%B6%9C%EB%A0%A5"><span class="nav-number">2.4.</span> <span class="nav-text">📝 2단계: UI에서 남은 시간 출력</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-1"><span class="nav-number">2.5.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">2.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-1"><span class="nav-number">2.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%9E%AC%EC%83%9D-%EC%9D%BC%EC%8B%9C%EC%A0%95%EC%A7%80-%ED%86%A0%EA%B8%80-%EA%B5%AC%ED%98%84"><span class="nav-number">3.</span> <span class="nav-text">재생&#x2F;일시정지 토글 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-2"><span class="nav-number">3.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%83%81%ED%83%9C-%EB%B3%80%EC%88%98%EC%99%80-%EB%A1%9C%EC%A7%81-%ED%99%95%EC%9E%A5"><span class="nav-number">3.3.</span> <span class="nav-text">📝 1단계: 상태 변수와 로직 확장</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EB%8B%A8%EC%9D%BC-%EB%B2%84%ED%8A%BC%EC%97%90%EC%84%9C-%ED%86%A0%EA%B8%80-%EA%B5%AC%ED%98%84"><span class="nav-number">3.4.</span> <span class="nav-text">📝 2단계: 단일 버튼에서 토글 구현</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-2"><span class="nav-number">3.5.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">3.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-2"><span class="nav-number">3.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EB%82%A8%EC%9D%80-%EC%8B%9C%EA%B0%84-%ED%8F%AC%EB%A7%B7%EA%B3%BC-%ED%8F%AC%EB%AA%A8%EB%8F%84%EB%A1%9C-%EB%88%84%EC%A0%81"><span class="nav-number">4.</span> <span class="nav-text">남은 시간 포맷과 포모도로 누적</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-3"><span class="nav-number">4.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%83%81%EC%88%98%EC%99%80-%EB%88%84%EC%A0%81-%EC%83%81%ED%83%9C-%EC%B6%94%EA%B0%80"><span class="nav-number">4.3.</span> <span class="nav-text">📝 1단계: 상수와 누적 상태 추가</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%8B%9C%EA%B0%84-%ED%8F%AC%EB%A7%B7-%ED%95%A8%EC%88%98-%EB%8F%84%EC%9E%85"><span class="nav-number">4.4.</span> <span class="nav-text">📝 2단계: 시간 포맷 함수 도입</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-3%EB%8B%A8%EA%B3%84-%EB%88%84%EC%A0%81-%ED%8F%AC%EB%AA%A8%EB%8F%84%EB%A1%9C-%EC%B6%9C%EB%A0%A5"><span class="nav-number">4.5.</span> <span class="nav-text">📝 3단계: 누적 포모도로 출력</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-3"><span class="nav-number">4.6.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">4.7.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-3"><span class="nav-number">4.8.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%EC%A0%84%EC%B2%B4-%ED%9D%90%EB%A6%84-%EC%A0%95%EB%A6%AC"><span class="nav-number">5.</span> <span class="nav-text">📚 전체 흐름 정리</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9C%85-%EC%B5%9C%EC%A2%85-%EC%A0%90%EA%B2%80-%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">6.</span> <span class="nav-text">✅ 최종 점검 리스트</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-02 12:04" itemprop="dateCreated datePublished" datetime="2025-10-02T12:04:00+09:00">2025-10-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="UI-레이아웃과-화면-분리"><a href="#UI-레이아웃과-화면-분리" class="headerlink" title="UI 레이아웃과 화면 분리"></a>UI 레이아웃과 화면 분리</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>MaterialApp</code>에 테마를 적용하고 화면을 별도 위젯으로 분리하는 방법 이해</li>
+<li><code>Scaffold</code> + <code>Flexible</code> + <code>Expanded</code> 조합으로 세로 레이아웃 설계</li>
+<li>테마 색상(<code>backgroundColor</code>, <code>cardColor</code>, <code>textTheme</code>)을 통해 일관된 스타일 적용</li>
+<li>새로운 화면 파일(<code>lib/screens/home_screen.dart</code>)을 생성하고 <code>HomeScreen</code>을 루트로 사용</li>
+</ul>
+<h3 id="📂-파일-구조"><a href="#📂-파일-구조" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (테마 정의 및 HomeScreen 연결)</span><br><span class="line"></span><br><span class="line">새로 생성되는 파일</span><br><span class="line">- lib/screens/home_screen.dart (Pomodoro UI 기본 뼈대)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-테마-정의와-화면-분리"><a href="#📝-1단계-테마-정의와-화면-분리" class="headerlink" title="📝 1단계: 테마 정의와 화면 분리"></a>📝 1단계: 테마 정의와 화면 분리</h3><p><strong>전체 코드 (lib&#x2F;main.dart):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:toonflix/screens/home_screen.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  runApp(App());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      theme: ThemeData(</span><br><span class="line">        backgroundColor: <span class="keyword">const</span> Color(<span class="number">0xFFE7626C</span>),</span><br><span class="line">        textTheme: <span class="keyword">const</span> TextTheme(</span><br><span class="line">          headline1: TextStyle(</span><br><span class="line">            color: Color(<span class="number">0xFF232B55</span>),</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">        cardColor: <span class="keyword">const</span> Color(<span class="number">0xFFF4EDDB</span>),</span><br><span class="line">      ),</span><br><span class="line">      home: <span class="keyword">const</span> HomeScreen(),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>배경색(연한 빨강), 카드색(밝은 베이지), <code>headline1</code> 컬러(남색)를 한 번에 정의해 후속 위젯이 재사용하도록 했습니다.</li>
+<li><code>HomeScreen</code>을 const 생성자로 호출해 불필요한 리빌드를 방지합니다.</li>
+</ul>
+<h3 id="📝-2단계-HomeScreen-UI-뼈대-작성"><a href="#📝-2단계-HomeScreen-UI-뼈대-작성" class="headerlink" title="📝 2단계: HomeScreen UI 뼈대 작성"></a>📝 2단계: HomeScreen UI 뼈대 작성</h3><p><strong>핵심 코드 (lib&#x2F;screens&#x2F;home_screen.dart):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HomeScreen</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> HomeScreen(&#123;<span class="keyword">super</span>.key&#125;);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  State&lt;HomeScreen&gt; createState() =&gt; _HomeScreenState();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_HomeScreenState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">HomeScreen</span>&gt; </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      backgroundColor: Theme.of(context).backgroundColor,</span><br><span class="line">      body: Column(</span><br><span class="line">        children: [</span><br><span class="line">          Flexible(</span><br><span class="line">            flex: <span class="number">1</span>,</span><br><span class="line">            child: Container(</span><br><span class="line">              alignment: Alignment.bottomCenter,</span><br><span class="line">              child: Text(</span><br><span class="line">                <span class="string">&#x27;25:00&#x27;</span>,</span><br><span class="line">                style: TextStyle(</span><br><span class="line">                  color: Theme.of(context).cardColor,</span><br><span class="line">                  fontSize: <span class="number">89</span>,</span><br><span class="line">                  fontWeight: FontWeight.w600,</span><br><span class="line">                ),</span><br><span class="line">              ),</span><br><span class="line">            ),</span><br><span class="line">          ),</span><br><span class="line">          Flexible(</span><br><span class="line">            flex: <span class="number">3</span>,</span><br><span class="line">            child: Center(</span><br><span class="line">              child: IconButton(</span><br><span class="line">                iconSize: <span class="number">120</span>,</span><br><span class="line">                color: Theme.of(context).cardColor,</span><br><span class="line">                onPressed: () &#123;&#125;,</span><br><span class="line">                icon: <span class="keyword">const</span> Icon(Icons.play_circle_outline),</span><br><span class="line">              ),</span><br><span class="line">            ),</span><br><span class="line">          ),</span><br><span class="line">          Flexible(</span><br><span class="line">            flex: <span class="number">1</span>,</span><br><span class="line">            child: Row(</span><br><span class="line">              children: [</span><br><span class="line">                Expanded(</span><br><span class="line">                  child: Container(</span><br><span class="line">                    decoration: BoxDecoration(</span><br><span class="line">                      color: Theme.of(context).cardColor,</span><br><span class="line">                    ),</span><br><span class="line">                    child: Column(</span><br><span class="line">                      mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">                      children: [</span><br><span class="line">                        Text(</span><br><span class="line">                          <span class="string">&#x27;Pomodoros&#x27;</span>,</span><br><span class="line">                          style: TextStyle(</span><br><span class="line">                            fontSize: <span class="number">20</span>,</span><br><span class="line">                            fontWeight: FontWeight.w600,</span><br><span class="line">                            color: Theme.of(context).textTheme.headline1!.color,</span><br><span class="line">                          ),</span><br><span class="line">                        ),</span><br><span class="line">                        Text(</span><br><span class="line">                          <span class="string">&#x27;0&#x27;</span>,</span><br><span class="line">                          style: TextStyle(</span><br><span class="line">                            fontSize: <span class="number">58</span>,</span><br><span class="line">                            fontWeight: FontWeight.w600,</span><br><span class="line">                            color: Theme.of(context).textTheme.headline1!.color,</span><br><span class="line">                          ),</span><br><span class="line">                        ),</span><br><span class="line">                      ],</span><br><span class="line">                    ),</span><br><span class="line">                  ),</span><br><span class="line">                ),</span><br><span class="line">              ],</span><br><span class="line">            ),</span><br><span class="line">          )</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><ul>
+<li><strong>Flexible&#x2F;Expanded</strong>: <code>Column</code> 세 영역에 <code>flex</code> 값을 부여해 타이머, 버튼, 통계 영역의 비율을 제어합니다.</li>
+<li><strong>Theme 재사용</strong>: 배경색·카드색·텍스트 색 모두 <code>Theme.of(context)</code>에서 가져와 테마 값과 동기화합니다.</li>
+<li><strong>StatefulWidget 도입</strong>: 추후 타이머 상태를 저장하기 위해 <code>HomeScreen</code>을 StatefulWidget으로 시작합니다(아직 상태 필드는 없음).</li>
+</ul>
+<p><strong>시각화:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────┐</span><br><span class="line">│           25:00              │ ← 상단 타이머 (flex 1)</span><br><span class="line">│                              │</span><br><span class="line">│      [   Play Icon   ]       │ ← 중앙 컨트롤 (flex 3)</span><br><span class="line">│                              │</span><br><span class="line">│  Pomodoros        0          │ ← 하단 통계 (flex 1)</span><br><span class="line">└──────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름"><a href="#📊-동작-흐름" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. App → MaterialApp → ThemeData 설정</span><br><span class="line">2. HomeScreen(StatefulWidget)이 Scaffold를 반환</span><br><span class="line">3. Column이 세 영역을 Flexible로 분할</span><br><span class="line">4. Theme.of(context) 호출로 전역 테마 색상을 가져옴</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>lib/screens</code> 폴더에 <code>home_screen.dart</code>가 생성됐는가?</li>
+<li><input disabled="" type="checkbox"> MaterialApp에서 <code>home: const HomeScreen()</code>을 사용했는가?</li>
+<li><input disabled="" type="checkbox"> Flexible 영역 비율이 1:3:1로 구성됐는가?</li>
+<li><input disabled="" type="checkbox"> UI 전체가 정의한 테마 색상을 사용하고 있는가?</li>
+</ul>
+<h3 id="💡-연습-과제"><a href="#💡-연습-과제" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>headline1</code> 색상을 다른 색으로 바꿔 카드 텍스트 색 변화 확인하기</li>
+<li>하단 카드에 <code>borderRadius</code>를 추가해 모서리를 둥글게 만들기</li>
+<li>타이머 텍스트를 중앙 정렬이 아니라 좌측 정렬로 바꿔 UI 변화를 비교하기</li>
+</ol>
+<hr>
+<h2 id="Timer-periodic으로-카운트다운-구현"><a href="#Timer-periodic으로-카운트다운-구현" class="headerlink" title="Timer.periodic으로 카운트다운 구현"></a>Timer.periodic으로 카운트다운 구현</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>dart:async</code>의 <code>Timer.periodic</code>으로 1초마다 콜백 실행하기</li>
+<li>타이머 상태(<code>totalSeconds</code>)를 감소시키고 setState로 UI 갱신하기</li>
+<li>타이머 핸들을 <code>late Timer</code>로 선언하고 <code>onTick</code> 콜백으로 추출하기</li>
+<li>타이머 시작 버튼에 실제 동작 연결하기</li>
+</ul>
+<h3 id="📂-파일-구조-1"><a href="#📂-파일-구조-1" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/home_screen.dart (타이머 상태와 로직 추가)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-타이머-상태와-콜백-추가"><a href="#📝-1단계-타이머-상태와-콜백-추가" class="headerlink" title="📝 1단계: 타이머 상태와 콜백 추가"></a>📝 1단계: 타이머 상태와 콜백 추가</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_HomeScreenState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">HomeScreen</span>&gt; </span>&#123;</span><br><span class="line">  <span class="built_in">int</span> totalSeconds = <span class="number">1500</span>;</span><br><span class="line">  <span class="keyword">late</span> Timer timer;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> onTick(Timer timer) &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      totalSeconds = totalSeconds - <span class="number">1</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> onStartPressed() &#123;</span><br><span class="line">    timer = Timer.periodic(</span><br><span class="line">      <span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">1</span>),</span><br><span class="line">      onTick,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>totalSeconds</code>는 25분(1500초)부터 내려가기 시작하는 타이머 값입니다.</li>
+<li><code>Timer.periodic</code>이 1초마다 <code>onTick</code>을 호출하며, 콜백 안에서 <code>setState</code>로 카운트다운 값을 갱신합니다.</li>
+<li><code>timer</code>를 <code>late</code>로 선언해 나중에 초기화하되, 반드시 타이머 생성 후 접근하도록 합니다.</li>
+</ul>
+<h3 id="📝-2단계-UI에서-남은-시간-출력"><a href="#📝-2단계-UI에서-남은-시간-출력" class="headerlink" title="📝 2단계: UI에서 남은 시간 출력"></a>📝 2단계: UI에서 남은 시간 출력</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Text(</span><br><span class="line">  <span class="string">&#x27;<span class="subst">$totalSeconds</span>&#x27;</span>,</span><br><span class="line">  style: TextStyle(</span><br><span class="line">    color: Theme.of(context).cardColor,</span><br><span class="line">    fontSize: <span class="number">89</span>,</span><br><span class="line">    fontWeight: FontWeight.w600,</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<ul>
+<li>타이머 숫자를 그대로 출력해 정상적으로 감소하는지 확인합니다(아직 포맷팅 전 단계).</li>
+<li>중앙의 <code>IconButton</code>은 <code>onStartPressed</code>에 연결해 재생 버튼을 누르면 타이머가 시작됩니다.</li>
+</ul>
+<h3 id="📊-동작-흐름-1"><a href="#📊-동작-흐름-1" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 사용자가 재생 버튼을 누름 → onStartPressed 실행</span><br><span class="line">2. Timer.periodic이 1초 주기로 onTick 호출</span><br><span class="line">3. onTick에서 totalSeconds-- 후 setState 호출</span><br><span class="line">4. build() 재호출 → Text(&#x27;$totalSeconds&#x27;)가 갱신된 숫자를 표시</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>dart:async</code>가 최상단에 import되어 있는가?</li>
+<li><input disabled="" type="checkbox"> <code>Timer.periodic</code>이 Duration(seconds: 1)로 생성되는가?</li>
+<li><input disabled="" type="checkbox"> 타이머 시작 후 숫자가 1초마다 감소하는가?</li>
+<li><input disabled="" type="checkbox"> 타이머를 멈추지 않아도 안전하게 동작하는가? (아직 종료 로직은 없음)</li>
+</ul>
+<h3 id="💡-연습-과제-1"><a href="#💡-연습-과제-1" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>totalSeconds</code> 초기값을 5로 줄여 빠르게 타이머 완료를 테스트해보세요.</li>
+<li><code>Timer.periodic</code> 대신 <code>Future.delayed</code>로 재귀 호출을 구현해 비교해보세요.</li>
+<li>남은 시간이 0이 되었을 때 경고 로그를 출력하도록 조건문을 추가하세요.</li>
+</ol>
+<hr>
+<h2 id="재생-일시정지-토글-구현"><a href="#재생-일시정지-토글-구현" class="headerlink" title="재생&#x2F;일시정지 토글 구현"></a>재생&#x2F;일시정지 토글 구현</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>타이머 실행 여부를 추적하는 불리언 상태(<code>isRunning</code>) 추가</li>
+<li>타이머 중지 시 <code>Timer.cancel()</code>을 호출해 자원 누수를 막기</li>
+<li>하나의 버튼에서 재생&#x2F;일시정지 아이콘과 동작을 토글하기</li>
+</ul>
+<h3 id="📂-파일-구조-2"><a href="#📂-파일-구조-2" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/home_screen.dart (isRunning 상태 및 Pause 기능 추가)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-상태-변수와-로직-확장"><a href="#📝-1단계-상태-변수와-로직-확장" class="headerlink" title="📝 1단계: 상태 변수와 로직 확장"></a>📝 1단계: 상태 변수와 로직 확장</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">bool</span> isRunning = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> onStartPressed() &#123;</span><br><span class="line">  timer = Timer.periodic(</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">1</span>),</span><br><span class="line">    onTick,</span><br><span class="line">  );</span><br><span class="line">  setState(() &#123;</span><br><span class="line">    isRunning = <span class="keyword">true</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> onPausePressed() &#123;</span><br><span class="line">  timer.cancel();</span><br><span class="line">  setState(() &#123;</span><br><span class="line">    isRunning = <span class="keyword">false</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>타이머 시작&#x2F;정지 시 <code>isRunning</code> 값을 갱신하여 UI와 상태를 동기화합니다.</li>
+<li>타이머를 중지할 때는 반드시 <code>timer.cancel()</code>을 호출해야 콜백이 더 이상 실행되지 않습니다.</li>
+</ul>
+<h3 id="📝-2단계-단일-버튼에서-토글-구현"><a href="#📝-2단계-단일-버튼에서-토글-구현" class="headerlink" title="📝 2단계: 단일 버튼에서 토글 구현"></a>📝 2단계: 단일 버튼에서 토글 구현</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">IconButton(</span><br><span class="line">  iconSize: <span class="number">120</span>,</span><br><span class="line">  color: Theme.of(context).cardColor,</span><br><span class="line">  onPressed: isRunning ? onPausePressed : onStartPressed,</span><br><span class="line">  icon: Icon(</span><br><span class="line">    isRunning</span><br><span class="line">        ? Icons.pause_circle_outline</span><br><span class="line">        : Icons.play_circle_outline,</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>isRunning</code>이 true면 일시정지 아이콘과 핸들러를, false면 재생 아이콘과 핸들러를 사용합니다.</li>
+<li>단일 위젯으로 상태에 따라 동작이 바뀌는 것을 경험할 수 있습니다.</li>
+</ul>
+<h3 id="📊-동작-흐름-2"><a href="#📊-동작-흐름-2" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. isRunning이 false → 재생 버튼 표시 → onStartPressed 실행</span><br><span class="line">2. onStartPressed에서 Timer 시작 + isRunning = true</span><br><span class="line">3. 버튼이 즉시 일시정지 아이콘으로 바뀜</span><br><span class="line">4. 사용자가 다시 누르면 onPausePressed 실행 → Timer.cancel + isRunning = false</span><br><span class="line">5. 버튼이 재생 아이콘으로 돌아감</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>isRunning</code> 기본값이 false로 설정되어 있는가?</li>
+<li><input disabled="" type="checkbox"> 타이머를 정지하면 setState가 호출되는가?</li>
+<li><input disabled="" type="checkbox"> 버튼 아이콘&#x2F;동작이 즉시 토글되는가?</li>
+<li><input disabled="" type="checkbox"> 타이머가 여러 번 start&#x2F;pause 되어도 오류 없이 동작하는가?</li>
+</ul>
+<h3 id="💡-연습-과제-2"><a href="#💡-연습-과제-2" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li>타이머가 멈췄을 때 배경색을 살짝 바꿔 상태 변화를 강조해보세요.</li>
+<li><code>isRunning</code> 대신 enum(<code>TimerStatus.idle/running</code>)을 사용해 상태를 확장해보세요.</li>
+<li>pause 후 resume 시 남은 시간을 유지하는지 확인하고, resume 버튼을 별도로 만들어보세요.</li>
+</ol>
+<hr>
+<h2 id="남은-시간-포맷과-포모도로-누적"><a href="#남은-시간-포맷과-포모도로-누적" class="headerlink" title="남은 시간 포맷과 포모도로 누적"></a>남은 시간 포맷과 포모도로 누적</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>상수(<code>static const twentyFiveMinutes</code>)로 변하지 않는 값 관리하기</li>
+<li>타이머 완료 시 포모도로 횟수(<code>totalPomodoros</code>) 증가 및 타이머 리셋</li>
+<li><code>Duration</code>과 문자열 조작으로 <code>MM:SS</code> 형식의 타이머 표시 만들기</li>
+<li>README를 간단한 강의 안내 문구로 정리 (프로젝트 소개 업데이트)</li>
+</ul>
+<h3 id="📂-파일-구조-3"><a href="#📂-파일-구조-3" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/home_screen.dart (포맷 함수, 포모도로 누적, 초기화 로직 추가)</span><br><span class="line">- README.md (프로젝트 소개 문구 정리)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-상수와-누적-상태-추가"><a href="#📝-1단계-상수와-누적-상태-추가" class="headerlink" title="📝 1단계: 상수와 누적 상태 추가"></a>📝 1단계: 상수와 누적 상태 추가</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> twentyFiveMinutes = <span class="number">1500</span>;</span><br><span class="line"><span class="built_in">int</span> totalSeconds = twentyFiveMinutes;</span><br><span class="line"><span class="built_in">bool</span> isRunning = <span class="keyword">false</span>;</span><br><span class="line"><span class="built_in">int</span> totalPomodoros = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>초기 25분 값을 상수로 선언해 재사용합니다.</li>
+<li>타이머가 끝나면 <code>totalSeconds</code>를 상수 값으로 다시 세팅하고, <code>totalPomodoros</code>를 1 증가시킵니다.</li>
+</ul>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> onTick(Timer timer) &#123;</span><br><span class="line">  <span class="keyword">if</span> (totalSeconds == <span class="number">0</span>) &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      totalPomodoros = totalPomodoros + <span class="number">1</span>;</span><br><span class="line">      isRunning = <span class="keyword">false</span>;</span><br><span class="line">      totalSeconds = twentyFiveMinutes;</span><br><span class="line">    &#125;);</span><br><span class="line">    timer.cancel();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      totalSeconds = totalSeconds - <span class="number">1</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>남은 시간이 0이면 타이머를 멈추고 초기 상태로 복원한 뒤 누적 횟수를 증가시킵니다.</li>
+<li>그렇지 않으면 기존과 같이 1초씩 감소시킵니다.</li>
+</ul>
+<h3 id="📝-2단계-시간-포맷-함수-도입"><a href="#📝-2단계-시간-포맷-함수-도입" class="headerlink" title="📝 2단계: 시간 포맷 함수 도입"></a>📝 2단계: 시간 포맷 함수 도입</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span> format(<span class="built_in">int</span> seconds) &#123;</span><br><span class="line">  <span class="keyword">var</span> duration = <span class="built_in">Duration</span>(seconds: seconds);</span><br><span class="line">  <span class="keyword">return</span> duration.toString().split(<span class="string">&quot;.&quot;</span>).first.substring(<span class="number">2</span>, <span class="number">7</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Duration</code> 객체를 문자열로 변환하면 <code>0:25:00.000000</code> 형식이 나오므로, <code>split</code>과 <code>substring</code>으로 <code>25:00</code> 부분만 추출합니다.</li>
+<li>빌드 메서드에서는 <code>format(totalSeconds)</code>를 호출해 항상 <code>MM:SS</code> 형식으로 표시합니다.</li>
+</ul>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Text(</span><br><span class="line">  format(totalSeconds),</span><br><span class="line">  style: TextStyle(...),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-3단계-누적-포모도로-출력"><a href="#📝-3단계-누적-포모도로-출력" class="headerlink" title="📝 3단계: 누적 포모도로 출력"></a>📝 3단계: 누적 포모도로 출력</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Text(</span><br><span class="line">  <span class="string">&#x27;<span class="subst">$totalPomodoros</span>&#x27;</span>,</span><br><span class="line">  style: TextStyle(</span><br><span class="line">    fontSize: <span class="number">58</span>,</span><br><span class="line">    fontWeight: FontWeight.w600,</span><br><span class="line">    color: Theme.of(context).textTheme.headline1!.color,</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>하단 카드에 누적 포모도로 수를 표시해 사용자에게 성취감을 제공합니다.</li>
+<li>README.md는 다음과 같이 간단한 소개와 강의 링크만 남기도록 정리했습니다:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Toonflix</span><br><span class="line"></span><br><span class="line">Lean Flutter by making a Webtoon App</span><br><span class="line"></span><br><span class="line">[Watch now (무료 강의)](https://nomadcoders.co/flutter-for-beginners)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-3"><a href="#📊-동작-흐름-3" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 타이머 시작 → onTick이 매초 totalSeconds 감소</span><br><span class="line">2. totalSeconds == 0 이 되면</span><br><span class="line">   a. timer.cancel()</span><br><span class="line">   b. totalPomodoros++, totalSeconds 초기화, isRunning = false</span><br><span class="line">3. format(totalSeconds)가 MM:SS 문자열을 반환하여 타이머 텍스트에 표시</span><br><span class="line">4. 하단 카드가 누적 포모도로 수를 최신 상태로 보여줌</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>twentyFiveMinutes</code> 상수가 선언되고 재사용되는가?</li>
+<li><input disabled="" type="checkbox"> 타이머가 0이 되면 자동으로 멈추고 값이 초기화되는가?</li>
+<li><input disabled="" type="checkbox"> 시간 표시가 <code>25:00</code> 형식으로 나온다는 것을 확인했는가?</li>
+<li><input disabled="" type="checkbox"> 포모도로 누적 숫자가 증가하는가?</li>
+<li><input disabled="" type="checkbox"> README가 간결한 소개와 강의 링크만 포함하도록 업데이트됐는가?</li>
+</ul>
+<h3 id="💡-연습-과제-3"><a href="#💡-연습-과제-3" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li>5분 휴식 타이머를 추가하고 완료 시 교차로 실행되도록 확장해보세요.</li>
+<li><code>format</code> 함수에서 <code>substring</code> 대신 <code>padLeft</code>를 사용해 같은 결과를 만들어보세요.</li>
+<li>포모도로가 목표치에 도달하면 알림 다이얼로그를 띄우도록 기능을 추가해보세요.</li>
+</ol>
+<hr>
+<h2 id="📚-전체-흐름-정리"><a href="#📚-전체-흐름-정리" class="headerlink" title="📚 전체 흐름 정리"></a>📚 전체 흐름 정리</h2><ul>
+<li>테마 적용과 화면 분리로 Pomodoro UI의 골격을 세웠습니다.</li>
+<li><code>Timer.periodic</code>을 도입해 1초 간격으로 남은 시간이 감소하도록 만들었습니다.</li>
+<li>재생&#x2F;일시정지 토글을 구현해 타이머 제어가 가능해졌습니다.</li>
+<li>남은 시간을 <code>MM:SS</code> 형식으로 포맷하고, 타이머 완료 시 포모도로 횟수를 누적하도록 완성했습니다.</li>
+</ul>
+<h2 id="✅-최종-점검-리스트"><a href="#✅-최종-점검-리스트" class="headerlink" title="✅ 최종 점검 리스트"></a>✅ 최종 점검 리스트</h2><ul>
+<li><input disabled="" type="checkbox"> 메인 앱이 HomeScreen을 불러오고 테마를 재사용하는가?</li>
+<li><input disabled="" type="checkbox"> Timer가 정상적으로 시작&#x2F;일시정지&#x2F;완료를 처리하는가?</li>
+<li><input disabled="" type="checkbox"> 남은 시간이 형식화되어 있고, 포모도로 누적 수가 표시되는가?</li>
+</ul>
+<hr>
+<p>출처 : <a target="_blank" rel="noopener" href="https://nomadcoders.co/flutter-for-beginners">https://nomadcoders.co/flutter-for-beginners</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/flutter/" rel="tag"><i class="fa fa-tag"></i> flutter</a>
+              <a href="/tags/basic/" rel="tag"><i class="fa fa-tag"></i> basic</a>
+              <a href="/tags/toonflix/" rel="tag"><i class="fa fa-tag"></i> toonflix</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/02/flutter-basic/flutter-basic-chapter3/" rel="prev" title="Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기">
+                  <i class="fa fa-angle-left"></i> Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/02/flutter-basic/flutter-basic-chapter5/" rel="next" title="Flutter Basic Chapter 5 - 웹툰 API 연동과 상세 화면">
+                  Flutter Basic Chapter 5 - 웹툰 API 연동과 상세 화면 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

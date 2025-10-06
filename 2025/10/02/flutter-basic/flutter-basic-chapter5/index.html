@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="AppBar와 기본 화면 정비🎯 이번 단계에서 배울 것 MaterialApp과 runApp에 const를 적용해 불필요한 리빌드 최소화 홈 화면을 HomeScreen StatelessWidget으로 구성하고 한국어 AppBar 추가 AppBar의 backgroundColor, foregroundColor, elevation 속성으로 스타일 제어">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter Basic Chapter 5 - 웹툰 API 연동과 상세 화면">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter5/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="AppBar와 기본 화면 정비🎯 이번 단계에서 배울 것 MaterialApp과 runApp에 const를 적용해 불필요한 리빌드 최소화 홈 화면을 HomeScreen StatelessWidget으로 구성하고 한국어 AppBar 추가 AppBar의 backgroundColor, foregroundColor, elevation 속성으로 스타일 제어">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-02T03:05:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="basic">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="toonflix">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter5/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter5/","path":"2025/10/02/flutter-basic/flutter-basic-chapter5/","title":"Flutter Basic Chapter 5 - 웹툰 API 연동과 상세 화면"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Flutter Basic Chapter 5 - 웹툰 API 연동과 상세 화면 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">21</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AppBar%EC%99%80-%EA%B8%B0%EB%B3%B8-%ED%99%94%EB%A9%B4-%EC%A0%95%EB%B9%84"><span class="nav-number">1.</span> <span class="nav-text">AppBar와 기본 화면 정비</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0"><span class="nav-number">1.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C"><span class="nav-number">1.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.3.1.</span> <span class="nav-text">🔍 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%ED%99%94%EB%A9%B4-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0"><span class="nav-number">1.4.</span> <span class="nav-text">🎨 화면 미리보기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.5.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-%EC%9A%94%EC%B2%AD%EA%B3%BC-%EB%AA%A8%EB%8D%B8-%EC%A0%95%EC%9D%98-Data-Fetching-fromJson"><span class="nav-number">2.</span> <span class="nav-text">HTTP 요청과 모델 정의 (Data Fetching &amp; fromJson)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-1"><span class="nav-number">2.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-1"><span class="nav-number">2.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">🔍 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">2.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%B4%88%EA%B8%B0-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%A1%9C%EB%94%A9%EA%B3%BC-%EC%83%81%ED%83%9C-%EA%B4%80%EB%A6%AC-waitForWebToons"><span class="nav-number">3.</span> <span class="nav-text">초기 데이터 로딩과 상태 관리 (waitForWebToons)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-2"><span class="nav-number">3.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-2"><span class="nav-number">3.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">🔍 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">3.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FutureBuilder%EB%A1%9C-%EC%83%81%ED%83%9C-%EB%8B%A8%EC%88%9C%ED%99%94"><span class="nav-number">4.</span> <span class="nav-text">FutureBuilder로 상태 단순화</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-3"><span class="nav-number">4.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-3"><span class="nav-number">4.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">4.3.1.</span> <span class="nav-text">🔍 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">4.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EA%B0%80%EB%A1%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EB%A6%AC%EC%8A%A4%ED%8A%B8%EB%B7%B0-%EA%B5%AC%EC%84%B1"><span class="nav-number">5.</span> <span class="nav-text">가로 스크롤 리스트뷰 구성</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-4"><span class="nav-number">5.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-4"><span class="nav-number">5.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-4"><span class="nav-number">5.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-4"><span class="nav-number">5.3.1.</span> <span class="nav-text">🔍 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-4"><span class="nav-number">5.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Webtoon-%EC%B9%B4%EB%93%9C-%EB%94%94%EC%9E%90%EC%9D%B8"><span class="nav-number">6.</span> <span class="nav-text">Webtoon 카드 디자인</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-5"><span class="nav-number">6.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-5"><span class="nav-number">6.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-5"><span class="nav-number">6.3.</span> <span class="nav-text">📝 핵심 코드</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-5"><span class="nav-number">6.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%83%81%EC%84%B8-%ED%99%94%EB%A9%B4%EA%B3%BC-%EB%B6%84%EB%A6%AC%EB%90%9C-%EC%9C%84%EC%A0%AF-%EA%B5%AC%EC%A1%B0"><span class="nav-number">7.</span> <span class="nav-text">상세 화면과 분리된 위젯 구조</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-6"><span class="nav-number">7.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-6"><span class="nav-number">7.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-6"><span class="nav-number">7.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-5"><span class="nav-number">7.3.1.</span> <span class="nav-text">🔍 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-6"><span class="nav-number">7.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hero-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98-%EC%97%B0%EA%B2%B0"><span class="nav-number">8.</span> <span class="nav-text">Hero 애니메이션 연결</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-7"><span class="nav-number">8.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-7"><span class="nav-number">8.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-7"><span class="nav-number">8.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-6"><span class="nav-number">8.3.1.</span> <span class="nav-text">🔍 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-7"><span class="nav-number">8.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%83%81%EC%84%B8-%EC%A0%95%EB%B3%B4-API-%ED%99%95%EC%9E%A5"><span class="nav-number">9.</span> <span class="nav-text">상세 정보 API 확장</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-8"><span class="nav-number">9.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-8"><span class="nav-number">9.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-8"><span class="nav-number">9.3.</span> <span class="nav-text">📝 핵심 코드</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-8"><span class="nav-number">9.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DetailScreen%EC%97%90%EC%84%9C-Future-%EC%A4%80%EB%B9%84"><span class="nav-number">10.</span> <span class="nav-text">DetailScreen에서 Future 준비</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-9"><span class="nav-number">10.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-9"><span class="nav-number">10.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-9"><span class="nav-number">10.3.</span> <span class="nav-text">📝 핵심 코드</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-9"><span class="nav-number">10.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%83%81%EC%84%B8-%EC%A0%95%EB%B3%B4-UI-%ED%91%9C%EC%8B%9C"><span class="nav-number">11.</span> <span class="nav-text">상세 정보 UI 표시</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-10"><span class="nav-number">11.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-10"><span class="nav-number">11.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-10"><span class="nav-number">11.3.</span> <span class="nav-text">📝 핵심 코드</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-10"><span class="nav-number">11.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%97%90%ED%94%BC%EC%86%8C%EB%93%9C-%EB%AA%A9%EB%A1%9D%EA%B3%BC-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83"><span class="nav-number">12.</span> <span class="nav-text">에피소드 목록과 스크롤 레이아웃</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-11"><span class="nav-number">12.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-11"><span class="nav-number">12.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-11"><span class="nav-number">12.3.</span> <span class="nav-text">📝 핵심 코드</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-11"><span class="nav-number">12.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URL-Launcher%EB%A1%9C-%EB%84%A4%EC%9D%B4%EB%B2%84-%EC%9B%B9%ED%88%B0-%EC%97%B4%EA%B8%B0"><span class="nav-number">13.</span> <span class="nav-text">URL Launcher로 네이버 웹툰 열기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-12"><span class="nav-number">13.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-12"><span class="nav-number">13.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-12"><span class="nav-number">13.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%ED%94%8C%EB%9E%AB%ED%8F%BC-%EC%84%A4%EC%A0%95-%EC%9A%94%EC%95%BD"><span class="nav-number">13.3.1.</span> <span class="nav-text">🔍 플랫폼 설정 요약</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-12"><span class="nav-number">13.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%A6%90%EA%B2%A8%EC%B0%BE%EA%B8%B0-%EC%A2%8B%EC%95%84%EC%9A%94-%EC%83%81%ED%83%9C-%EC%A0%80%EC%9E%A5"><span class="nav-number">14.</span> <span class="nav-text">즐겨찾기(좋아요) 상태 저장</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-13"><span class="nav-number">14.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-13"><span class="nav-number">14.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-%ED%95%B5%EC%8B%AC-%EC%BD%94%EB%93%9C-13"><span class="nav-number">14.3.</span> <span class="nav-text">📝 핵심 코드</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-7"><span class="nav-number">14.3.1.</span> <span class="nav-text">🔍 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-13"><span class="nav-number">14.4.</span> <span class="nav-text">✅ 체크리스트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%EC%A0%84%EC%B2%B4-%ED%9D%90%EB%A6%84-%EC%A0%95%EB%A6%AC"><span class="nav-number">15.</span> <span class="nav-text">📚 전체 흐름 정리</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9C%85-%EC%B5%9C%EC%A2%85-%EC%A0%90%EA%B2%80-%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">16.</span> <span class="nav-text">✅ 최종 점검 리스트</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Flutter Basic Chapter 5 - 웹툰 API 연동과 상세 화면 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flutter Basic Chapter 5 - 웹툰 API 연동과 상세 화면
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-02 12:05" itemprop="dateCreated datePublished" datetime="2025-10-02T12:05:00+09:00">2025-10-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="AppBar와-기본-화면-정비"><a href="#AppBar와-기본-화면-정비" class="headerlink" title="AppBar와 기본 화면 정비"></a>AppBar와 기본 화면 정비</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>MaterialApp</code>과 <code>runApp</code>에 <code>const</code>를 적용해 불필요한 리빌드 최소화</li>
+<li>홈 화면을 <code>HomeScreen</code> StatelessWidget으로 구성하고 한국어 AppBar 추가</li>
+<li>AppBar의 <code>backgroundColor</code>, <code>foregroundColor</code>, <code>elevation</code> 속성으로 스타일 제어</li>
+</ul>
+<h3 id="📂-파일-구조"><a href="#📂-파일-구조" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart</span><br><span class="line">- lib/screens/home_screen.dart</span><br><span class="line">- test/widget_test.dart (MyApp → App 이름 변경)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드"><a href="#📝-핵심-코드" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/main.dart</span></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  runApp(<span class="keyword">const</span> App());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> App(&#123;<span class="keyword">super</span>.key&#125;);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">const</span> MaterialApp(</span><br><span class="line">      home: HomeScreen(),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/screens/home_screen.dart</span></span><br><span class="line"><span class="keyword">return</span> Scaffold(</span><br><span class="line">  backgroundColor: Colors.white,</span><br><span class="line">  appBar: AppBar(</span><br><span class="line">    elevation: <span class="number">2</span>,</span><br><span class="line">    backgroundColor: Colors.white,</span><br><span class="line">    foregroundColor: Colors.green,</span><br><span class="line">    title: <span class="keyword">const</span> Text(</span><br><span class="line">      <span class="string">&#x27;어늘의 웹툰&#x27;</span>,</span><br><span class="line">      style: TextStyle(fontSize: <span class="number">24</span>),</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-상세-설명"><a href="#🔍-상세-설명" class="headerlink" title="🔍 상세 설명"></a>🔍 상세 설명</h4><ul>
+<li><code>const MaterialApp</code> 사용으로 위젯 트리를 고정화하고 Hot Reload 성능을 개선했습니다.</li>
+<li><code>AppBar</code>의 그림자 높이를 <code>elevation: 2</code>로 줄여 얇은 실선 느낌을 주고, 글자색은 <code>foregroundColor</code>로 초록색으로 통일했습니다.</li>
+<li>테스트 파일에서 <code>MyApp</code> 대신 <code>App</code>을 pump하도록 수정해 기본 테스트가 통과합니다.</li>
+</ul>
+<h3 id="🎨-화면-미리보기"><a href="#🎨-화면-미리보기" class="headerlink" title="🎨 화면 미리보기"></a>🎨 화면 미리보기</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌────────────────────────────┐</span><br><span class="line">│ 어늘의 웹툰                   │  ← 흰색 배경 + 초록 텍스트 AppBar</span><br><span class="line">└────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>runApp(const App())</code>로 <code>const</code>가 적용됐는가?</li>
+<li><input disabled="" type="checkbox"> AppBar 배경이 흰색, 텍스트는 초록색으로 표시되는가?</li>
+<li><input disabled="" type="checkbox"> 기본 테스트(<code>test/widget_test.dart</code>)가 <code>App</code> 기준으로 동작하는가?</li>
+</ul>
+<hr>
+<h2 id="HTTP-요청과-모델-정의-Data-Fetching-fromJson"><a href="#HTTP-요청과-모델-정의-Data-Fetching-fromJson" class="headerlink" title="HTTP 요청과 모델 정의 (Data Fetching &amp; fromJson)"></a>HTTP 요청과 모델 정의 (Data Fetching &amp; fromJson)</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>http</code> 패키지를 의존성으로 추가하고 REST API 호출하기</li>
+<li>비동기 함수에 <code>Future&lt;List&lt;WebtoonModel&gt;&gt;</code> 타입 선언하기</li>
+<li><code>jsonDecode</code> 결과를 <code>WebtoonModel.fromJson</code>으로 변환해 강타입 컬렉션 만들기</li>
+</ul>
+<h3 id="📂-파일-구조-1"><a href="#📂-파일-구조-1" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">수정되는/생성되는 파일</span><br><span class="line">- pubspec.yaml (http 패키지 추가)</span><br><span class="line">- lib/services/api_service.dart (신규)</span><br><span class="line">- lib/models/webtoon_model.dart (신규)</span><br><span class="line">- lib/main.dart (앱 시작 시 API 호출 시험)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-1"><a href="#📝-핵심-코드-1" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pubspec.yaml (dependencies)</span></span><br><span class="line">http: ^<span class="number">0.13</span>.<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/models/webtoon_model.dart</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebtoonModel</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> title, thumb, id;</span><br><span class="line"></span><br><span class="line">  WebtoonModel.fromJson(<span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">dynamic</span>&gt; json)</span><br><span class="line">      : title = json[<span class="string">&#x27;title&#x27;</span>],</span><br><span class="line">        thumb = json[<span class="string">&#x27;thumb&#x27;</span>],</span><br><span class="line">        id = json[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/services/api_service.dart</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiService</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">String</span> baseUrl =</span><br><span class="line">      <span class="string">&#x27;https://webtoon-crawler.nomadcoders.workers.dev&#x27;</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">String</span> today = <span class="string">&#x27;today&#x27;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> Future&lt;<span class="built_in">List</span>&lt;WebtoonModel&gt;&gt; getTodaysToons() <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="built_in">List</span>&lt;WebtoonModel&gt; webtoonInstances = [];</span><br><span class="line">    <span class="keyword">final</span> url = <span class="built_in">Uri</span>.parse(<span class="string">&#x27;<span class="subst">$baseUrl</span>/<span class="subst">$today</span>&#x27;</span>);</span><br><span class="line">    <span class="keyword">final</span> response = <span class="keyword">await</span> http.<span class="keyword">get</span>(url);</span><br><span class="line">    <span class="keyword">if</span> (response.statusCode == <span class="number">200</span>) &#123;</span><br><span class="line">      <span class="keyword">final</span> webtoons = jsonDecode(response.body);</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> webtoon <span class="keyword">in</span> webtoons) &#123;</span><br><span class="line">        <span class="keyword">final</span> instance = WebtoonModel.fromJson(webtoon);</span><br><span class="line">        webtoonInstances.add(instance);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> webtoonInstances;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> Error();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/main.dart (임시 호출)</span></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  ApiService().getTodaysToons(); <span class="comment">// 이후 5.4에서 static 호출로 변경</span></span><br><span class="line">  runApp(<span class="keyword">const</span> App());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-상세-설명-1"><a href="#🔍-상세-설명-1" class="headerlink" title="🔍 상세 설명"></a>🔍 상세 설명</h4><ul>
+<li><code>.fromJson</code> 생성자를 통해 맵 구조 데이터를 안전하게 모델로 변환했습니다.</li>
+<li>5.3 Recap 커밋에서 <code>final instance = ...</code> 변수로 나누어 가독성을 높였습니다.</li>
+<li><code>ApiService</code>를 static 메서드로 재구성(5.4)해 인스턴스를 생성하지 않고도 재사용할 수 있도록 했습니다.</li>
+</ul>
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>http</code> 패키지가 의존성으로 추가되고 <code>flutter pub get</code>이 실행되었는가?</li>
+<li><input disabled="" type="checkbox"> <code>getTodaysToons()</code>가 <code>Future&lt;List&lt;WebtoonModel&gt;&gt;</code>를 반환하는가?</li>
+<li><input disabled="" type="checkbox"> HTTP 200 이외에는 <code>throw Error()</code>로 예외를 던지는가?</li>
+</ul>
+<hr>
+<h2 id="초기-데이터-로딩과-상태-관리-waitForWebToons"><a href="#초기-데이터-로딩과-상태-관리-waitForWebToons" class="headerlink" title="초기 데이터 로딩과 상태 관리 (waitForWebToons)"></a>초기 데이터 로딩과 상태 관리 (waitForWebToons)</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>StatefulWidget</code>에서 <code>initState()</code>를 활용해 비동기 초기화 실행하기</li>
+<li>로딩 상태(<code>isLoading</code>)와 결과 리스트(<code>webtoons</code>)를 상태로 저장하기</li>
+<li>API 호출을 기다린 후 <code>setState()</code>로 UI 갱신하기</li>
+</ul>
+<h3 id="📂-파일-구조-2"><a href="#📂-파일-구조-2" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/home_screen.dart (StatefulWidget으로 전환)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-2"><a href="#📝-핵심-코드-2" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_HomeScreenState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">HomeScreen</span>&gt; </span>&#123;</span><br><span class="line">  <span class="built_in">List</span>&lt;WebtoonModel&gt; webtoons = [];</span><br><span class="line">  <span class="built_in">bool</span> isLoading = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> waitForWebToons() <span class="keyword">async</span> &#123;</span><br><span class="line">    webtoons = <span class="keyword">await</span> ApiService.getTodaysToons();</span><br><span class="line">    isLoading = <span class="keyword">false</span>;</span><br><span class="line">    setState(() &#123;&#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> initState() &#123;</span><br><span class="line">    <span class="keyword">super</span>.initState();</span><br><span class="line">    waitForWebToons();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="built_in">print</span>(webtoons);</span><br><span class="line">    <span class="built_in">print</span>(isLoading);</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-상세-설명-2"><a href="#🔍-상세-설명-2" class="headerlink" title="🔍 상세 설명"></a>🔍 상세 설명</h4><ul>
+<li>API 응답을 기다린 뒤 <code>setState()</code>를 호출해 화면을 다시 그리고, 개발 중에는 <code>print</code>로 값 확인을 했습니다.</li>
+<li>이후 5.5에서 <code>FutureBuilder</code>로 리팩터링하므로 이 임시 상태 로직은 제거됩니다.</li>
+</ul>
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>waitForWebToons()</code>가 <code>initState</code>에서 한 번만 호출되는가?</li>
+<li><input disabled="" type="checkbox"> API 응답이 완료되면 <code>isLoading</code>이 false로 바뀌는가?</li>
+</ul>
+<hr>
+<h2 id="FutureBuilder로-상태-단순화"><a href="#FutureBuilder로-상태-단순화" class="headerlink" title="FutureBuilder로 상태 단순화"></a>FutureBuilder로 상태 단순화</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>FutureBuilder</code>를 사용해 비동기 처리 결과를 위젯 트리 안에서 직접 다루기</li>
+<li><code>snapshot.hasData</code>를 기준으로 로딩&#x2F;성공 상태 분기하기</li>
+<li><code>Scaffold</code>의 <code>body</code>에 FutureBuilder를 배치해 전체 화면 컨텐츠 제어하기</li>
+</ul>
+<h3 id="📂-파일-구조-3"><a href="#📂-파일-구조-3" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/home_screen.dart (StatelessWidget + FutureBuilder)</span><br><span class="line">- lib/main.dart (불필요한 ApiService 인스턴스 제거)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-3"><a href="#📝-핵심-코드-3" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HomeScreen</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  HomeScreen(&#123;<span class="keyword">super</span>.key&#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">final</span> Future&lt;<span class="built_in">List</span>&lt;WebtoonModel&gt;&gt; webtoons = ApiService.getTodaysToons();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      ...</span><br><span class="line">      body: FutureBuilder(</span><br><span class="line">        future: webtoons,</span><br><span class="line">        builder: (context, snapshot) &#123;</span><br><span class="line">          <span class="keyword">if</span> (snapshot.hasData) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">const</span> Text(<span class="string">&#x27;There is data!&#x27;</span>); <span class="comment">// 이후 단계에서 교체</span></span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">const</span> Text(<span class="string">&#x27;Loading....&#x27;</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-상세-설명-3"><a href="#🔍-상세-설명-3" class="headerlink" title="🔍 상세 설명"></a>🔍 상세 설명</h4><ul>
+<li><code>FutureBuilder</code> 덕분에 StatefulWidget이 다시 StatelessWidget으로 간결해졌습니다.</li>
+<li>이후 섹션에서 <code>snapshot.data!</code>를 활용해 리스트를 렌더링합니다.</li>
+</ul>
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>FutureBuilder</code>가 null safety에 맞게 <code>snapshot.hasData</code> 체크 후 데이터를 사용하는가?</li>
+<li><input disabled="" type="checkbox"> 로딩 중에는 텍스트 또는 스피너가 표시되는가?</li>
+</ul>
+<hr>
+<h2 id="가로-스크롤-리스트뷰-구성"><a href="#가로-스크롤-리스트뷰-구성" class="headerlink" title="가로 스크롤 리스트뷰 구성"></a>가로 스크롤 리스트뷰 구성</h2><h3 id="🎯-이번-단계에서-배울-것-4"><a href="#🎯-이번-단계에서-배울-것-4" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>ListView.separated</code>를 이용해 카드 간 간격을 쉽게 조절하기</li>
+<li><code>scrollDirection: Axis.horizontal</code>로 가로 캐러셀 형태 만들기</li>
+<li>로딩 상태일 때 <code>CircularProgressIndicator</code>를 중앙에 배치하기</li>
+</ul>
+<h3 id="📂-파일-구조-4"><a href="#📂-파일-구조-4" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/home_screen.dart</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-4"><a href="#📝-핵심-코드-4" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> FutureBuilder(</span><br><span class="line">  future: webtoons,</span><br><span class="line">  builder: (context, snapshot) &#123;</span><br><span class="line">    <span class="keyword">if</span> (snapshot.hasData) &#123;</span><br><span class="line">      <span class="keyword">return</span> ListView.separated(</span><br><span class="line">        scrollDirection: Axis.horizontal,</span><br><span class="line">        itemCount: snapshot.data!.length,</span><br><span class="line">        itemBuilder: (context, index) &#123;</span><br><span class="line">          <span class="keyword">var</span> webtoon = snapshot.data![index];</span><br><span class="line">          <span class="keyword">return</span> Text(webtoon.title);</span><br><span class="line">        &#125;,</span><br><span class="line">        separatorBuilder: (context, index) =&gt; <span class="keyword">const</span> SizedBox(width: <span class="number">20</span>),</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">const</span> Center(child: CircularProgressIndicator());</span><br><span class="line">  &#125;,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-상세-설명-4"><a href="#🔍-상세-설명-4" class="headerlink" title="🔍 상세 설명"></a>🔍 상세 설명</h4><ul>
+<li><code>separatorBuilder</code>로 일정한 공백(<code>SizedBox(width: 20)</code>)을 자동 삽입했습니다.</li>
+<li><code>CircularProgressIndicator</code>를 사용해 데이터 로딩 중임을 명확히 전달합니다.</li>
+</ul>
+<h3 id="✅-체크리스트-4"><a href="#✅-체크리스트-4" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>ListView.separated</code>가 가로 방향으로 동작하는가?</li>
+<li><input disabled="" type="checkbox"> 로딩 시 스피너가 중앙에 표시되는가?</li>
+</ul>
+<hr>
+<h2 id="Webtoon-카드-디자인"><a href="#Webtoon-카드-디자인" class="headerlink" title="Webtoon 카드 디자인"></a>Webtoon 카드 디자인</h2><h3 id="🎯-이번-단계에서-배울-것-5"><a href="#🎯-이번-단계에서-배울-것-5" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>썸네일 이미지에 그림자(<code>BoxShadow</code>)와 둥근 모서리(<code>borderRadius</code>) 적용</li>
+<li><code>Column</code>과 <code>Expanded</code>로 리스트 상단 여백과 공간 비율 조절</li>
+<li>별도 메서드 <code>makeList</code>로 빌더 코드를 분리해 가독성 향상</li>
+</ul>
+<h3 id="📂-파일-구조-5"><a href="#📂-파일-구조-5" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/home_screen.dart (카드 UI 추가)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-5"><a href="#📝-핵심-코드-5" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">ListView makeList(AsyncSnapshot&lt;<span class="built_in">List</span>&lt;WebtoonModel&gt;&gt; snapshot) &#123;</span><br><span class="line">  <span class="keyword">return</span> ListView.separated(</span><br><span class="line">    scrollDirection: Axis.horizontal,</span><br><span class="line">    padding: <span class="keyword">const</span> EdgeInsets.symmetric(vertical: <span class="number">10</span>, horizontal: <span class="number">20</span>),</span><br><span class="line">    itemBuilder: (context, index) &#123;</span><br><span class="line">      <span class="keyword">var</span> webtoon = snapshot.data![index];</span><br><span class="line">      <span class="keyword">return</span> Column(</span><br><span class="line">        children: [</span><br><span class="line">          Container(</span><br><span class="line">            width: <span class="number">250</span>,</span><br><span class="line">            clipBehavior: Clip.hardEdge,</span><br><span class="line">            decoration: BoxDecoration(</span><br><span class="line">              borderRadius: BorderRadius.circular(<span class="number">15</span>),</span><br><span class="line">              boxShadow: [</span><br><span class="line">                BoxShadow(</span><br><span class="line">                  blurRadius: <span class="number">15</span>,</span><br><span class="line">                  offset: <span class="keyword">const</span> Offset(<span class="number">10</span>, <span class="number">10</span>),</span><br><span class="line">                  color: Colors.black.withOpacity(<span class="number">0.3</span>),</span><br><span class="line">                )</span><br><span class="line">              ],</span><br><span class="line">            ),</span><br><span class="line">            child: Image.network(webtoon.thumb),</span><br><span class="line">          ),</span><br><span class="line">          <span class="keyword">const</span> SizedBox(height: <span class="number">10</span>),</span><br><span class="line">          Text(webtoon.title, style: <span class="keyword">const</span> TextStyle(fontSize: <span class="number">22</span>)),</span><br><span class="line">        ],</span><br><span class="line">      );</span><br><span class="line">    &#125;,</span><br><span class="line">    separatorBuilder: (context, index) =&gt; <span class="keyword">const</span> SizedBox(width: <span class="number">40</span>),</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-5"><a href="#✅-체크리스트-5" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 썸네일이 둥근 모서리와 그림자를 적용한 컨테이너 안에 들어가는가?</li>
+<li><input disabled="" type="checkbox"> 타이틀 텍스트가 이미지 아래에 표시되는가?</li>
+</ul>
+<hr>
+<h2 id="상세-화면과-분리된-위젯-구조"><a href="#상세-화면과-분리된-위젯-구조" class="headerlink" title="상세 화면과 분리된 위젯 구조"></a>상세 화면과 분리된 위젯 구조</h2><h3 id="🎯-이번-단계에서-배울-것-6"><a href="#🎯-이번-단계에서-배울-것-6" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>Navigator.push</code>와 <code>MaterialPageRoute</code>로 상세 화면으로 이동하기</li>
+<li>썸네일&#x2F;타이틀 UI를 <code>Webtoon</code> 위젯으로 분리해 재사용성 확보</li>
+<li>상세 화면(<code>DetailScreen</code>)에서 동일한 카드 레이아웃 재활용</li>
+</ul>
+<h3 id="📂-파일-구조-6"><a href="#📂-파일-구조-6" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">새로 생성되는 파일</span><br><span class="line">- lib/screens/detail_screen.dart</span><br><span class="line">- lib/widgets/webtoon_widget.dart</span><br><span class="line"></span><br><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/home_screen.dart (Webtoon 위젯 사용)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-6"><a href="#📝-핵심-코드-6" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/widgets/webtoon_widget.dart</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Webtoon</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> GestureDetector(</span><br><span class="line">      onTap: () &#123;</span><br><span class="line">        Navigator.push(</span><br><span class="line">          context,</span><br><span class="line">          MaterialPageRoute(</span><br><span class="line">            builder: (context) =&gt; DetailScreen(</span><br><span class="line">              title: title,</span><br><span class="line">              thumb: thumb,</span><br><span class="line">              id: id,</span><br><span class="line">            ),</span><br><span class="line">            fullscreenDialog: <span class="keyword">true</span>,</span><br><span class="line">          ),</span><br><span class="line">        );</span><br><span class="line">      &#125;,</span><br><span class="line">      child: Column(</span><br><span class="line">        children: [...],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/screens/detail_screen.dart (초기 버전)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DetailScreen</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> title, thumb, id;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-상세-설명-5"><a href="#🔍-상세-설명-5" class="headerlink" title="🔍 상세 설명"></a>🔍 상세 설명</h4><ul>
+<li><code>fullscreenDialog: true</code>로 iOS 스타일의 모달 전환 효과를 적용했습니다.</li>
+<li><code>DetailScreen</code>은 아직 정적 정보만 보여주며, 이후 섹션에서 API 연동으로 확장합니다.</li>
+</ul>
+<h3 id="✅-체크리스트-6"><a href="#✅-체크리스트-6" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 썸네일을 탭하면 DetailScreen으로 이동하는가?</li>
+<li><input disabled="" type="checkbox"> 홈 화면과 상세 화면 모두 동일한 카드 스타일을 유지하는가?</li>
+</ul>
+<hr>
+<h2 id="Hero-애니메이션-연결"><a href="#Hero-애니메이션-연결" class="headerlink" title="Hero 애니메이션 연결"></a>Hero 애니메이션 연결</h2><h3 id="🎯-이번-단계에서-배울-것-7"><a href="#🎯-이번-단계에서-배울-것-7" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>Hero</code> 위젯을 이용해 썸네일 전환 애니메이션 구현하기</li>
+<li><code>tag</code>로 고유 ID(<code>webtoon.id</code>)를 사용해 출발&#x2F;도착 위젯을 연결하기</li>
+</ul>
+<h3 id="📂-파일-구조-7"><a href="#📂-파일-구조-7" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/widgets/webtoon_widget.dart</span><br><span class="line">- lib/screens/detail_screen.dart</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-7"><a href="#📝-핵심-코드-7" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Hero(</span><br><span class="line">  tag: id,</span><br><span class="line">  child: Container(</span><br><span class="line">    width: <span class="number">250</span>,</span><br><span class="line">    clipBehavior: Clip.hardEdge,</span><br><span class="line">    decoration: ...,</span><br><span class="line">    child: Image.network(thumb),</span><br><span class="line">  ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-상세-설명-6"><a href="#🔍-상세-설명-6" class="headerlink" title="🔍 상세 설명"></a>🔍 상세 설명</h4><ul>
+<li>동일한 <code>tag</code> 값을 가진 Hero 위젯이 화면 전환 시 자연스러운 확대&#x2F;축소 이동을 제공합니다.</li>
+<li>Hero는 반드시 전환 대상 두 화면에 모두 존재해야 하므로 홈&#x2F;상세 화면 모두 수정을 진행했습니다.</li>
+</ul>
+<h3 id="✅-체크리스트-7"><a href="#✅-체크리스트-7" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 카드 썸네일이 상세 화면으로 전환될 때 부드러운 애니메이션이 재생되는가?</li>
+</ul>
+<hr>
+<h2 id="상세-정보-API-확장"><a href="#상세-정보-API-확장" class="headerlink" title="상세 정보 API 확장"></a>상세 정보 API 확장</h2><h3 id="🎯-이번-단계에서-배울-것-8"><a href="#🎯-이번-단계에서-배울-것-8" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>세부 정보용 모델(<code>WebtoonDetailModel</code>, <code>WebtoonEpisodeModel</code>)을 추가로 정의하기</li>
+<li><code>ApiService</code>에 웹툰 상세 정보&#x2F;에피소드 목록 API 메서드 구현하기</li>
+</ul>
+<h3 id="📂-파일-구조-8"><a href="#📂-파일-구조-8" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">새로 생성되는 파일</span><br><span class="line">- lib/models/webtoon_detail_model.dart</span><br><span class="line">- lib/models/webtoon_episode_model.dart</span><br><span class="line"></span><br><span class="line">수정되는 파일</span><br><span class="line">- lib/services/api_service.dart</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-8"><a href="#📝-핵심-코드-8" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> Future&lt;WebtoonDetailModel&gt; getToonById(<span class="built_in">String</span> id) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">final</span> url = <span class="built_in">Uri</span>.parse(<span class="string">&#x27;<span class="subst">$baseUrl</span>/<span class="subst">$id</span>&#x27;</span>);</span><br><span class="line">  <span class="keyword">final</span> response = <span class="keyword">await</span> http.<span class="keyword">get</span>(url);</span><br><span class="line">  <span class="keyword">if</span> (response.statusCode == <span class="number">200</span>) &#123;</span><br><span class="line">    <span class="keyword">final</span> webtoon = jsonDecode(response.body);</span><br><span class="line">    <span class="keyword">return</span> WebtoonDetailModel.fromJson(webtoon);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">throw</span> Error();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> Future&lt;<span class="built_in">List</span>&lt;WebtoonEpisodeModel&gt;&gt; getLatestEpisodesById(<span class="built_in">String</span> id) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="built_in">List</span>&lt;WebtoonEpisodeModel&gt; episodesInstances = [];</span><br><span class="line">  <span class="keyword">final</span> url = <span class="built_in">Uri</span>.parse(<span class="string">&#x27;<span class="subst">$baseUrl</span>/<span class="subst">$id</span>/episodes&#x27;</span>);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-8"><a href="#✅-체크리스트-8" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 상세 API가 JSON을 모델 객체로 변환해 반환하는가?</li>
+<li><input disabled="" type="checkbox"> 에피소드 리스트가 <code>List&lt;WebtoonEpisodeModel&gt;</code> 형태로 준비되는가?</li>
+</ul>
+<hr>
+<h2 id="DetailScreen에서-Future-준비"><a href="#DetailScreen에서-Future-준비" class="headerlink" title="DetailScreen에서 Future 준비"></a>DetailScreen에서 Future 준비</h2><h3 id="🎯-이번-단계에서-배울-것-9"><a href="#🎯-이번-단계에서-배울-것-9" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>DetailScreen</code>을 StatefulWidget으로 전환하고 <code>initState()</code>에서 Future 초기화</li>
+<li><code>widget.id</code>를 사용해 라우트 인자로 받은 값을 접근하기</li>
+</ul>
+<h3 id="📂-파일-구조-9"><a href="#📂-파일-구조-9" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/detail_screen.dart (StatefulWidget화)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-9"><a href="#📝-핵심-코드-9" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DetailScreen</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_DetailScreenState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">DetailScreen</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">late</span> Future&lt;WebtoonDetailModel&gt; webtoon;</span><br><span class="line">  <span class="keyword">late</span> Future&lt;<span class="built_in">List</span>&lt;WebtoonEpisodeModel&gt;&gt; episodes;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> initState() &#123;</span><br><span class="line">    <span class="keyword">super</span>.initState();</span><br><span class="line">    webtoon = ApiService.getToonById(widget.id);</span><br><span class="line">    episodes = ApiService.getLatestEpisodesById(widget.id);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-9"><a href="#✅-체크리스트-9" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>webtoon</code>과 <code>episodes</code> Futures가 <code>late</code>로 선언되고 <code>initState</code>에서 초기화되는가?</li>
+</ul>
+<hr>
+<h2 id="상세-정보-UI-표시"><a href="#상세-정보-UI-표시" class="headerlink" title="상세 정보 UI 표시"></a>상세 정보 UI 표시</h2><h3 id="🎯-이번-단계에서-배울-것-10"><a href="#🎯-이번-단계에서-배울-것-10" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>FutureBuilder</code>로 상세 정보를 받아와 소개글&#x2F;장르&#x2F;연령을 표시하기</li>
+<li><code>Padding</code>과 <code>crossAxisAlignment</code>로 텍스트 정렬 다듬기</li>
+</ul>
+<h3 id="📂-파일-구조-10"><a href="#📂-파일-구조-10" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/detail_screen.dart</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-10"><a href="#📝-핵심-코드-10" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">FutureBuilder(</span><br><span class="line">  future: webtoon,</span><br><span class="line">  builder: (context, snapshot) &#123;</span><br><span class="line">    <span class="keyword">if</span> (snapshot.hasData) &#123;</span><br><span class="line">      <span class="keyword">return</span> Padding(</span><br><span class="line">        padding: <span class="keyword">const</span> EdgeInsets.symmetric(horizontal: <span class="number">50</span>),</span><br><span class="line">        child: Column(</span><br><span class="line">          crossAxisAlignment: CrossAxisAlignment.start,</span><br><span class="line">          children: [</span><br><span class="line">            Text(snapshot.data!.about, style: <span class="keyword">const</span> TextStyle(fontSize: <span class="number">16</span>)),</span><br><span class="line">            <span class="keyword">const</span> SizedBox(height: <span class="number">15</span>),</span><br><span class="line">            Text(<span class="string">&#x27;<span class="subst">$&#123;snapshot.data!.genre&#125;</span> / <span class="subst">$&#123;snapshot.data!.age&#125;</span>&#x27;</span>,</span><br><span class="line">                style: <span class="keyword">const</span> TextStyle(fontSize: <span class="number">16</span>)),</span><br><span class="line">          ],</span><br><span class="line">        ),</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">const</span> Text(<span class="string">&#x27;...&#x27;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-10"><a href="#✅-체크리스트-10" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 상세 소개글과 장르&#x2F;연령 정보가 로딩 완료 후 표시되는가?</li>
+<li><input disabled="" type="checkbox"> 로딩 중에는 placeholder(<code>...</code>)가 나타나는가?</li>
+</ul>
+<hr>
+<h2 id="에피소드-목록과-스크롤-레이아웃"><a href="#에피소드-목록과-스크롤-레이아웃" class="headerlink" title="에피소드 목록과 스크롤 레이아웃"></a>에피소드 목록과 스크롤 레이아웃</h2><h3 id="🎯-이번-단계에서-배울-것-11"><a href="#🎯-이번-단계에서-배울-것-11" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>SingleChildScrollView</code>와 <code>Padding</code>으로 상세 화면 전체를 스크롤 가능하게 만들기</li>
+<li><code>FutureBuilder</code> + <code>for</code> 루프 조합으로 에피소드 목록을 위젯 리스트로 변환하기</li>
+<li>카드 형태의 에피소드 요소에 그림자와 간격 적용하기</li>
+</ul>
+<h3 id="📂-파일-구조-11"><a href="#📂-파일-구조-11" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/screens/detail_screen.dart</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-11"><a href="#📝-핵심-코드-11" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">FutureBuilder(</span><br><span class="line">  future: episodes,</span><br><span class="line">  builder: (context, snapshot) &#123;</span><br><span class="line">    <span class="keyword">if</span> (snapshot.hasData) &#123;</span><br><span class="line">      <span class="keyword">return</span> Column(</span><br><span class="line">        children: [</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">var</span> episode <span class="keyword">in</span> snapshot.data!)</span><br><span class="line">            Container(</span><br><span class="line">              margin: <span class="keyword">const</span> EdgeInsets.only(bottom: <span class="number">10</span>),</span><br><span class="line">              decoration: BoxDecoration(</span><br><span class="line">                borderRadius: BorderRadius.circular(<span class="number">20</span>),</span><br><span class="line">                color: Colors.green.shade400,</span><br><span class="line">                boxShadow: [...],</span><br><span class="line">              ),</span><br><span class="line">              child: Padding(</span><br><span class="line">                padding: <span class="keyword">const</span> EdgeInsets.symmetric(vertical: <span class="number">10</span>, horizontal: <span class="number">20</span>),</span><br><span class="line">                child: Row(</span><br><span class="line">                  mainAxisAlignment: MainAxisAlignment.spaceBetween,</span><br><span class="line">                  children: [</span><br><span class="line">                    Text(episode.title, style: <span class="keyword">const</span> TextStyle(color: Colors.white, fontSize: <span class="number">16</span>)),</span><br><span class="line">                    <span class="keyword">const</span> Icon(Icons.chevron_right_rounded, color: Colors.white),</span><br><span class="line">                  ],</span><br><span class="line">                ),</span><br><span class="line">              ),</span><br><span class="line">            )</span><br><span class="line">        ],</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Container();</span><br><span class="line">  &#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-11"><a href="#✅-체크리스트-11" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 상세 화면이 세로로 스크롤되며 이미지&#x2F;설명&#x2F;에피소드가 이어지는가?</li>
+<li><input disabled="" type="checkbox"> 각각의 에피소드 카드가 일정한 간격과 그림자를 갖는가?</li>
+</ul>
+<hr>
+<h2 id="URL-Launcher로-네이버-웹툰-열기"><a href="#URL-Launcher로-네이버-웹툰-열기" class="headerlink" title="URL Launcher로 네이버 웹툰 열기"></a>URL Launcher로 네이버 웹툰 열기</h2><h3 id="🎯-이번-단계에서-배울-것-12"><a href="#🎯-이번-단계에서-배울-것-12" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>url_launcher</code> 패키지 추가 및 플랫폼 설정(iOS&#x2F;Android&#x2F;macOS 등) 적용</li>
+<li>에피소드 전용 위젯(<code>Episode</code>) 분리 및 탭 제스처 처리</li>
+<li><code>launchUrlString</code>으로 외부 브라우저를 통해 실제 웹툰 페이지 열기</li>
+</ul>
+<h3 id="📂-파일-구조-12"><a href="#📂-파일-구조-12" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">새로 생성되는 파일</span><br><span class="line">- lib/widgets/episode_widget.dart</span><br><span class="line"></span><br><span class="line">수정되는 파일</span><br><span class="line">- pubspec.yaml (url_launcher 의존성)</span><br><span class="line">- lib/screens/detail_screen.dart (Episode 위젯 사용)</span><br><span class="line">- iOS/macOS/Linux/Windows 설정 파일들 (플러그인 등록)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-12"><a href="#📝-핵심-코드-12" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/widgets/episode_widget.dart</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Episode</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> Episode(&#123;Key? key, <span class="keyword">required</span> <span class="keyword">this</span>.episode, <span class="keyword">required</span> <span class="keyword">this</span>.webtoonId&#125;)</span><br><span class="line">      : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> webtoonId;</span><br><span class="line">  <span class="keyword">final</span> WebtoonEpisodeModel episode;</span><br><span class="line"></span><br><span class="line">  onButtonTap() <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> launchUrlString(</span><br><span class="line">      <span class="string">&#x27;https://comic.naver.com/webtoon/detail?titleId=<span class="subst">$webtoonId</span>&amp;no=<span class="subst">$&#123;episode.id&#125;</span>&#x27;</span>,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> GestureDetector(</span><br><span class="line">      onTap: onButtonTap,</span><br><span class="line">      child: Container(...),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/screens/detail_screen.dart (에피소드 출력 부분)</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> episode <span class="keyword">in</span> snapshot.data!)</span><br><span class="line">  Episode(</span><br><span class="line">    episode: episode,</span><br><span class="line">    webtoonId: widget.id,</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-플랫폼-설정-요약"><a href="#🔍-플랫폼-설정-요약" class="headerlink" title="🔍 플랫폼 설정 요약"></a>🔍 플랫폼 설정 요약</h4><ul>
+<li>iOS&#x2F; macOS <code>Podfile</code>, <code>xcconfig</code> 파일에 <code>use_frameworks!</code> 등 url_launcher 구성이 추가되었습니다.</li>
+<li>Flutter가 자동 생성하는 <code>GeneratedPluginRegistrant</code> 파일들도 url_launcher 등록 코드가 포함되도록 업데이트되었습니다.</li>
+</ul>
+<h3 id="✅-체크리스트-12"><a href="#✅-체크리스트-12" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 에피소드를 탭하면 기본 브라우저에서 네이버 웹툰 상세 페이지가 열리는가?</li>
+<li><input disabled="" type="checkbox"> url_launcher 의존성이 pubspec에 추가되어 있는가?</li>
+</ul>
+<hr>
+<h2 id="즐겨찾기-좋아요-상태-저장"><a href="#즐겨찾기-좋아요-상태-저장" class="headerlink" title="즐겨찾기(좋아요) 상태 저장"></a>즐겨찾기(좋아요) 상태 저장</h2><h3 id="🎯-이번-단계에서-배울-것-13"><a href="#🎯-이번-단계에서-배울-것-13" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>shared_preferences</code> 패키지로 간단한 로컬 스토리지 구현</li>
+<li><code>initPrefs()</code>에서 초기화 후 <code>likedToons</code> 리스트를 읽어 상태 반영하기</li>
+<li>AppBar 아이콘을 <code>Icons.favorite</code> ↔ <code>Icons.favorite_outline</code>으로 토글하기</li>
+</ul>
+<h3 id="📂-파일-구조-13"><a href="#📂-파일-구조-13" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- pubspec.yaml (shared_preferences 의존성)</span><br><span class="line">- lib/screens/detail_screen.dart (즐겨찾기 로직 추가)</span><br><span class="line">- pubspec.lock, 플랫폼 플러그인 등록 파일들</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-핵심-코드-13"><a href="#📝-핵심-코드-13" class="headerlink" title="📝 핵심 코드"></a>📝 핵심 코드</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_DetailScreenState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">DetailScreen</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">late</span> SharedPreferences prefs;</span><br><span class="line">  <span class="built_in">bool</span> isLiked = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">  Future initPrefs() <span class="keyword">async</span> &#123;</span><br><span class="line">    prefs = <span class="keyword">await</span> SharedPreferences.getInstance();</span><br><span class="line">    <span class="keyword">final</span> likedToons = prefs.getStringList(<span class="string">&#x27;likedToons&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (likedToons != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (likedToons.contains(widget.id) == <span class="keyword">true</span>) &#123;</span><br><span class="line">        setState(() &#123;</span><br><span class="line">          isLiked = <span class="keyword">true</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">await</span> prefs.setStringList(<span class="string">&#x27;likedToons&#x27;</span>, []);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> initState() &#123;</span><br><span class="line">    <span class="keyword">super</span>.initState();</span><br><span class="line">    webtoon = ApiService.getToonById(widget.id);</span><br><span class="line">    episodes = ApiService.getLatestEpisodesById(widget.id);</span><br><span class="line">    initPrefs();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  onHeartTap() <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> likedToons = prefs.getStringList(<span class="string">&#x27;likedToons&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (likedToons != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (isLiked) &#123;</span><br><span class="line">        likedToons.remove(widget.id);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        likedToons.add(widget.id);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">await</span> prefs.setStringList(<span class="string">&#x27;likedToons&#x27;</span>, likedToons);</span><br><span class="line">      setState(() &#123;</span><br><span class="line">        isLiked = !isLiked;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">appBar: AppBar(</span><br><span class="line">  ...</span><br><span class="line">  actions: [</span><br><span class="line">    IconButton(</span><br><span class="line">      onPressed: onHeartTap,</span><br><span class="line">      icon: Icon(isLiked ? Icons.favorite : Icons.favorite_outline),</span><br><span class="line">    ),</span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-상세-설명-7"><a href="#🔍-상세-설명-7" class="headerlink" title="🔍 상세 설명"></a>🔍 상세 설명</h4><ul>
+<li>앱 최초 실행 시 <code>likedToons</code> 키가 없으면 빈 리스트를 만들어 저장합니다.</li>
+<li>즐겨찾기 토글 시 <code>setStringList</code>로 업데이트하고 <code>isLiked</code>를 반전합니다.</li>
+<li>Heart 아이콘이 즉시 변경되어 UX가 즉각적입니다.</li>
+</ul>
+<h3 id="✅-체크리스트-13"><a href="#✅-체크리스트-13" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 앱을 재실행해도 즐겨찾기한 웹툰은 하트가 채워진 상태로 표시되는가?</li>
+<li><input disabled="" type="checkbox"> <code>shared_preferences</code> 의존성이 pubspec에 추가되었는가?</li>
+</ul>
+<hr>
+<h2 id="📚-전체-흐름-정리"><a href="#📚-전체-흐름-정리" class="headerlink" title="📚 전체 흐름 정리"></a>📚 전체 흐름 정리</h2><ul>
+<li>AppBar가 있는 기본 UI를 구성했고, HTTP 요청과 JSON → 모델 변환을 준비했습니다.</li>
+<li>FutureBuilder와 ListView로 오늘의 웹툰 목록을 비동기&#x2F;가로 스크롤 형태로 렌더링했습니다.</li>
+<li>카드 UI를 개선하고 상세 화면 이동, Hero 애니메이션을 추가했습니다.</li>
+<li>상세 정보와 최신 에피소드 목록을 API로 받아와 표시했습니다.</li>
+<li>url_launcher로 네이버 웹툰 페이지를 직접 열 수 있게 했고, shared_preferences로 즐겨찾기 상태를 저장했습니다.</li>
+</ul>
+<h2 id="✅-최종-점검-리스트"><a href="#✅-최종-점검-리스트" class="headerlink" title="✅ 최종 점검 리스트"></a>✅ 최종 점검 리스트</h2><ul>
+<li><input disabled="" type="checkbox"> <code>http</code>, <code>url_launcher</code>, <code>shared_preferences</code> 패키지가 pubspec에 포함돼 있는가?</li>
+<li><input disabled="" type="checkbox"> 홈 화면이 가로 캐러셀로 오늘의 웹툰을 보여주고, 탭하면 상세 화면으로 이동하는가?</li>
+<li><input disabled="" type="checkbox"> 상세 화면에서 소개&#x2F;장르&#x2F;연령&#x2F;최근 에피소드가 제대로 표시되는가?</li>
+<li><input disabled="" type="checkbox"> 에피소드를 탭하면 외부 브라우저에서 열리는가?</li>
+<li><input disabled="" type="checkbox"> 하트 아이콘으로 즐겨찾기를 토글할 수 있고 앱을 다시 켜도 상태가 유지되는가?</li>
+</ul>
+<hr>
+<p>출처 : <a target="_blank" rel="noopener" href="https://nomadcoders.co/flutter-for-beginners">https://nomadcoders.co/flutter-for-beginners</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/flutter/" rel="tag"><i class="fa fa-tag"></i> flutter</a>
+              <a href="/tags/basic/" rel="tag"><i class="fa fa-tag"></i> basic</a>
+              <a href="/tags/toonflix/" rel="tag"><i class="fa fa-tag"></i> toonflix</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/02/flutter-basic/flutter-basic-chapter4/" rel="prev" title="Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기">
+                  <i class="fa fa-angle-left"></i> Flutter Basic Chapter 4 - Pomodoro 타이머 앱 만들기
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/04/flutter/flutter-0/" rel="next" title="0. Flutter TikTok Clone - 초기 프로젝트 세팅">
+                  0. Flutter TikTok Clone - 초기 프로젝트 세팅 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

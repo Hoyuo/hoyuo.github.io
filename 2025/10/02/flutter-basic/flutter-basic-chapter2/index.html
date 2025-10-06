@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="헤더와 다크 배경 구성🎯 이번 단계에서 배울 것 화면 전체 배경색과 여백을 잡아 기본 레이아웃 만들기 Row, Column을 조합해 우측 상단 인사 헤더 정렬하기 불투명도(Opacity)를 이용해 텍스트 명암 대비 조절하기 다크 테마 UI에서 자주 사용하는 색상 코드를 적용하기">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter Basic Chapter 2 - 다크 테마 월렛 대시보드">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter2/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="헤더와 다크 배경 구성🎯 이번 단계에서 배울 것 화면 전체 배경색과 여백을 잡아 기본 레이아웃 만들기 Row, Column을 조합해 우측 상단 인사 헤더 정렬하기 불투명도(Opacity)를 이용해 텍스트 명암 대비 조절하기 다크 테마 UI에서 자주 사용하는 색상 코드를 적용하기">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-02T03:02:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="basic">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="toonflix">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter2/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter2/","path":"2025/10/02/flutter-basic/flutter-basic-chapter2/","title":"Flutter Basic Chapter 2 - 다크 테마 월렛 대시보드"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Flutter Basic Chapter 2 - 다크 테마 월렛 대시보드 | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">21</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%ED%97%A4%EB%8D%94%EC%99%80-%EB%8B%A4%ED%81%AC-%EB%B0%B0%EA%B2%BD-%EA%B5%AC%EC%84%B1"><span class="nav-number">1.</span> <span class="nav-text">헤더와 다크 배경 구성</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0"><span class="nav-number">1.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%ED%97%A4%EB%8D%94-UI-%EB%B0%B0%EC%B9%98%ED%95%98%EA%B8%B0"><span class="nav-number">1.3.</span> <span class="nav-text">📝 1단계: 헤더 UI 배치하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85"><span class="nav-number">1.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%ED%99%94%EB%A9%B4-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0"><span class="nav-number">1.4.</span> <span class="nav-text">🎨 화면 미리보기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84"><span class="nav-number">1.5.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">1.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C"><span class="nav-number">1.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%9E%94%EC%95%A1-%EC%A0%95%EB%B3%B4%EC%99%80-CTA-%EB%B2%84%ED%8A%BC-%EC%B6%94%EA%B0%80-feat-Const-%EC%B5%9C%EC%A0%81%ED%99%94"><span class="nav-number">2.</span> <span class="nav-text">잔액 정보와 CTA 버튼 추가 (feat. Const 최적화)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-1"><span class="nav-number">2.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-1"><span class="nav-number">2.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%9E%94%EC%95%A1-%EC%84%B9%EC%85%98%EA%B3%BC-%EB%B2%84%ED%8A%BC-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">2.3.</span> <span class="nav-text">📝 1단계: 잔액 섹션과 버튼 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%ED%99%94%EB%A9%B4-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0-1"><span class="nav-number">2.4.</span> <span class="nav-text">🎨 화면 미리보기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-1"><span class="nav-number">2.5.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-1"><span class="nav-number">2.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-1"><span class="nav-number">2.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%9E%AC%EC%82%AC%EC%9A%A9-%EA%B0%80%EB%8A%A5%ED%95%9C-%EB%B2%84%ED%8A%BC-%EC%9C%84%EC%A0%AF-%EC%B6%94%EC%B6%9C"><span class="nav-number">3.</span> <span class="nav-text">재사용 가능한 버튼 위젯 추출</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-2"><span class="nav-number">3.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-2"><span class="nav-number">3.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Button-%EC%9C%84%EC%A0%AF-%EC%A0%95%EC%9D%98%ED%95%98%EA%B8%B0"><span class="nav-number">3.3.</span> <span class="nav-text">📝 1단계: Button 위젯 정의하기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-main-dart%EC%97%90%EC%84%9C-Button-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0"><span class="nav-number">3.4.</span> <span class="nav-text">📝 2단계: main.dart에서 Button 사용하기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%ED%99%94%EB%A9%B4-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0-2"><span class="nav-number">3.5.</span> <span class="nav-text">🎨 화면 미리보기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-2"><span class="nav-number">3.6.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-2"><span class="nav-number">3.7.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-2"><span class="nav-number">3.8.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%9B%94%EB%A0%9B-%EC%B9%B4%EB%93%9C-UI-%EA%B5%AC%EC%84%B1"><span class="nav-number">4.</span> <span class="nav-text">월렛 카드 UI 구성</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-3"><span class="nav-number">4.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-3"><span class="nav-number">4.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Wallets-%ED%83%80%EC%9D%B4%ED%8B%80%EA%B3%BC-%EC%B9%B4%EB%93%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">4.3.</span> <span class="nav-text">📝 1단계: Wallets 타이틀과 카드 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-3"><span class="nav-number">4.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%ED%99%94%EB%A9%B4-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0-3"><span class="nav-number">4.4.</span> <span class="nav-text">🎨 화면 미리보기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-3"><span class="nav-number">4.5.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-3"><span class="nav-number">4.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-3"><span class="nav-number">4.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EC%95%84%EC%9D%B4%EC%BD%98-%EB%B0%B0%EC%B9%98%EC%99%80-Transform-%ED%99%9C%EC%9A%A9"><span class="nav-number">5.</span> <span class="nav-text">아이콘 배치와 Transform 활용</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-4"><span class="nav-number">5.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-4"><span class="nav-number">5.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-%EC%B9%B4%EB%93%9C%EC%97%90-%ED%86%B5%ED%99%94-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%96%B9%EA%B8%B0"><span class="nav-number">5.3.</span> <span class="nav-text">📝 1단계: 카드에 통화 아이콘 얹기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-4"><span class="nav-number">5.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%ED%99%94%EB%A9%B4-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0-4"><span class="nav-number">5.4.</span> <span class="nav-text">🎨 화면 미리보기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-4"><span class="nav-number">5.5.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-4"><span class="nav-number">5.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-4"><span class="nav-number">5.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CurrencyCard-%EC%9C%84%EC%A0%AF%EA%B3%BC-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EC%B2%98%EB%A6%AC"><span class="nav-number">6.</span> <span class="nav-text">CurrencyCard 위젯과 스크롤 처리</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-5"><span class="nav-number">6.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-5"><span class="nav-number">6.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-CurrencyCard-%EC%9C%84%EC%A0%AF-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="nav-number">6.3.</span> <span class="nav-text">📝 1단계: CurrencyCard 위젯 만들기</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%8D-%EC%BD%94%EB%93%9C-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-5"><span class="nav-number">6.3.1.</span> <span class="nav-text">🔍 코드 상세 설명</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-2%EB%8B%A8%EA%B3%84-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EB%B7%B0%EC%99%80-%EC%B9%B4%EB%93%9C-%EB%B0%B0%EC%B9%98%ED%95%98%EA%B8%B0"><span class="nav-number">6.4.</span> <span class="nav-text">📝 2단계: 스크롤 뷰와 카드 배치하기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%ED%99%94%EB%A9%B4-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0-5"><span class="nav-number">6.5.</span> <span class="nav-text">🎨 화면 미리보기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-5"><span class="nav-number">6.6.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-5"><span class="nav-number">6.7.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-5"><span class="nav-number">6.8.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code-Challenge-%EB%B0%98%EC%98%81"><span class="nav-number">7.</span> <span class="nav-text">Code Challenge 반영</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%EC%9D%B4%EB%B2%88-%EB%8B%A8%EA%B3%84%EC%97%90%EC%84%9C-%EB%B0%B0%EC%9A%B8-%EA%B2%83-6"><span class="nav-number">7.1.</span> <span class="nav-text">🎯 이번 단계에서 배울 것</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%82-%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0-6"><span class="nav-number">7.2.</span> <span class="nav-text">📂 파일 구조</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9D-1%EB%8B%A8%EA%B3%84-Dollar-%EC%B9%B4%EB%93%9C-%EC%95%84%EC%9D%B4%EC%BD%98-%EB%B3%80%EA%B2%BD"><span class="nav-number">7.3.</span> <span class="nav-text">📝 1단계: Dollar 카드 아이콘 변경</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%A8-%ED%99%94%EB%A9%B4-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0-6"><span class="nav-number">7.4.</span> <span class="nav-text">🎨 화면 미리보기</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%EB%8F%99%EC%9E%91-%ED%9D%90%EB%A6%84-6"><span class="nav-number">7.5.</span> <span class="nav-text">📊 동작 흐름</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8-6"><span class="nav-number">7.6.</span> <span class="nav-text">✅ 체크리스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%EC%97%B0%EC%8A%B5-%EA%B3%BC%EC%A0%9C-6"><span class="nav-number">7.7.</span> <span class="nav-text">💡 연습 과제</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%EC%A0%84%EC%B2%B4-%ED%9D%90%EB%A6%84-%EC%A0%95%EB%A6%AC"><span class="nav-number">8.</span> <span class="nav-text">📚 전체 흐름 정리</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9C%85-%EC%B5%9C%EC%A2%85-%EC%A0%90%EA%B2%80-%EB%A6%AC%EC%8A%A4%ED%8A%B8"><span class="nav-number">9.</span> <span class="nav-text">✅ 최종 점검 리스트</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/02/flutter-basic/flutter-basic-chapter2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Flutter Basic Chapter 2 - 다크 테마 월렛 대시보드 | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flutter Basic Chapter 2 - 다크 테마 월렛 대시보드
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-02 12:02" itemprop="dateCreated datePublished" datetime="2025-10-02T12:02:00+09:00">2025-10-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="헤더와-다크-배경-구성"><a href="#헤더와-다크-배경-구성" class="headerlink" title="헤더와 다크 배경 구성"></a>헤더와 다크 배경 구성</h2><h3 id="🎯-이번-단계에서-배울-것"><a href="#🎯-이번-단계에서-배울-것" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>화면 전체 배경색과 여백을 잡아 기본 레이아웃 만들기</li>
+<li><code>Row</code>, <code>Column</code>을 조합해 우측 상단 인사 헤더 정렬하기</li>
+<li>불투명도(<code>Opacity</code>)를 이용해 텍스트 명암 대비 조절하기</li>
+<li>다크 테마 UI에서 자주 사용하는 색상 코드를 적용하기</li>
+</ul>
+<h3 id="📂-파일-구조"><a href="#📂-파일-구조" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (헤더 UI 추가)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-헤더-UI-배치하기"><a href="#📝-1단계-헤더-UI-배치하기" class="headerlink" title="📝 1단계: 헤더 UI 배치하기"></a>📝 1단계: 헤더 UI 배치하기</h3><p><strong>전체 코드 (lib&#x2F;main.dart @ 2.0):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  runApp(App());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      home: Scaffold(</span><br><span class="line">        backgroundColor: Color(<span class="number">0xFF181818</span>),</span><br><span class="line">        body: Padding(</span><br><span class="line">          padding: EdgeInsets.symmetric(</span><br><span class="line">            horizontal: <span class="number">40</span>,</span><br><span class="line">          ),</span><br><span class="line">          child: Column(</span><br><span class="line">            children: [</span><br><span class="line">              SizedBox(</span><br><span class="line">                height: <span class="number">80</span>,</span><br><span class="line">              ),</span><br><span class="line">              Row(</span><br><span class="line">                mainAxisAlignment: MainAxisAlignment.end,</span><br><span class="line">                children: [</span><br><span class="line">                  Column(</span><br><span class="line">                    crossAxisAlignment: CrossAxisAlignment.end,</span><br><span class="line">                    children: [</span><br><span class="line">                      Text(</span><br><span class="line">                        <span class="string">&#x27;Hey, Selena&#x27;</span>,</span><br><span class="line">                        style: TextStyle(</span><br><span class="line">                          color: Colors.white,</span><br><span class="line">                          fontSize: <span class="number">28</span>,</span><br><span class="line">                          fontWeight: FontWeight.w800,</span><br><span class="line">                        ),</span><br><span class="line">                      ),</span><br><span class="line">                      Text(</span><br><span class="line">                        <span class="string">&#x27;Welcome back&#x27;</span>,</span><br><span class="line">                        style: TextStyle(</span><br><span class="line">                          color: Color.fromRGBO(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0.8</span>),</span><br><span class="line">                          fontSize: <span class="number">18</span>,</span><br><span class="line">                        ),</span><br><span class="line">                      ),</span><br><span class="line">                    ],</span><br><span class="line">                  )</span><br><span class="line">                ],</span><br><span class="line">              )</span><br><span class="line">            ],</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명"><a href="#🔍-코드-상세-설명" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. 다크 테마 배경 지정</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">backgroundColor: Color(<span class="number">0xFF181818</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>16진 색상 코드로 거의 검정에 가까운 회색을 지정했습니다.</li>
+<li>다크 테마에서는 고대비 흰색 텍스트와 조합해 가독성을 확보합니다.</li>
+</ul>
+<p><strong>2. 전체 여백과 상단 패딩 확보</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Padding(</span><br><span class="line">  padding: EdgeInsets.symmetric(horizontal: <span class="number">40</span>),</span><br><span class="line">)</span><br><span class="line">SizedBox(height: <span class="number">80</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>좌우 40px 여백으로 콘텐츠가 화면 모서리에 붙지 않게 합니다.</li>
+<li><code>SizedBox</code>로 상단 공간을 만들어 노치 영역이나 상태바와 겹치지 않도록 합니다.</li>
+</ul>
+<p><strong>3. 헤더 정렬 전략</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Row(</span><br><span class="line">  mainAxisAlignment: MainAxisAlignment.end,</span><br><span class="line">  children: [</span><br><span class="line">    Column(</span><br><span class="line">      crossAxisAlignment: CrossAxisAlignment.end,</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Row</code>를 사용해 헤더 전체를 오른쪽 끝에 배치했습니다.</li>
+<li>내부 <code>Column</code>도 <code>crossAxisAlignment.end</code>로 맞춰 두 줄의 텍스트가 오른쪽 정렬되도록 했습니다.</li>
+</ul>
+<p><strong>4. 텍스트 스타일 대비</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">color: Color.fromRGBO(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0.8</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>두 번째 문자열은 살짝 투명도를 주어 강조 계층을 만들었습니다.</li>
+<li><code>fromRGBO</code>의 마지막 파라미터(0.8)가 알파값(불투명도)입니다.</li>
+</ul>
+<p><strong>시각화:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────┐</span><br><span class="line">│                                  │</span><br><span class="line">│                       Hey, Selena│</span><br><span class="line">│                      Welcome back│</span><br><span class="line">│                                  │</span><br><span class="line">└──────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="🎨-화면-미리보기"><a href="#🎨-화면-미리보기" class="headerlink" title="🎨 화면 미리보기"></a>🎨 화면 미리보기</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">다크 배경 + 우측 상단 인사말 두 줄</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름"><a href="#📊-동작-흐름" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. Scaffold가 0xFF181818 배경을 그림</span><br><span class="line">2. Padding이 좌우 여백을 확보</span><br><span class="line">3. Column이 세로 레이아웃을 구성</span><br><span class="line">4. Row가 헤더를 오른쪽 끝으로 정렬</span><br><span class="line">5. Column 안에서 두 줄 텍스트가 위→아래 순으로 출력</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트"><a href="#✅-체크리스트" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 배경색과 텍스트 색 대비가 충분한가?</li>
+<li><input disabled="" type="checkbox"> 헤더가 화면 오른쪽 상단에 맞춰졌는가?</li>
+<li><input disabled="" type="checkbox"> 두 번째 텍스트가 살짝 흐리게 표현되는가?</li>
+</ul>
+<h3 id="💡-연습-과제"><a href="#💡-연습-과제" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li>헤더 이름을 본인 이름으로 바꿔보세요.</li>
+<li><code>SizedBox(height: 80)</code> 값을 줄여 상단 여백 변화를 확인하세요.</li>
+<li><code>Color.fromRGBO</code>의 알파값을 0.5로 변경해 투명도 차이를 느껴보세요.</li>
+</ol>
+<hr>
+<h2 id="잔액-정보와-CTA-버튼-추가-feat-Const-최적화"><a href="#잔액-정보와-CTA-버튼-추가-feat-Const-최적화" class="headerlink" title="잔액 정보와 CTA 버튼 추가 (feat. Const 최적화)"></a>잔액 정보와 CTA 버튼 추가 (feat. Const 최적화)</h2><h3 id="🎯-이번-단계에서-배울-것-1"><a href="#🎯-이번-단계에서-배울-것-1" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>Column</code>에 텍스트를 차곡차곡 쌓아 계층적 정보를 표현하기</li>
+<li><code>withOpacity</code>로 텍스트 색상 밝기를 빠르게 조절하기</li>
+<li><code>Container</code>와 <code>BoxDecoration</code>으로 버튼 형태 만들기</li>
+<li><code>const</code> 키워드로 위젯을 고정해 성능과 핫리로드 효율 개선하기</li>
+</ul>
+<h3 id="📂-파일-구조-1"><a href="#📂-파일-구조-1" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (잔액, 버튼 레이아웃 추가 및 const 적용)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-잔액-섹션과-버튼-만들기"><a href="#📝-1단계-잔액-섹션과-버튼-만들기" class="headerlink" title="📝 1단계: 잔액 섹션과 버튼 만들기"></a>📝 1단계: 잔액 섹션과 버튼 만들기</h3><p><strong>추가된 코드 핵심 (lib&#x2F;main.dart @ 2.2~2.3):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> SizedBox(height: <span class="number">120</span>),</span><br><span class="line">Text(</span><br><span class="line">  <span class="string">&#x27;Total Balance&#x27;</span>,</span><br><span class="line">  style: TextStyle(</span><br><span class="line">    fontSize: <span class="number">22</span>,</span><br><span class="line">    color: Colors.white.withOpacity(<span class="number">0.8</span>),</span><br><span class="line">  ),</span><br><span class="line">),</span><br><span class="line"><span class="keyword">const</span> SizedBox(height: <span class="number">5</span>),</span><br><span class="line"><span class="keyword">const</span> Text(</span><br><span class="line">  <span class="string">&#x27;\$5 194 482&#x27;</span>,</span><br><span class="line">  style: TextStyle(</span><br><span class="line">    fontSize: <span class="number">48</span>,</span><br><span class="line">    fontWeight: FontWeight.w600,</span><br><span class="line">    color: Colors.white,</span><br><span class="line">  ),</span><br><span class="line">),</span><br><span class="line"><span class="keyword">const</span> SizedBox(height: <span class="number">30</span>),</span><br><span class="line">Row(</span><br><span class="line">  children: [</span><br><span class="line">    Container(</span><br><span class="line">      decoration: BoxDecoration(</span><br><span class="line">        color: <span class="keyword">const</span> Color(<span class="number">0xFFF1B33B</span>),</span><br><span class="line">        borderRadius: BorderRadius.circular(<span class="number">45</span>),</span><br><span class="line">      ),</span><br><span class="line">      child: <span class="keyword">const</span> Padding(</span><br><span class="line">        padding: EdgeInsets.symmetric(</span><br><span class="line">          vertical: <span class="number">20</span>,</span><br><span class="line">          horizontal: <span class="number">50</span>,</span><br><span class="line">        ),</span><br><span class="line">        child: Text(</span><br><span class="line">          <span class="string">&#x27;Transfer&#x27;</span>,</span><br><span class="line">          style: TextStyle(fontSize: <span class="number">20</span>),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    )</span><br><span class="line">  ],</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-1"><a href="#🔍-코드-상세-설명-1" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>withOpacity</code>로 명암 조절</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">color: Colors.white.withOpacity(<span class="number">0.8</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>이미 존재하는 컬러에 간단히 투명도를 입혀 강조 수준을 조절합니다.</li>
+<li>RGBO보다 간결하여 빠르게 반복 적용할 수 있습니다.</li>
+</ul>
+<p><strong>2. 큰 숫자 폰트와 두께</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fontSize: <span class="number">48</span>,</span><br><span class="line">fontWeight: FontWeight.w600,</span><br></pre></td></tr></table></figure>
+<ul>
+<li>잔액 정보는 한눈에 들어와야 하므로 큰 글씨와 굵은 두께를 사용합니다.</li>
+<li>Flutter의 <code>FontWeight</code>는 100~900 사이 굵기를 선택할 수 있습니다.</li>
+</ul>
+<p><strong>3. 버튼 레이아웃</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Container → BoxDecoration → borderRadius: BorderRadius.circular(<span class="number">45</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>컨테이너 배경색을 노란색으로 칠하고 모서리를 둥글게 잘랐습니다.</li>
+<li><code>Padding</code>으로 내부 여백을 주어 버튼이 답답해 보이지 않게 합니다.</li>
+</ul>
+<p><strong>4. <code>const</code> 키워드 활용 (2.3 커밋)</strong></p>
+<ul>
+<li>값이 변하지 않는 위젯 앞에 <code>const</code>를 붙여 위젯 트리를 불변으로 표시합니다.</li>
+<li>Flutter는 const 위젯을 재사용하므로 리빌드 때 성능이 좋아집니다.</li>
+<li><code>const Color(...)</code>처럼 생성자에도 <code>const</code>를 붙여야 완전히 불변으로 취급됩니다.</li>
+</ul>
+<p><strong>비교 예시:</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before (non-const)</span></span><br><span class="line">SizedBox(height: <span class="number">120</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// After (const 적용)</span></span><br><span class="line"><span class="keyword">const</span> SizedBox(height: <span class="number">120</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>시각화:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────┐</span><br><span class="line">│           Total Balance     │</span><br><span class="line">│          $5 194 482         │</span><br><span class="line">│ [ Transfer ]                │</span><br><span class="line">└─────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="🎨-화면-미리보기-1"><a href="#🎨-화면-미리보기-1" class="headerlink" title="🎨 화면 미리보기"></a>🎨 화면 미리보기</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">잔액 텍스트 아래 노란색 Transfer 버튼이 나타난 모습</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-1"><a href="#📊-동작-흐름-1" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. Column이 잔액 텍스트와 버튼을 위→아래로 배치</span><br><span class="line">2. SizedBox들이 각 요소 사이 간격을 확보</span><br><span class="line">3. Row가 버튼을 가로 방향으로 감싸며 향후 추가 버튼을 대비</span><br><span class="line">4. Container+Padding 조합으로 버튼 형태를 완성</span><br><span class="line">5. const 키워드가 불필요한 재빌드를 막아 성능을 지킴</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-1"><a href="#✅-체크리스트-1" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>Total Balance</code> 텍스트가 살짝 회색빛으로 표현되는가?</li>
+<li><input disabled="" type="checkbox"> 잔액 숫자가 굵고 크게 표시되는가?</li>
+<li><input disabled="" type="checkbox"> 버튼이 둥근 사각형 형태로 렌더링되는가?</li>
+<li><input disabled="" type="checkbox"> 변하지 않는 위젯에 <code>const</code>가 붙어 있는가?</li>
+</ul>
+<h3 id="💡-연습-과제-1"><a href="#💡-연습-과제-1" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>Request</code> 버튼을 추가로 만들어 <code>Row</code> 안에 나란히 배치해보세요.</li>
+<li>버튼 색상을 다른 브랜드 컬러로 바꿔 보고 어울리는지 확인하세요.</li>
+<li><code>const</code>를 붙일 수 있는 다른 위젯이 없는지 찾아보고 적용하세요.</li>
+</ol>
+<hr>
+<h2 id="재사용-가능한-버튼-위젯-추출"><a href="#재사용-가능한-버튼-위젯-추출" class="headerlink" title="재사용 가능한 버튼 위젯 추출"></a>재사용 가능한 버튼 위젯 추출</h2><h3 id="🎯-이번-단계에서-배울-것-2"><a href="#🎯-이번-단계에서-배울-것-2" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>위젯을 별도 파일로 분리해 재사용성을 높이기</li>
+<li>생성자 파라미터에 <code>required</code>와 <code>final</code>을 사용해 안전한 위젯 설계하기</li>
+<li><code>main.dart</code>에서 커스텀 위젯 두 개를 서로 다른 테마로 배치하기</li>
+</ul>
+<h3 id="📂-파일-구조-2"><a href="#📂-파일-구조-2" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">새로 생성되는 파일</span><br><span class="line">- lib/widgets/button.dart (커스텀 버튼 위젯)</span><br><span class="line"></span><br><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (Button 위젯 사용 및 padding, 간격 조정)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-Button-위젯-정의하기"><a href="#📝-1단계-Button-위젯-정의하기" class="headerlink" title="📝 1단계: Button 위젯 정의하기"></a>📝 1단계: Button 위젯 정의하기</h3><p><strong>전체 코드 (lib&#x2F;widgets&#x2F;button.dart @ 2.5):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> text;</span><br><span class="line">  <span class="keyword">final</span> Color bgColor;</span><br><span class="line">  <span class="keyword">final</span> Color textColor;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> Button(&#123;</span><br><span class="line">    <span class="keyword">super</span>.key,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.text,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.bgColor,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.textColor,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Container(</span><br><span class="line">      decoration: BoxDecoration(</span><br><span class="line">        color: bgColor,</span><br><span class="line">        borderRadius: BorderRadius.circular(<span class="number">45</span>),</span><br><span class="line">      ),</span><br><span class="line">      child: Padding(</span><br><span class="line">        padding: <span class="keyword">const</span> EdgeInsets.symmetric(</span><br><span class="line">          vertical: <span class="number">20</span>,</span><br><span class="line">          horizontal: <span class="number">50</span>,</span><br><span class="line">        ),</span><br><span class="line">        child: Text(</span><br><span class="line">          text,</span><br><span class="line">          style: TextStyle(</span><br><span class="line">            color: textColor,</span><br><span class="line">            fontSize: <span class="number">20</span>,</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-2"><a href="#🔍-코드-상세-설명-2" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. <code>StatelessWidget</code>으로 재사용성 확보</strong></p>
+<ul>
+<li>버튼 내용(text)과 스타일(bgColor, textColor)을 파라미터로 받아 다양한 조합을 지원합니다.</li>
+<li>상태 변화가 없으므로 <code>StatelessWidget</code>이 적합하며, 불필요한 상태 관리를 피할 수 있습니다.</li>
+</ul>
+<p><strong>2. <code>required</code>와 <code>final</code></strong></p>
+<ul>
+<li>생성자에 <code>required</code>를 추가해 필수 인수를 누락하면 컴파일 시점에 바로 오류가 납니다.</li>
+<li>멤버 변수를 <code>final</code>로 선언해 위젯이 불변이라는 것을 명시합니다.</li>
+</ul>
+<p><strong>3. 기존 Container 코드 재사용</strong></p>
+<ul>
+<li>2.2에서 작성한 버튼 스타일을 그대로 옮겨 왔기 때문에 UI가 변하지 않습니다.</li>
+<li><code>padding</code>도 함께 포함하여 호출하는 쪽에서 반복할 필요가 없습니다.</li>
+</ul>
+<h3 id="📝-2단계-main-dart에서-Button-사용하기"><a href="#📝-2단계-main-dart에서-Button-사용하기" class="headerlink" title="📝 2단계: main.dart에서 Button 사용하기"></a>📝 2단계: main.dart에서 Button 사용하기</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Row(</span><br><span class="line">  mainAxisAlignment: MainAxisAlignment.spaceBetween,</span><br><span class="line">  children: <span class="keyword">const</span> [</span><br><span class="line">    Button(</span><br><span class="line">      text: <span class="string">&#x27;Transfer&#x27;</span>,</span><br><span class="line">      bgColor: Color(<span class="number">0xFFF1B33B</span>),</span><br><span class="line">      textColor: Colors.black,</span><br><span class="line">    ),</span><br><span class="line">    Button(</span><br><span class="line">      text: <span class="string">&#x27;Request&#x27;</span>,</span><br><span class="line">      bgColor: Color(<span class="number">0xFF1F2123</span>),</span><br><span class="line">      textColor: Colors.white,</span><br><span class="line">    ),</span><br><span class="line">  ],</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Row</code>의 <code>mainAxisAlignment.spaceBetween</code>으로 두 버튼을 좌우 끝에 배치했습니다.</li>
+<li>같은 위젯이라도 색 조합만 바꿔 완전히 다른 느낌을 줄 수 있음을 보여줍니다.</li>
+</ul>
+<p><strong>비교 예시:</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line">Container(...); <span class="comment">// Transfer</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// After</span></span><br><span class="line"><span class="keyword">const</span> Button(text: <span class="string">&#x27;Transfer&#x27;</span>, ...);</span><br></pre></td></tr></table></figure>
+
+<h3 id="🎨-화면-미리보기-2"><a href="#🎨-화면-미리보기-2" class="headerlink" title="🎨 화면 미리보기"></a>🎨 화면 미리보기</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ Transfer ]        [ Request ]  ← 동일한 버튼 위젯의 두 가지 스타일</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-2"><a href="#📊-동작-흐름-2" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. main.dart가 Button 클래스를 임포트</span><br><span class="line">2. Row 안에서 Button을 두 번 호출하며 다른 속성을 전달</span><br><span class="line">3. Button이 텍스트/색상을 받아 Container를 렌더링</span><br><span class="line">4. 동일한 구조를 복제하지 않고도 UI 일관성을 유지</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-2"><a href="#✅-체크리스트-2" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> <code>lib/widgets/button.dart</code> 파일이 생성되었는가?</li>
+<li><input disabled="" type="checkbox"> Button 위젯의 모든 인수가 <code>required</code>로 선언되었는가?</li>
+<li><input disabled="" type="checkbox"> main.dart에서 두 버튼 색상이 정확히 다르게 표시되는가?</li>
+</ul>
+<h3 id="💡-연습-과제-2"><a href="#💡-연습-과제-2" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>Button</code> 위젯에 <code>icon</code> 파라미터를 추가하고 아이콘이 있는 버튼을 만들어보세요.</li>
+<li>버튼 너비를 <code>double</code> 파라미터로 받아 다양한 길이를 지원하게 확장해보세요.</li>
+<li><code>GestureDetector</code>를 감싸 클릭 이벤트를 받을 준비를 해보세요.</li>
+</ol>
+<hr>
+<h2 id="월렛-카드-UI-구성"><a href="#월렛-카드-UI-구성" class="headerlink" title="월렛 카드 UI 구성"></a>월렛 카드 UI 구성</h2><h3 id="🎯-이번-단계에서-배울-것-3"><a href="#🎯-이번-단계에서-배울-것-3" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>둥근 카드 컨테이너 안에 텍스트를 세로로 배치하기</li>
+<li><code>crossAxisAlignment.end</code>와 <code>spaceBetween</code>으로 제목&#x2F;바로가기 배치하기</li>
+<li>통화 금액과 단위를 나란히 배치하는 <code>Row</code> 구성 이해하기</li>
+</ul>
+<h3 id="📂-파일-구조-3"><a href="#📂-파일-구조-3" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (Wallets 섹션과 첫 번째 카드 추가)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-Wallets-타이틀과-카드-만들기"><a href="#📝-1단계-Wallets-타이틀과-카드-만들기" class="headerlink" title="📝 1단계: Wallets 타이틀과 카드 만들기"></a>📝 1단계: Wallets 타이틀과 카드 만들기</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> SizedBox(height: <span class="number">100</span>),</span><br><span class="line">Row(</span><br><span class="line">  crossAxisAlignment: CrossAxisAlignment.end,</span><br><span class="line">  mainAxisAlignment: MainAxisAlignment.spaceBetween,</span><br><span class="line">  children: [</span><br><span class="line">    <span class="keyword">const</span> Text(</span><br><span class="line">      <span class="string">&#x27;Wallets&#x27;</span>,</span><br><span class="line">      style: TextStyle(</span><br><span class="line">        color: Colors.white,</span><br><span class="line">        fontSize: <span class="number">36</span>,</span><br><span class="line">        fontWeight: FontWeight.w600,</span><br><span class="line">      ),</span><br><span class="line">    ),</span><br><span class="line">    Text(</span><br><span class="line">      <span class="string">&#x27;View All&#x27;</span>,</span><br><span class="line">      style: TextStyle(</span><br><span class="line">        color: Colors.white.withOpacity(<span class="number">0.8</span>),</span><br><span class="line">        fontSize: <span class="number">18</span>,</span><br><span class="line">      ),</span><br><span class="line">    ),</span><br><span class="line">  ],</span><br><span class="line">),</span><br><span class="line"><span class="keyword">const</span> SizedBox(height: <span class="number">20</span>),</span><br><span class="line">Container(</span><br><span class="line">  decoration: BoxDecoration(</span><br><span class="line">    color: <span class="keyword">const</span> Color(<span class="number">0xFF1F2123</span>),</span><br><span class="line">    borderRadius: BorderRadius.circular(<span class="number">25</span>),</span><br><span class="line">  ),</span><br><span class="line">  child: Padding(</span><br><span class="line">    padding: <span class="keyword">const</span> EdgeInsets.all(<span class="number">30</span>),</span><br><span class="line">    child: Row(</span><br><span class="line">      children: [</span><br><span class="line">        Column(</span><br><span class="line">          crossAxisAlignment: CrossAxisAlignment.start,</span><br><span class="line">          children: [</span><br><span class="line">            <span class="keyword">const</span> Text(</span><br><span class="line">              <span class="string">&#x27;Euro&#x27;</span>,</span><br><span class="line">              style: TextStyle(</span><br><span class="line">                color: Colors.white,</span><br><span class="line">                fontSize: <span class="number">32</span>,</span><br><span class="line">                fontWeight: FontWeight.w600,</span><br><span class="line">              ),</span><br><span class="line">            ),</span><br><span class="line">            <span class="keyword">const</span> SizedBox(height: <span class="number">10</span>),</span><br><span class="line">            Row(</span><br><span class="line">              children: [</span><br><span class="line">                <span class="keyword">const</span> Text(</span><br><span class="line">                  <span class="string">&#x27;6 428&#x27;</span>,</span><br><span class="line">                  style: TextStyle(</span><br><span class="line">                    color: Colors.white,</span><br><span class="line">                    fontSize: <span class="number">20</span>,</span><br><span class="line">                  ),</span><br><span class="line">                ),</span><br><span class="line">                <span class="keyword">const</span> SizedBox(width: <span class="number">5</span>),</span><br><span class="line">                Text(</span><br><span class="line">                  <span class="string">&#x27;EUR&#x27;</span>,</span><br><span class="line">                  style: TextStyle(</span><br><span class="line">                    color: Colors.white.withOpacity(<span class="number">0.8</span>),</span><br><span class="line">                    fontSize: <span class="number">20</span>,</span><br><span class="line">                  ),</span><br><span class="line">                ),</span><br><span class="line">              ],</span><br><span class="line">            )</span><br><span class="line">          ],</span><br><span class="line">        ),</span><br><span class="line">      ],</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-3"><a href="#🔍-코드-상세-설명-3" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. 섹션 헤더 배치</strong></p>
+<ul>
+<li><code>crossAxisAlignment.end</code>로 <code>Wallets</code> 제목과 <code>View All</code>을 baseline에 맞춰 자연스러운 시선을 유도합니다.</li>
+<li><code>View All</code>은 <code>withOpacity</code>로 살짝 흐려 보조 정보임을 표현합니다.</li>
+</ul>
+<p><strong>2. 카드 컨테이너</strong></p>
+<ul>
+<li>배경색을 한 단계 밝게(0xFF1F2123) 설정해 메인 배경과 구분했습니다.</li>
+<li><code>borderRadius.circular(25)</code>로 부드러운 카드 모양을 만들었습니다.</li>
+</ul>
+<p><strong>3. 카드 내부 텍스트</strong></p>
+<ul>
+<li><code>Column</code> 안 첫 줄은 통화 이름, 두 번째 <code>Row</code>에는 금액과 단위를 나란히 배치합니다.</li>
+<li>금액과 단위 사이에 <code>SizedBox(width: 5)</code>로 적당한 간격을 둡니다.</li>
+</ul>
+<p><strong>시각화:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Wallets                View All</span><br><span class="line">┌──────────────────────────────┐</span><br><span class="line">│ Euro                         │</span><br><span class="line">│ 6 428  EUR                   │</span><br><span class="line">└──────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="🎨-화면-미리보기-3"><a href="#🎨-화면-미리보기-3" class="headerlink" title="🎨 화면 미리보기"></a>🎨 화면 미리보기</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">카드 형태 컨테이너 안에 통화 정보가 정돈된 모습</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-3"><a href="#📊-동작-흐름-3" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. Row가 섹션 제목과 View All 버튼을 좌우로 배치</span><br><span class="line">2. SizedBox로 섹션과 카드 사이 여백 확보</span><br><span class="line">3. Container가 카드 배경과 모서리를 렌더링</span><br><span class="line">4. Column→Row 조합으로 통화명과 금액/코드를 위→아래, 좌→우로 배치</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-3"><a href="#✅-체크리스트-3" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> Wallets 제목과 View All이 같은 라인에 정렬되는가?</li>
+<li><input disabled="" type="checkbox"> 카드 배경색이 메인 배경보다 밝게 표시되는가?</li>
+<li><input disabled="" type="checkbox"> 금액과 통화 코드가 한 줄에 나란히 보이는가?</li>
+</ul>
+<h3 id="💡-연습-과제-3"><a href="#💡-연습-과제-3" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li>다른 통화를 하나 더 추가하고 카드 아래에 배치해보세요.</li>
+<li>카드 배경색을 살짝 더 밝은 회색으로 바꿔 대비를 실험해보세요.</li>
+<li><code>View All</code> 텍스트를 버튼으로 만들고 onPressed 콜백을 준비해보세요.</li>
+</ol>
+<hr>
+<h2 id="아이콘-배치와-Transform-활용"><a href="#아이콘-배치와-Transform-활용" class="headerlink" title="아이콘 배치와 Transform 활용"></a>아이콘 배치와 Transform 활용</h2><h3 id="🎯-이번-단계에서-배울-것-4"><a href="#🎯-이번-단계에서-배울-것-4" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>clipBehavior: Clip.hardEdge</code>로 자식이 카드 바깥으로 넘치지 않게 하기</li>
+<li><code>Transform.scale</code>, <code>Transform.translate</code>를 조합해 아이콘 위치와 크기 조정하기</li>
+<li>머티리얼 아이콘(<code>Icons.euro_rounded</code>)을 활용해 시각적 포인트 주기</li>
+</ul>
+<h3 id="📂-파일-구조-4"><a href="#📂-파일-구조-4" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (Euro 카드에 아이콘 추가)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-카드에-통화-아이콘-얹기"><a href="#📝-1단계-카드에-통화-아이콘-얹기" class="headerlink" title="📝 1단계: 카드에 통화 아이콘 얹기"></a>📝 1단계: 카드에 통화 아이콘 얹기</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  clipBehavior: Clip.hardEdge,</span><br><span class="line">  decoration: BoxDecoration(</span><br><span class="line">    color: <span class="keyword">const</span> Color(<span class="number">0xFF1F2123</span>),</span><br><span class="line">    borderRadius: BorderRadius.circular(<span class="number">25</span>),</span><br><span class="line">  ),</span><br><span class="line">  child: Padding(</span><br><span class="line">    padding: <span class="keyword">const</span> EdgeInsets.all(<span class="number">30</span>),</span><br><span class="line">    child: Row(</span><br><span class="line">      mainAxisAlignment: MainAxisAlignment.spaceBetween,</span><br><span class="line">      children: [</span><br><span class="line">        <span class="comment">// ... 왼쪽 텍스트 컬럼 ...</span></span><br><span class="line">        Transform.scale(</span><br><span class="line">          scale: <span class="number">2.2</span>,</span><br><span class="line">          child: Transform.translate(</span><br><span class="line">            offset: <span class="keyword">const</span> Offset(-<span class="number">5</span>, <span class="number">12</span>),</span><br><span class="line">            child: <span class="keyword">const</span> Icon(</span><br><span class="line">              Icons.euro_rounded,</span><br><span class="line">              color: Colors.white,</span><br><span class="line">              size: <span class="number">88</span>,</span><br><span class="line">            ),</span><br><span class="line">          ),</span><br><span class="line">        )</span><br><span class="line">      ],</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-4"><a href="#🔍-코드-상세-설명-4" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. Clip 설정</strong></p>
+<ul>
+<li><code>clipBehavior: Clip.hardEdge</code>로 둥근 둥근 모서리 밖으로 아이콘이 튀어나오지 않게 자릅니다.</li>
+</ul>
+<p><strong>2. Transform 두 번 중첩</strong></p>
+<ul>
+<li><code>Transform.scale</code>로 아이콘을 2.2배 확대합니다.</li>
+<li>내부에서 <code>Transform.translate</code>를 적용해 살짝 왼쪽(-5)과 아래(+12)로 이동시킵니다.</li>
+<li>WYSIWYG처럼 아이콘 위치를 세밀하게 조정할 수 있습니다.</li>
+</ul>
+<p><strong>3. 아이콘 스타일</strong></p>
+<ul>
+<li><code>size: 88</code>과 흰색을 사용해 어두운 배경 위에서 눈에 띄게 만듭니다.</li>
+<li>통화별로 대표 아이콘을 사용하면 직관적인 UI가 됩니다.</li>
+</ul>
+<h3 id="🎨-화면-미리보기-4"><a href="#🎨-화면-미리보기-4" class="headerlink" title="🎨 화면 미리보기"></a>🎨 화면 미리보기</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────┐</span><br><span class="line">│ Euro             € (확대 아이콘)│</span><br><span class="line">│ 6 428  EUR                   │</span><br><span class="line">└──────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-4"><a href="#📊-동작-흐름-4" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. Row가 텍스트와 아이콘을 양쪽 끝으로 분리</span><br><span class="line">2. Transform.scale이 아이콘을 크게 확대</span><br><span class="line">3. Transform.translate가 살짝 위치를 조정</span><br><span class="line">4. Clip.hardEdge가 카드 밖으로 나간 부분을 잘라서 깔끔하게 유지</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-4"><a href="#✅-체크리스트-4" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 아이콘이 카드 밖으로 삐져나오지 않는가?</li>
+<li><input disabled="" type="checkbox"> 아이콘이 텍스트와 자연스럽게 맞춰졌는가?</li>
+<li><input disabled="" type="checkbox"> Transform 적용 순서(scale → translate)가 올바른가?</li>
+</ul>
+<h3 id="💡-연습-과제-4"><a href="#💡-연습-과제-4" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li>아이콘 색상을 <code>Colors.amber</code>로 바꿔 카드 강조 색을 실험해보세요.</li>
+<li><code>Transform.rotate</code>를 추가해 아이콘을 살짝 기울여 보세요.</li>
+<li>다른 통화 아이콘을 찾아 아이콘 데이터를 교체해보세요.</li>
+</ol>
+<hr>
+<h2 id="CurrencyCard-위젯과-스크롤-처리"><a href="#CurrencyCard-위젯과-스크롤-처리" class="headerlink" title="CurrencyCard 위젯과 스크롤 처리"></a>CurrencyCard 위젯과 스크롤 처리</h2><h3 id="🎯-이번-단계에서-배울-것-5"><a href="#🎯-이번-단계에서-배울-것-5" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li><code>SingleChildScrollView</code>로 세로 레이아웃을 스크롤 가능하게 만들기</li>
+<li>카드 구성을 <code>CurrencyCard</code> 위젯으로 분리해 재사용성 극대화하기</li>
+<li><code>isInverted</code> 플래그로 밝은 카드&#x2F;어두운 카드 테마 전환 구현하기</li>
+<li><code>Transform.translate</code>로 카드 간 겹쳐 보이게 오프셋 주기</li>
+</ul>
+<h3 id="📂-파일-구조-5"><a href="#📂-파일-구조-5" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">새로 생성되는 파일</span><br><span class="line">- lib/widgets/currency_card.dart (재사용 가능한 카드 위젯)</span><br><span class="line"></span><br><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (스크롤 뷰 도입 및 카드 세 개 배치)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-CurrencyCard-위젯-만들기"><a href="#📝-1단계-CurrencyCard-위젯-만들기" class="headerlink" title="📝 1단계: CurrencyCard 위젯 만들기"></a>📝 1단계: CurrencyCard 위젯 만들기</h3><p><strong>전체 코드 (lib&#x2F;widgets&#x2F;currency_card.dart @ 2.8):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CurrencyCard</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> name, code, amount;</span><br><span class="line">  <span class="keyword">final</span> IconData icon;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">bool</span> isInverted;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">final</span> _blackColor = <span class="keyword">const</span> Color(<span class="number">0xFF1F2123</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> CurrencyCard(&#123;</span><br><span class="line">    <span class="keyword">super</span>.key,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.name,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.code,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.amount,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.icon,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.isInverted,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Container(</span><br><span class="line">      clipBehavior: Clip.hardEdge,</span><br><span class="line">      decoration: BoxDecoration(</span><br><span class="line">        color: isInverted ? Colors.white : _blackColor,</span><br><span class="line">        borderRadius: BorderRadius.circular(<span class="number">25</span>),</span><br><span class="line">      ),</span><br><span class="line">      child: Padding(</span><br><span class="line">        padding: <span class="keyword">const</span> EdgeInsets.all(<span class="number">30</span>),</span><br><span class="line">        child: Row(</span><br><span class="line">          mainAxisAlignment: MainAxisAlignment.spaceBetween,</span><br><span class="line">          children: [</span><br><span class="line">            Column(</span><br><span class="line">              crossAxisAlignment: CrossAxisAlignment.start,</span><br><span class="line">              children: [</span><br><span class="line">                Text(</span><br><span class="line">                  name,</span><br><span class="line">                  style: TextStyle(</span><br><span class="line">                    color: isInverted ? _blackColor : Colors.white,</span><br><span class="line">                    fontSize: <span class="number">32</span>,</span><br><span class="line">                    fontWeight: FontWeight.w600,</span><br><span class="line">                  ),</span><br><span class="line">                ),</span><br><span class="line">                <span class="keyword">const</span> SizedBox(</span><br><span class="line">                  height: <span class="number">20</span>,</span><br><span class="line">                ),</span><br><span class="line">                Row(</span><br><span class="line">                  children: [</span><br><span class="line">                    Text(</span><br><span class="line">                      amount,</span><br><span class="line">                      style: TextStyle(</span><br><span class="line">                        color: isInverted ? _blackColor : Colors.white,</span><br><span class="line">                        fontSize: <span class="number">20</span>,</span><br><span class="line">                      ),</span><br><span class="line">                    ),</span><br><span class="line">                    <span class="keyword">const</span> SizedBox(</span><br><span class="line">                      width: <span class="number">5</span>,</span><br><span class="line">                    ),</span><br><span class="line">                    Text(</span><br><span class="line">                      code,</span><br><span class="line">                      style: TextStyle(</span><br><span class="line">                        color: isInverted</span><br><span class="line">                            ? _blackColor</span><br><span class="line">                            : Colors.white.withOpacity(<span class="number">0.8</span>),</span><br><span class="line">                        fontSize: <span class="number">20</span>,</span><br><span class="line">                      ),</span><br><span class="line">                    ),</span><br><span class="line">                  ],</span><br><span class="line">                )</span><br><span class="line">              ],</span><br><span class="line">            ),</span><br><span class="line">            Transform.scale(</span><br><span class="line">              scale: <span class="number">2.2</span>,</span><br><span class="line">              child: Transform.translate(</span><br><span class="line">                offset: <span class="keyword">const</span> Offset(</span><br><span class="line">                  -<span class="number">5</span>,</span><br><span class="line">                  <span class="number">12</span>,</span><br><span class="line">                ),</span><br><span class="line">                child: Icon(</span><br><span class="line">                  icon,</span><br><span class="line">                  color: isInverted ? _blackColor : Colors.white,</span><br><span class="line">                  size: <span class="number">88</span>,</span><br><span class="line">                ),</span><br><span class="line">              ),</span><br><span class="line">            )</span><br><span class="line">          ],</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="🔍-코드-상세-설명-5"><a href="#🔍-코드-상세-설명-5" class="headerlink" title="🔍 코드 상세 설명"></a>🔍 코드 상세 설명</h4><p><strong>1. 테마 전환 플래그 <code>isInverted</code></strong></p>
+<ul>
+<li>카드 배경과 텍스트, 아이콘 색을 조건문 없이 삼항 연산자로 깔끔히 바꿉니다.</li>
+<li>밝은 카드와 어두운 카드를 동일한 위젯이 담당하게 되어 중복이 줄었습니다.</li>
+</ul>
+<p><strong>2. <code>_blackColor</code> 필드</strong></p>
+<ul>
+<li>반복적으로 사용하는 0xFF1F2123 색상을 필드로 빼 재사용합니다.</li>
+<li>밑줄로 시작하는 변수명은 Dart에서 private(파일 내 전용)을 의미합니다.</li>
+</ul>
+<p><strong>3. 기존 Transform 로직 재사용</strong></p>
+<ul>
+<li>2.7에서 만든 아이콘 배치를 그대로 포함해 어느 카드에서나 적용됩니다.</li>
+</ul>
+<h3 id="📝-2단계-스크롤-뷰와-카드-배치하기"><a href="#📝-2단계-스크롤-뷰와-카드-배치하기" class="headerlink" title="📝 2단계: 스크롤 뷰와 카드 배치하기"></a>📝 2단계: 스크롤 뷰와 카드 배치하기</h3><p><strong>핵심 변경 (lib&#x2F;main.dart @ 2.8):</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">body: SingleChildScrollView(</span><br><span class="line">  child: Padding(</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    child: Column(</span><br><span class="line">      crossAxisAlignment: CrossAxisAlignment.start,</span><br><span class="line">      children: [</span><br><span class="line">        <span class="comment">// ... 기존 헤더/버튼 ...</span></span><br><span class="line">        <span class="keyword">const</span> CurrencyCard(</span><br><span class="line">          name: <span class="string">&#x27;Euro&#x27;</span>,</span><br><span class="line">          code: <span class="string">&#x27;EUR&#x27;</span>,</span><br><span class="line">          amount: <span class="string">&#x27;6 428&#x27;</span>,</span><br><span class="line">          icon: Icons.euro_rounded,</span><br><span class="line">          isInverted: <span class="keyword">false</span>,</span><br><span class="line">        ),</span><br><span class="line">        Transform.translate(</span><br><span class="line">          offset: <span class="keyword">const</span> Offset(<span class="number">0</span>, -<span class="number">20</span>),</span><br><span class="line">          child: <span class="keyword">const</span> CurrencyCard(</span><br><span class="line">            name: <span class="string">&#x27;Bitcoin&#x27;</span>,</span><br><span class="line">            code: <span class="string">&#x27;BTC&#x27;</span>,</span><br><span class="line">            amount: <span class="string">&#x27;9 785&#x27;</span>,</span><br><span class="line">            icon: Icons.currency_bitcoin,</span><br><span class="line">            isInverted: <span class="keyword">true</span>,</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">        Transform.translate(</span><br><span class="line">          offset: <span class="keyword">const</span> Offset(<span class="number">0</span>, -<span class="number">40</span>),</span><br><span class="line">          child: <span class="keyword">const</span> CurrencyCard(</span><br><span class="line">            name: <span class="string">&#x27;Dollar&#x27;</span>,</span><br><span class="line">            code: <span class="string">&#x27;USD&#x27;</span>,</span><br><span class="line">            amount: <span class="string">&#x27;428&#x27;</span>,</span><br><span class="line">            icon: Icons.attach_money_outlined,</span><br><span class="line">            isInverted: <span class="keyword">false</span>,</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ],</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>SingleChildScrollView</code>로 긴 화면에서 overflow 에러 없이 세로 스크롤이 되도록 했습니다.</li>
+<li><code>Transform.translate</code>를 카드마다 적용해 살짝 겹치는 느낌의 스택 효과를 냅니다.</li>
+<li>두 번째 카드만 <code>isInverted: true</code>를 사용해 흰색 카드 역색상을 보여줍니다.</li>
+</ul>
+<h3 id="🎨-화면-미리보기-5"><a href="#🎨-화면-미리보기-5" class="headerlink" title="🎨 화면 미리보기"></a>🎨 화면 미리보기</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Euro Card</span><br><span class="line">  ↳ Bitcoin Card (흰색, 살짝 위로 겹침)</span><br><span class="line">    ↳ Dollar Card (다시 어두운 테마, 더 위로 겹침)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-5"><a href="#📊-동작-흐름-5" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. SingleChildScrollView가 Column 전체를 스크롤 가능한 영역으로 감쌈</span><br><span class="line">2. CurrencyCard 위젯이 전달받은 데이터로 카드 하나를 렌더링</span><br><span class="line">3. isInverted bool이 카드 색상 테마를 결정</span><br><span class="line">4. Transform.translate가 각 카드의 Y값을 음수로 이동시켜 겹쳐 보이게 함</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-5"><a href="#✅-체크리스트-5" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> 스크롤이 필요한 화면에서 overflow 에러가 사라졌는가?</li>
+<li><input disabled="" type="checkbox"> 세 가지 카드가 서로 다른 색&#x2F;데이터로 표시되는가?</li>
+<li><input disabled="" type="checkbox"> Transform 덕분에 카드가 계단식으로 겹쳐 보이는가?</li>
+</ul>
+<h3 id="💡-연습-과제-5"><a href="#💡-연습-과제-5" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li><code>isInverted</code>를 추가 카드에 적용하며 밝은&#x2F;어두운 테마를 자유롭게 조합해보세요.</li>
+<li><code>Transform.translate</code>의 offset 값을 조절해 카드 겹침 간격을 바꿔보세요.</li>
+<li><code>CurrencyCard</code>에 <code>order</code> 파라미터를 만들어 자동으로 높이 오프셋을 결정하도록 개선해보세요.</li>
+</ol>
+<hr>
+<h2 id="Code-Challenge-반영"><a href="#Code-Challenge-반영" class="headerlink" title="Code Challenge 반영"></a>Code Challenge 반영</h2><h3 id="🎯-이번-단계에서-배울-것-6"><a href="#🎯-이번-단계에서-배울-것-6" class="headerlink" title="🎯 이번 단계에서 배울 것"></a>🎯 이번 단계에서 배울 것</h3><ul>
+<li>마지막 카드 아이콘을 다른 머티리얼 아이콘으로 교체하기</li>
+<li>작은 변경도 깃 커밋으로 남겨 추적 가능하게 만들기</li>
+</ul>
+<h3 id="📂-파일-구조-6"><a href="#📂-파일-구조-6" class="headerlink" title="📂 파일 구조"></a>📂 파일 구조</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">수정되는 파일</span><br><span class="line">- lib/main.dart (USD 카드 아이콘 교체)</span><br></pre></td></tr></table></figure>
+
+<h3 id="📝-1단계-Dollar-카드-아이콘-변경"><a href="#📝-1단계-Dollar-카드-아이콘-변경" class="headerlink" title="📝 1단계: Dollar 카드 아이콘 변경"></a>📝 1단계: Dollar 카드 아이콘 변경</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Transform.translate(</span><br><span class="line">  offset: <span class="keyword">const</span> Offset(<span class="number">0</span>, -<span class="number">40</span>),</span><br><span class="line">  child: <span class="keyword">const</span> CurrencyCard(</span><br><span class="line">    name: <span class="string">&#x27;Dollar&#x27;</span>,</span><br><span class="line">    code: <span class="string">&#x27;USD&#x27;</span>,</span><br><span class="line">    amount: <span class="string">&#x27;428&#x27;</span>,</span><br><span class="line">    icon: Icons.monetization_on_outlined,</span><br><span class="line">    isInverted: <span class="keyword">false</span>,</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Icons.attach_money_outlined</code>에서 <code>Icons.monetization_on_outlined</code>로 교체해 과제 요구사항을 반영했습니다.</li>
+<li>머티리얼 아이콘 라이브러리의 다양한 아이콘을 탐색하는 계기가 됩니다.</li>
+</ul>
+<h3 id="🎨-화면-미리보기-6"><a href="#🎨-화면-미리보기-6" class="headerlink" title="🎨 화면 미리보기"></a>🎨 화면 미리보기</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Dollar 카드 아이콘이 세로 동전 그래픽으로 바뀐 모습</span><br></pre></td></tr></table></figure>
+
+<h3 id="📊-동작-흐름-6"><a href="#📊-동작-흐름-6" class="headerlink" title="📊 동작 흐름"></a>📊 동작 흐름</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. CurrencyCard가 새로운 아이콘 데이터를 전달받음</span><br><span class="line">2. Icon 위젯이 해당 심볼을 렌더링</span><br><span class="line">3. 나머지 레이아웃은 기존과 동일하게 유지</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-체크리스트-6"><a href="#✅-체크리스트-6" class="headerlink" title="✅ 체크리스트"></a>✅ 체크리스트</h3><ul>
+<li><input disabled="" type="checkbox"> Dollar 카드 아이콘이 바뀌었는가?</li>
+<li><input disabled="" type="checkbox"> 나머지 카드 레이아웃에는 영향이 없는가?</li>
+</ul>
+<h3 id="💡-연습-과제-6"><a href="#💡-연습-과제-6" class="headerlink" title="💡 연습 과제"></a>💡 연습 과제</h3><ol>
+<li>다른 통화 카드도 각기 어울리는 아이콘으로 바꿔보세요.</li>
+<li>아이콘 색상을 카드 테마와 다르게 줘서 시각적 대비를 확인하세요.</li>
+<li>머티리얼 아이콘 사이트에서 즐겨 쓰는 아이콘을 찾아 목록을 정리해보세요.</li>
+</ol>
+<hr>
+<h2 id="📚-전체-흐름-정리"><a href="#📚-전체-흐름-정리" class="headerlink" title="📚 전체 흐름 정리"></a>📚 전체 흐름 정리</h2><ul>
+<li>다크 테마 배경과 헤더가 완성되었습니다.</li>
+<li>잔액 정보와 CTA 버튼을 추가하고 const로 렌더링을 최적화했습니다.</li>
+<li>버튼을 별도 위젯으로 추출해 재사용성을 높였습니다.</li>
+<li>Wallets 섹션과 통화 카드, 아이콘 배치를 마무리했습니다.</li>
+<li>카드 역시 컴포넌트화하고 스크롤 처리, 겹침 효과를 구현했습니다.</li>
+<li>코드 챌린지에서는 아이콘 교체로 머티리얼 컴포넌트 탐색을 마쳤습니다.</li>
+</ul>
+<h2 id="✅-최종-점검-리스트"><a href="#✅-최종-점검-리스트" class="headerlink" title="✅ 최종 점검 리스트"></a>✅ 최종 점검 리스트</h2><ul>
+<li><input disabled="" type="checkbox"> 헤더, 잔액, Wallets 섹션이 순서대로 화면에 배치되었는가?</li>
+<li><input disabled="" type="checkbox"> Button과 CurrencyCard 위젯이 각각 <code>lib/widgets</code> 폴더에 존재하는가?</li>
+<li><input disabled="" type="checkbox"> <code>isInverted</code>가 카드 색상 테마를 잘 전환하고 있는가?</li>
+<li><input disabled="" type="checkbox"> 스크롤이 필요한 경우 <code>SingleChildScrollView</code>가 적용되어 있는가?</li>
+<li><input disabled="" type="checkbox"> 최종 아이콘 교체가 반영되었는가?</li>
+</ul>
+<hr>
+<p>출처 : <a target="_blank" rel="noopener" href="https://nomadcoders.co/flutter-for-beginners">https://nomadcoders.co/flutter-for-beginners</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/flutter/" rel="tag"><i class="fa fa-tag"></i> flutter</a>
+              <a href="/tags/basic/" rel="tag"><i class="fa fa-tag"></i> basic</a>
+              <a href="/tags/toonflix/" rel="tag"><i class="fa fa-tag"></i> toonflix</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/02/flutter-basic/flutter-basic-chapter1/" rel="prev" title="Flutter Basic Chapter 1 - Flutter 프로젝트 생성과 Hello World">
+                  <i class="fa fa-angle-left"></i> Flutter Basic Chapter 1 - Flutter 프로젝트 생성과 Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/02/flutter-basic/flutter-basic-chapter3/" rel="next" title="Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기">
+                  Flutter Basic Chapter 3 - 상태로 움직이는 UI 만들기 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
