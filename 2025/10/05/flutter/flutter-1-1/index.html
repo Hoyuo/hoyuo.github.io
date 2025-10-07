@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoyuo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="TikTok Clone 프로젝트의 멀티 모듈 아키텍처 구조와 Melos 기반 모노레포 관리 가이드  🏗️ 아키텍처 개요">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. 부록 Multi Module Architecture Guide">
+<meta property="og:url" content="https://hoyuo.github.io/2025/10/05/flutter/flutter-1-1/index.html">
+<meta property="og:site_name" content="Hoyuo&#39;s Blog">
+<meta property="og:description" content="TikTok Clone 프로젝트의 멀티 모듈 아키텍처 구조와 Melos 기반 모노레포 관리 가이드  🏗️ 아키텍처 개요">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2025-10-05T03:10:00.000Z">
+<meta property="article:author" content="Hoyuo">
+<meta property="article:tag" content="Tiktok Clone">
+<meta property="article:tag" content="flutter">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoyuo.github.io/2025/10/05/flutter/flutter-1-1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"ko","comments":true,"permalink":"https://hoyuo.github.io/2025/10/05/flutter/flutter-1-1/","path":"2025/10/05/flutter/flutter-1-1/","title":"1. 부록 Multi Module Architecture Guide"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>1. 부록 Multi Module Architecture Guide | Hoyuo's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoyuo's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mobile Developer<br/> (Android, iOS, Flutter, RN)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="검색" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>홈</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>태그<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>카테고리<span class="badge">0</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>아카이브<span class="badge">23</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>검색
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          목차
+        </li>
+        <li class="sidebar-nav-overview">
+          흝어보기
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8F%97%EF%B8%8F-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EA%B0%9C%EC%9A%94"><span class="nav-number">1.</span> <span class="nav-text">🏗️ 아키텍처 개요</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%ED%95%B5%EC%8B%AC-%EC%9B%90%EC%B9%99"><span class="nav-number">1.1.</span> <span class="nav-text">핵심 원칙</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%81-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B5%AC%EC%A1%B0"><span class="nav-number">2.</span> <span class="nav-text">📁 프로젝트 구조</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%94%97-%EC%9D%98%EC%A1%B4%EC%84%B1-%EA%B5%AC%EC%A1%B0"><span class="nav-number">3.</span> <span class="nav-text">🔗 의존성 구조</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%9D%98%EC%A1%B4%EC%84%B1-%EB%B0%A9%ED%96%A5"><span class="nav-number">3.1.</span> <span class="nav-text">의존성 방향</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EB%A3%A8%ED%8A%B8-%EC%95%B1-pubspec-yaml"><span class="nav-number">3.2.</span> <span class="nav-text">루트 앱 (pubspec.yaml)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EA%B8%B0%EB%8A%A5-%EB%AA%A8%EB%93%88-features-authentication-pubspec-yaml"><span class="nav-number">3.3.</span> <span class="nav-text">기능 모듈 (features&#x2F;authentication&#x2F;pubspec.yaml)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EB%94%94%EC%9E%90%EC%9D%B8-%EC%8B%9C%EC%8A%A4%ED%85%9C-common-design-system-pubspec-yaml"><span class="nav-number">3.4.</span> <span class="nav-text">디자인 시스템 (common&#x2F;design_system&#x2F;pubspec.yaml)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%9B%A0%EF%B8%8F-Melos-%EC%84%A4%EC%A0%95"><span class="nav-number">4.</span> <span class="nav-text">🛠️ Melos 설정</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#melos-yaml"><span class="nav-number">4.1.</span> <span class="nav-text">melos.yaml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Melos-%EB%AA%85%EB%A0%B9%EC%96%B4"><span class="nav-number">4.2.</span> <span class="nav-text">Melos 명령어</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%A6-%EB%94%94%EC%9E%90%EC%9D%B8-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%82%AC%EC%9A%A9%EB%B2%95"><span class="nav-number">5.</span> <span class="nav-text">📦 디자인 시스템 사용법</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Import"><span class="nav-number">5.1.</span> <span class="nav-text">Import</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EA%B0%84%EA%B2%A9-Gaps"><span class="nav-number">5.2.</span> <span class="nav-text">간격 (Gaps)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%ED%81%AC%EA%B8%B0-Sizes"><span class="nav-number">5.3.</span> <span class="nav-text">크기 (Sizes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%83%89%EC%83%81"><span class="nav-number">5.4.</span> <span class="nav-text">색상</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%86%95-%EC%83%88%EB%A1%9C%EC%9A%B4-%EA%B8%B0%EB%8A%A5-%EB%AA%A8%EB%93%88-%EC%B6%94%EA%B0%80%ED%95%98%EA%B8%B0"><span class="nav-number">6.</span> <span class="nav-text">🆕 새로운 기능 모듈 추가하기</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%EA%B8%B0%EB%8A%A5-%EB%AA%A8%EB%93%88-%EC%83%9D%EC%84%B1"><span class="nav-number">6.1.</span> <span class="nav-text">1. 기능 모듈 생성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%EB%AA%A8%EB%93%88-%EA%B5%AC%EC%A1%B0-%EC%84%A4%EC%A0%95"><span class="nav-number">6.2.</span> <span class="nav-text">2. 모듈 구조 설정</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-pubspec-yaml-%EC%84%A4%EC%A0%95"><span class="nav-number">6.3.</span> <span class="nav-text">3. pubspec.yaml 설정</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%EB%A3%A8%ED%8A%B8-pubspec-yaml%EC%97%90-%EB%93%B1%EB%A1%9D"><span class="nav-number">6.4.</span> <span class="nav-text">4. 루트 pubspec.yaml에 등록</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8"><span class="nav-number">6.5.</span> <span class="nav-text">5. 의존성 업데이트</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%94%84-%EA%B8%B0%EC%A1%B4-%EB%AA%A8%EB%93%88-%EA%B5%AC%EC%A1%B0"><span class="nav-number">7.</span> <span class="nav-text">🔄 기존 모듈 구조</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Authentication-%EB%AA%A8%EB%93%88"><span class="nav-number">7.1.</span> <span class="nav-text">Authentication 모듈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Onboarding-%EB%AA%A8%EB%93%88"><span class="nav-number">7.2.</span> <span class="nav-text">Onboarding 모듈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%EB%84%A4%EB%B9%84%EA%B2%8C%EC%9D%B4%EC%85%98-%ED%8C%A8%ED%84%B4"><span class="nav-number">8.</span> <span class="nav-text">🎯 네비게이션 패턴</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9C%85-%EA%B0%9C%EB%B0%9C-%EA%B0%80%EC%9D%B4%EB%93%9C%EB%9D%BC%EC%9D%B8"><span class="nav-number">9.</span> <span class="nav-text">✅ 개발 가이드라인</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DO-%E2%9C%85"><span class="nav-number">9.1.</span> <span class="nav-text">DO ✅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DON%E2%80%99T-%E2%9D%8C"><span class="nav-number">9.2.</span> <span class="nav-text">DON’T ❌</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%AA-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%B0%8F-%EB%B6%84%EC%84%9D"><span class="nav-number">10.</span> <span class="nav-text">🧪 테스트 및 분석</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%A0%84%EC%B2%B4-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%B6%84%EC%84%9D"><span class="nav-number">10.1.</span> <span class="nav-text">전체 프로젝트 분석</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EA%B0%9C%EB%B3%84-%EB%AA%A8%EB%93%88-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="nav-number">10.2.</span> <span class="nav-text">개별 모듈 테스트</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%95%B1-%EC%8B%A4%ED%96%89"><span class="nav-number">10.3.</span> <span class="nav-text">앱 실행</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%9A%80-%EC%A3%BC%EC%9A%94-%EC%9D%B4%EC%A0%90"><span class="nav-number">11.</span> <span class="nav-text">🚀 주요 이점</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%EB%8F%85%EB%A6%BD%EC%84%B1"><span class="nav-number">11.1.</span> <span class="nav-text">1. 독립성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%EC%9E%AC%EC%82%AC%EC%9A%A9%EC%84%B1"><span class="nav-number">11.2.</span> <span class="nav-text">2. 재사용성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%ED%99%95%EC%9E%A5%EC%84%B1"><span class="nav-number">11.3.</span> <span class="nav-text">3. 확장성</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%98%EC%84%B1"><span class="nav-number">11.4.</span> <span class="nav-text">4. 유지보수성</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%94%8D-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85"><span class="nav-number">12.</span> <span class="nav-text">🔍 트러블슈팅</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%98%A4%EB%A5%98"><span class="nav-number">12.1.</span> <span class="nav-text">의존성 오류</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EB%AA%A8%EB%93%88-%EC%9D%B8%EC%8B%9D-%EC%95%88-%EB%90%A8"><span class="nav-number">12.2.</span> <span class="nav-text">모듈 인식 안 됨</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Import-%EC%98%A4%EB%A5%98"><span class="nav-number">12.3.</span> <span class="nav-text">Import 오류</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%EA%B4%80%EB%A0%A8-%EB%AC%B8%EC%84%9C"><span class="nav-number">13.</span> <span class="nav-text">📚 관련 문서</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoyuo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">포스트</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">태그</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="ko">
+    <link itemprop="mainEntityOfPage" href="https://hoyuo.github.io/2025/10/05/flutter/flutter-1-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoyuo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="1. 부록 Multi Module Architecture Guide | Hoyuo's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1. 부록 Multi Module Architecture Guide
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">작성일</span>
+
+      <time title="Post created: 2025-10-05 12:10" itemprop="dateCreated datePublished" datetime="2025-10-05T12:10:00+09:00">2025-10-05</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>TikTok Clone 프로젝트의 멀티 모듈 아키텍처 구조와 Melos 기반 모노레포 관리 가이드</p>
+<hr>
+<h2 id="🏗️-아키텍처-개요"><a href="#🏗️-아키텍처-개요" class="headerlink" title="🏗️ 아키텍처 개요"></a>🏗️ 아키텍처 개요</h2><p>이 프로젝트는 <strong>기능 기반 모듈화 아키텍처</strong>와 <strong>Melos 모노레포 관리</strong>를 사용하여 확장 가능하고 유지보수 가능한 구조를 구축합니다.</p>
+<h3 id="핵심-원칙"><a href="#핵심-원칙" class="headerlink" title="핵심 원칙"></a>핵심 원칙</h3><ol>
+<li><strong>독립적인 기능 모듈</strong>: 각 기능은 자체 <code>pubspec.yaml</code>을 가진 별도의 Flutter 패키지</li>
+<li><strong>공유 디자인 시스템</strong>: 중앙화된 디자인 토큰으로 일관성 유지</li>
+<li><strong>명확한 의존성 방향</strong>: 기능 → 공통 모듈 (역방향 의존성 없음)</li>
+<li><strong>모노레포 관리</strong>: Melos를 통한 통합 패키지 관리</li>
+</ol>
+<hr>
+<h2 id="📁-프로젝트-구조"><a href="#📁-프로젝트-구조" class="headerlink" title="📁 프로젝트 구조"></a>📁 프로젝트 구조</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">tiktok/                           # 루트 모노레포</span><br><span class="line">├── melos.yaml                    # Melos 설정 파일</span><br><span class="line">├── pubspec.yaml                  # 루트 앱 의존성</span><br><span class="line">├── lib/</span><br><span class="line">│   └── main.dart                 # 앱 진입점 (오케스트레이션)</span><br><span class="line">│</span><br><span class="line">├── common/                       # 공유 모듈</span><br><span class="line">│   └── design_system/            # 디자인 토큰 패키지</span><br><span class="line">│       ├── pubspec.yaml          # publish_to: &#x27;none&#x27;</span><br><span class="line">│       └── lib/</span><br><span class="line">│           ├── design_system.dart</span><br><span class="line">│           ├── sizes.dart        # Sizes.size16, size20 등</span><br><span class="line">│           └── gaps.dart         # Gaps.v20, h16 등</span><br><span class="line">│</span><br><span class="line">└── features/                     # 기능 모듈</span><br><span class="line">    ├── authentication/           # 인증 기능</span><br><span class="line">    │   ├── pubspec.yaml          # feature_authentication</span><br><span class="line">    │   └── lib/</span><br><span class="line">    │       ├── screens/          # SignUpScreen, LoginScreen 등</span><br><span class="line">    │       └── widgets/          # AuthButton, FormButton 등</span><br><span class="line">    │</span><br><span class="line">    └── onboarding/               # 온보딩 기능</span><br><span class="line">        ├── pubspec.yaml          # feature_onboarding</span><br><span class="line">        └── lib/</span><br><span class="line">            └── screens/          # InterestsScreen 등</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔗-의존성-구조"><a href="#🔗-의존성-구조" class="headerlink" title="🔗 의존성 구조"></a>🔗 의존성 구조</h2><h3 id="의존성-방향"><a href="#의존성-방향" class="headerlink" title="의존성 방향"></a>의존성 방향</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">메인 앱 (tiktok)</span><br><span class="line">    ↓</span><br><span class="line">기능 모듈 (features/*)</span><br><span class="line">    ↓</span><br><span class="line">공통 모듈 (common/design_system)</span><br></pre></td></tr></table></figure>
+
+<h3 id="루트-앱-pubspec-yaml"><a href="#루트-앱-pubspec-yaml" class="headerlink" title="루트 앱 (pubspec.yaml)"></a>루트 앱 (<code>pubspec.yaml</code>)</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">tiktok</span></span><br><span class="line"><span class="attr">publish_to:</span> <span class="string">&#x27;none&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="comment"># 공통 모듈</span></span><br><span class="line">  <span class="attr">design_system:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">common/design_system</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 기능 모듈</span></span><br><span class="line">  <span class="attr">feature_authentication:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">features/authentication</span></span><br><span class="line">  <span class="attr">feature_onboarding:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">features/onboarding</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dev_dependencies:</span></span><br><span class="line">  <span class="attr">melos:</span> <span class="number">6.3</span><span class="number">.3</span>  <span class="comment"># 모노레포 관리 도구</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="기능-모듈-features-authentication-pubspec-yaml"><a href="#기능-모듈-features-authentication-pubspec-yaml" class="headerlink" title="기능 모듈 (features/authentication/pubspec.yaml)"></a>기능 모듈 (<code>features/authentication/pubspec.yaml</code>)</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">feature_authentication</span></span><br><span class="line"><span class="attr">publish_to:</span> <span class="string">&#x27;none&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="attr">flutter:</span></span><br><span class="line">    <span class="attr">sdk:</span> <span class="string">flutter</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">font_awesome_flutter:</span> <span class="number">10.9</span><span class="number">.1</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 디자인 시스템 의존성 (상대 경로)</span></span><br><span class="line">  <span class="attr">design_system:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">../../common/design_system</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 다른 기능 모듈 의존성 (필요시)</span></span><br><span class="line">  <span class="attr">feature_onboarding:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">../onboarding</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="디자인-시스템-common-design-system-pubspec-yaml"><a href="#디자인-시스템-common-design-system-pubspec-yaml" class="headerlink" title="디자인 시스템 (common/design_system/pubspec.yaml)"></a>디자인 시스템 (<code>common/design_system/pubspec.yaml</code>)</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">design_system</span></span><br><span class="line"><span class="attr">publish_to:</span> <span class="string">&#x27;none&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="attr">flutter:</span></span><br><span class="line">    <span class="attr">sdk:</span> <span class="string">flutter</span></span><br><span class="line">  <span class="attr">cupertino_icons:</span> <span class="string">^1.0.8</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>중요</strong>: 디자인 시스템은 다른 모듈에 의존하지 않음 (최하위 레이어)</p>
+<hr>
+<h2 id="🛠️-Melos-설정"><a href="#🛠️-Melos-설정" class="headerlink" title="🛠️ Melos 설정"></a>🛠️ Melos 설정</h2><h3 id="melos-yaml"><a href="#melos-yaml" class="headerlink" title="melos.yaml"></a><code>melos.yaml</code></h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Tiktok</span></span><br><span class="line"></span><br><span class="line"><span class="attr">packages:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">common/**</span>      <span class="comment"># common/ 아래 모든 패키지</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">features/**</span>    <span class="comment"># features/ 아래 모든 패키지</span></span><br><span class="line"></span><br><span class="line"><span class="attr">scripts:</span></span><br><span class="line">  <span class="attr">analyze:</span></span><br><span class="line">    <span class="attr">exec:</span> <span class="string">dart</span> <span class="string">analyze</span> <span class="string">.</span>  <span class="comment"># 모든 패키지 분석</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Melos-명령어"><a href="#Melos-명령어" class="headerlink" title="Melos 명령어"></a>Melos 명령어</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 모든 패키지의 의존성 가져오기</span></span><br><span class="line">melos bootstrap</span><br><span class="line"><span class="comment"># 또는</span></span><br><span class="line">flutter pub get  <span class="comment"># 루트에서 실행하면 자동으로 모든 모듈 처리</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 모든 패키지 분석</span></span><br><span class="line">melos run analyze</span><br><span class="line"></span><br><span class="line"><span class="comment"># 특정 패키지에서 명령 실행</span></span><br><span class="line">melos <span class="built_in">exec</span> --scope=<span class="string">&quot;feature_authentication&quot;</span> -- flutter <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📦-디자인-시스템-사용법"><a href="#📦-디자인-시스템-사용법" class="headerlink" title="📦 디자인 시스템 사용법"></a>📦 디자인 시스템 사용법</h2><h3 id="Import"><a href="#Import" class="headerlink" title="Import"></a>Import</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:design_system/design_system.dart&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="간격-Gaps"><a href="#간격-Gaps" class="headerlink" title="간격 (Gaps)"></a>간격 (Gaps)</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 수직 간격</span></span><br><span class="line">Gaps.v5   <span class="comment">// 5px 수직 간격</span></span><br><span class="line">Gaps.v10  <span class="comment">// 10px</span></span><br><span class="line">Gaps.v20  <span class="comment">// 20px</span></span><br><span class="line">Gaps.v32  <span class="comment">// 32px</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 수평 간격</span></span><br><span class="line">Gaps.h5   <span class="comment">// 5px 수평 간격</span></span><br><span class="line">Gaps.h16  <span class="comment">// 16px</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="크기-Sizes"><a href="#크기-Sizes" class="headerlink" title="크기 (Sizes)"></a>크기 (Sizes)</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 상수 값</span></span><br><span class="line">Sizes.size16  <span class="comment">// 16.0</span></span><br><span class="line">Sizes.size20  <span class="comment">// 20.0</span></span><br><span class="line">Sizes.size28  <span class="comment">// 28.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 사용 예시</span></span><br><span class="line">padding: EdgeInsets.all(Sizes.size16)</span><br><span class="line">width: Sizes.size48</span><br><span class="line">height: Sizes.size96</span><br></pre></td></tr></table></figure>
+
+<h3 id="색상"><a href="#색상" class="headerlink" title="색상"></a>색상</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 테마 색상 사용 (중앙화된 테마에서)</span></span><br><span class="line">Theme.of(context).primaryColor      <span class="comment">// #E9435A (TikTok 핑크)</span></span><br><span class="line">Theme.of(context).scaffoldBackgroundColor</span><br></pre></td></tr></table></figure>
+
+<p><strong>절대 금지</strong>: 하드코딩된 값 사용</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">❌ padding: EdgeInsets.all(<span class="number">16</span>)            <span class="comment">// 나쁜 예</span></span><br><span class="line">✅ padding: EdgeInsets.all(Sizes.size16)  <span class="comment">// 좋은 예</span></span><br><span class="line"></span><br><span class="line">❌ SizedBox(height: <span class="number">20</span>)                   <span class="comment">// 나쁜 예</span></span><br><span class="line">✅ Gaps.v20                               <span class="comment">// 좋은 예</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🆕-새로운-기능-모듈-추가하기"><a href="#🆕-새로운-기능-모듈-추가하기" class="headerlink" title="🆕 새로운 기능 모듈 추가하기"></a>🆕 새로운 기능 모듈 추가하기</h2><h3 id="1-기능-모듈-생성"><a href="#1-기능-모듈-생성" class="headerlink" title="1. 기능 모듈 생성"></a>1. 기능 모듈 생성</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> features</span><br><span class="line">flutter create --template=package feature_[name]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-모듈-구조-설정"><a href="#2-모듈-구조-설정" class="headerlink" title="2. 모듈 구조 설정"></a>2. 모듈 구조 설정</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">features/[feature_name]/</span><br><span class="line">├── lib/</span><br><span class="line">│   ├── screens/      # 전체 페이지 스크린</span><br><span class="line">│   └── widgets/      # 재사용 가능한 컴포넌트</span><br><span class="line">└── pubspec.yaml</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-pubspec-yaml-설정"><a href="#3-pubspec-yaml-설정" class="headerlink" title="3. pubspec.yaml 설정"></a>3. <code>pubspec.yaml</code> 설정</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">feature_[name]</span></span><br><span class="line"><span class="attr">publish_to:</span> <span class="string">&#x27;none&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="attr">flutter:</span></span><br><span class="line">    <span class="attr">sdk:</span> <span class="string">flutter</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 디자인 시스템 의존성 추가</span></span><br><span class="line">  <span class="attr">design_system:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">../../common/design_system</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 다른 필요한 패키지들...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-루트-pubspec-yaml에-등록"><a href="#4-루트-pubspec-yaml에-등록" class="headerlink" title="4. 루트 pubspec.yaml에 등록"></a>4. 루트 <code>pubspec.yaml</code>에 등록</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="string">feature_[name]:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">features/[name]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-의존성-업데이트"><a href="#5-의존성-업데이트" class="headerlink" title="5. 의존성 업데이트"></a>5. 의존성 업데이트</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter pub get</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔄-기존-모듈-구조"><a href="#🔄-기존-모듈-구조" class="headerlink" title="🔄 기존 모듈 구조"></a>🔄 기존 모듈 구조</h2><h3 id="Authentication-모듈"><a href="#Authentication-모듈" class="headerlink" title="Authentication 모듈"></a>Authentication 모듈</h3><p><strong>경로</strong>: <code>features/authentication/</code></p>
+<p><strong>화면</strong>:</p>
+<ul>
+<li><code>SignUpScreen</code> - 회원가입 진입</li>
+<li><code>LoginScreen</code> - 로그인 진입</li>
+<li><code>UsernameScreen</code> - 사용자명 입력</li>
+<li><code>EmailScreen</code> - 이메일 입력</li>
+<li><code>PasswordScreen</code> - 비밀번호 입력</li>
+<li><code>BirthdayScreen</code> - 생년월일 입력</li>
+<li><code>LoginFormScreen</code> - 로그인 폼</li>
+</ul>
+<p><strong>위젯</strong>:</p>
+<ul>
+<li><code>AuthButton</code> - 소셜 인증 버튼</li>
+<li><code>FormButton</code> - 폼 제출 버튼</li>
+</ul>
+<p><strong>의존성</strong>:</p>
+<ul>
+<li><code>design_system</code> (간격, 크기)</li>
+<li><code>font_awesome_flutter</code> (아이콘)</li>
+<li><code>feature_onboarding</code> (회원가입 완료 후 이동)</li>
+</ul>
+<h3 id="Onboarding-모듈"><a href="#Onboarding-모듈" class="headerlink" title="Onboarding 모듈"></a>Onboarding 모듈</h3><p><strong>경로</strong>: <code>features/onboarding/</code></p>
+<p><strong>화면</strong>:</p>
+<ul>
+<li><code>InterestsScreen</code> - 관심사 선택</li>
+</ul>
+<p><strong>의존성</strong>:</p>
+<ul>
+<li><code>design_system</code></li>
+</ul>
+<hr>
+<h2 id="🎯-네비게이션-패턴"><a href="#🎯-네비게이션-패턴" class="headerlink" title="🎯 네비게이션 패턴"></a>🎯 네비게이션 패턴</h2><p>현재 <strong>명령형 네비게이션</strong> 사용 (Named routes 미설정):</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 기능 간 이동</span></span><br><span class="line">Navigator.of(context).push(</span><br><span class="line">  MaterialPageRoute(</span><br><span class="line">    builder: (_) =&gt; <span class="keyword">const</span> InterestsScreen(),</span><br><span class="line">  ),</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 대체 (pushAndRemoveUntil)</span></span><br><span class="line">Navigator.of(context).pushAndRemoveUntil(</span><br><span class="line">  MaterialPageRoute(builder: (_) =&gt; <span class="keyword">const</span> InterestsScreen()),</span><br><span class="line">  (route) =&gt; <span class="keyword">false</span>,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><strong>Import 예시</strong>:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Authentication에서 Onboarding으로 이동</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:feature_onboarding/screens/interests_screen.dart&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="✅-개발-가이드라인"><a href="#✅-개발-가이드라인" class="headerlink" title="✅ 개발 가이드라인"></a>✅ 개발 가이드라인</h2><h3 id="DO-✅"><a href="#DO-✅" class="headerlink" title="DO ✅"></a>DO ✅</h3><ol>
+<li><p><strong>디자인 시스템 사용</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:design_system/design_system.dart&#x27;</span>;</span><br><span class="line">padding: EdgeInsets.all(Sizes.size16)</span><br><span class="line">Gaps.v20</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>명확한 모듈 분리</strong></p>
+<ul>
+<li>각 기능은 독립적인 패키지</li>
+<li><code>screens/</code>, <code>widgets/</code> 디렉토리 구조 유지</li>
+</ul>
+</li>
+<li><p><strong>상대 경로 의존성</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">design_system:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">../../common/design_system</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>publish_to: ‘none’</strong></p>
+<ul>
+<li>모든 모듈 패키지에 명시</li>
+</ul>
+</li>
+</ol>
+<h3 id="DON’T-❌"><a href="#DON’T-❌" class="headerlink" title="DON’T ❌"></a>DON’T ❌</h3><ol>
+<li><p><strong>하드코딩된 값 사용 금지</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">❌ padding: EdgeInsets.all(<span class="number">16</span>)</span><br><span class="line">❌ SizedBox(height: <span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>역방향 의존성 생성 금지</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">❌ design_system → feature_authentication</span><br><span class="line">✅ feature_authentication → design_system</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>기능 간 직접 의존성 최소화</strong></p>
+<ul>
+<li>가능한 메인 앱을 통한 오케스트레이션</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="🧪-테스트-및-분석"><a href="#🧪-테스트-및-분석" class="headerlink" title="🧪 테스트 및 분석"></a>🧪 테스트 및 분석</h2><h3 id="전체-프로젝트-분석"><a href="#전체-프로젝트-분석" class="headerlink" title="전체 프로젝트 분석"></a>전체 프로젝트 분석</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">melos run analyze</span><br><span class="line"><span class="comment"># 또는</span></span><br><span class="line">dart analyze .</span><br></pre></td></tr></table></figure>
+
+<h3 id="개별-모듈-테스트"><a href="#개별-모듈-테스트" class="headerlink" title="개별 모듈 테스트"></a>개별 모듈 테스트</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> features/authentication</span><br><span class="line">flutter <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="앱-실행"><a href="#앱-실행" class="headerlink" title="앱 실행"></a>앱 실행</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 루트에서 실행</span></span><br><span class="line">flutter run</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🚀-주요-이점"><a href="#🚀-주요-이점" class="headerlink" title="🚀 주요 이점"></a>🚀 주요 이점</h2><h3 id="1-독립성"><a href="#1-독립성" class="headerlink" title="1. 독립성"></a>1. <strong>독립성</strong></h3><ul>
+<li>각 기능 모듈은 독립적으로 개발&#x2F;테스트 가능</li>
+<li>다른 기능에 영향 없이 수정 가능</li>
+</ul>
+<h3 id="2-재사용성"><a href="#2-재사용성" class="headerlink" title="2. 재사용성"></a>2. <strong>재사용성</strong></h3><ul>
+<li>디자인 시스템을 통한 일관된 UI</li>
+<li>위젯 재사용으로 중복 코드 최소화</li>
+</ul>
+<h3 id="3-확장성"><a href="#3-확장성" class="headerlink" title="3. 확장성"></a>3. <strong>확장성</strong></h3><ul>
+<li>새로운 기능 추가 시 기존 코드 영향 최소화</li>
+<li>모노레포 구조로 통합 관리 용이</li>
+</ul>
+<h3 id="4-유지보수성"><a href="#4-유지보수성" class="headerlink" title="4. 유지보수성"></a>4. <strong>유지보수성</strong></h3><ul>
+<li>명확한 책임 분리</li>
+<li>의존성 방향이 명확하여 리팩토링 안전</li>
+</ul>
+<hr>
+<h2 id="🔍-트러블슈팅"><a href="#🔍-트러블슈팅" class="headerlink" title="🔍 트러블슈팅"></a>🔍 트러블슈팅</h2><h3 id="의존성-오류"><a href="#의존성-오류" class="headerlink" title="의존성 오류"></a>의존성 오류</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 모든 모듈 의존성 재설정</span></span><br><span class="line">flutter clean</span><br><span class="line">flutter pub get</span><br></pre></td></tr></table></figure>
+
+<h3 id="모듈-인식-안-됨"><a href="#모듈-인식-안-됨" class="headerlink" title="모듈 인식 안 됨"></a>모듈 인식 안 됨</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pubspec_overrides.yaml 확인 (자동 생성됨)</span></span><br><span class="line"><span class="comment"># melos.yaml 패키지 경로 확인</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Import-오류"><a href="#Import-오류" class="headerlink" title="Import 오류"></a>Import 오류</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 절대 경로 사용</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:design_system/design_system.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:feature_authentication/screens/login_screen.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 상대 경로 사용 금지</span></span><br><span class="line">❌ <span class="keyword">import</span> <span class="string">&#x27;../../common/design_system/lib/gaps.dart&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📚-관련-문서"><a href="#📚-관련-문서" class="headerlink" title="📚 관련 문서"></a>📚 관련 문서</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://melos.invertase.dev/">Melos 공식 문서</a></li>
+<li>Flutter 패키지 개발: <code>flutter create --template=package</code></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/flutter/" rel="tag"><i class="fa fa-tag"></i> flutter</a>
+              <a href="/tags/Tiktok-Clone/" rel="tag"><i class="fa fa-tag"></i> Tiktok Clone</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/04/flutter/flutter-1/" rel="prev" title="1. Flutter TikTok Clone - 인증(Authentication)">
+                  <i class="fa fa-angle-left"></i> 1. Flutter TikTok Clone - 인증(Authentication)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/06/langchain/lecture_chapter_1/" rel="next" title="1. LangChain의 첫걸음">
+                  1. LangChain의 첫걸음 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoyuo</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
